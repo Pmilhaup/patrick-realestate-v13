@@ -1,0 +1,113 @@
+---
+import Chapter from '../layouts/Chapter.astro';
+const lds = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://patrick.realestate/"}, {"@type": "ListItem", "position": 2, "name": "Heritage", "item": "https://patrick.realestate/heritage"}]}];
+---
+<Chapter
+  title="Heritage — Sotheby's · Patrick Milhaupt"
+  description="The 280-year Sotheby's lineage — auction house, realty network, editorial brand. Why a house founded in 1744 still sets the standard for the world's most storied homes."
+  path="/heritage" current="/heritage" palette="0.15"
+  jsonLd={lds.length>=1 ? lds[0] : null}
+  rail={[{"id": "ch-00", "num": "00", "label": "Opening"}, {"id": "ch-01", "num": "01", "label": "1744"}, {"id": "ch-02", "num": "02", "label": "Network"}, {"id": "ch-03", "num": "03", "label": "Chicago"}]}
+>
+
+
+  <section class="chapter" id="ch-00" data-chapter="0" data-palette="0.05">
+    <div class="inner" style="text-align:center; align-items:center;">
+      <div class="ch-head fade-up" style="justify-content:center;">
+        <span class="hashmark"><i></i></span>
+        <div class="meta" style="border:0; padding:0;">
+          <span class="eyebrow">Heritage &middot; Sotheby's</span>
+        </div>
+      </div>
+      <h1 class="headline" data-headline="">
+        A standard,<br>not a <em>slogan</em>.
+      </h1>
+      <p class="body fade-up" style="margin: 0 auto; text-align:center;">
+        The realty network is fifty years old. The house is two hundred and eighty-one. Heritage here is operational: the same standard of curation, photography, and reach applies whether the home is in Lake Forest or Lake Como. A short reading on what stands behind the wordmark.
+      </p>
+      <div class="cta-row fade-up" style="justify-content:center;">
+        <a class="btn" href="#ch-01">Continue &darr;</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="ch-01" data-chapter="1" data-palette="0.20">
+    <div class="inner">
+      <div class="ch-head fade-up">
+        <span class="num">01</span>
+        <div class="meta">
+          <span class="eyebrow">Chapter One</span>
+          <span class="sub">The House &middot; 1744</span>
+        </div>
+      </div>
+      <h2 class="headline" data-headline="">
+        Established <em>1744</em>.
+      </h2>
+      <p class="body fade-up">
+        Samuel Baker opened a bookshop on the Strand in London in 1744 and held the first auction the same year. From that single sale grew the oldest continuously operating company on the London Stock Exchange and, in time, one of the world&rsquo;s great auction houses. By the nineteenth century Sotheby&rsquo;s was placing Napoleon&rsquo;s Saint Helena library, the Talleyrand papers, and the libraries of Goethe. By the twentieth, the Mary Cassatts, the Rothkos, the Picassos. 
+      </p>
+      
+      <div class="kpi-grid">
+        <div class="kpi"><span class="l">Founded</span><span class="v">1744</span><span class="d">London &middot; Samuel Baker</span></div>
+        <div class="kpi"><span class="l">Years in continuous operation</span><span class="v">281</span><span class="d">Oldest on the LSE</span></div>
+        <div class="kpi"><span class="l">Auctions held in 2024</span><span class="v">~600</span><span class="d">Across 70+ categories</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="ch-02" data-chapter="2" data-palette="0.40">
+    <div class="inner">
+      <div class="ch-head fade-up">
+        <span class="num">02</span>
+        <div class="meta">
+          <span class="eyebrow">Chapter Two</span>
+          <span class="sub">The Network &middot; 1976 to present</span>
+        </div>
+      </div>
+      <h2 class="headline" data-headline="">
+        A house, at <em>scale</em>.
+      </h2>
+      <p class="body fade-up">
+        Sotheby&rsquo;s International Realty was founded in 1976 to extend the auction house&rsquo;s standard to a different kind of object: the residence of consequence. The thesis was simple and remains so &mdash; the discipline that places a Vermeer can place a villa. Fifty years on, the network operates more than 1,100 offices across 86 countries and territories. In the United States in 2025, Sotheby&rsquo;s International Realty closed $182.4 billion in sales volume, a year-over-year gain of 9.3 percent in a market that grew, by NAR&rsquo;s measure, 2.6 percent. The brand outperforms the market it operates in because it is operated by advisors trained to read the market &mdash; not to chase it.
+      </p>
+      <p class="body fade-up">
+        Scale here is a tool, not a boast. It is what makes a Lake Forest listing reach a Singapore buyer with a Sotheby&rsquo;s advisor on the receiving end &mdash; on the same week, in the same brand language, against the same standard of curation. A listing introduced into this network is introduced once, into a system that already knows what to do with it.
+      </p>
+      <div class="kpi-grid">
+        <div class="kpi pop"><span class="l">Offices, worldwide</span><span class="v">1,100+</span><span class="d">86 countries &amp; territories</span></div>
+        <div class="kpi pop"><span class="l">2025 U.S. volume</span><span class="v">$182.4B</span><span class="d up">+9.3% YoY (NAR: +2.6%)</span></div>
+        <div class="kpi"><span class="l">sothebysrealty.com visits</span><span class="v">~42M</span><span class="d">15 languages &middot; 49% outside U.S.</span></div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="chapter" id="ch-03" data-chapter="3" data-palette="0.70">
+    <div class="inner">
+      <div class="ch-head fade-up">
+        <span class="num">03</span>
+        <div class="meta">
+          <span class="eyebrow">Chapter Three</span>
+          <span class="sub">Chicago &middot; The North Shore Chapter</span>
+        </div>
+      </div>
+      <h2 class="headline" data-headline="">
+        The North Shore <em>chapter</em>.
+      </h2>
+      <p class="body fade-up">
+        The Sotheby&rsquo;s network operates locally through carefully chosen affiliate firms, each owned in its own market. In Chicago, that firm is Jameson Sotheby&rsquo;s International Realty &mdash; a brokerage of more than 400 advisors with offices in River North, Lincoln Park, Lake Forest, Hinsdale, Highland Park, and Naples, Florida. Jameson holds Sotheby&rsquo;s affiliate status for the Chicago metro and is the dominant Sotheby&rsquo;s presence on the North Shore corridor &mdash; eighteen miles of lakefront from Wilmette to Lake Bluff that contain a disproportionate share of the most storied residences in the Midwest.
+      </p>
+      <p class="body fade-up">
+        I joined Sotheby&rsquo;s International Realty in 2016, after nine years in institutional real estate. The practice carries the Sotheby&rsquo;s discipline to a defined corridor: the same standard of curation, photography, narrative, and reach, whether the home is in Lake Forest or Lake Como. That tradition is the inheritance; this practice is its current expression. <a href="/properties" style="color:var(--gold-lit,#F0D68A);">View active representations &rarr;</a>
+      </p>
+      <div class="kpi-grid">
+        <div class="kpi"><span class="l">Jameson Sotheby&rsquo;s advisors</span><span class="v">400+</span><span class="d">Chicago metro &amp; Naples</span></div>
+        <div class="kpi"><span class="l">North Shore corridor</span><span class="v">18 mi</span><span class="d">Wilmette to Lake Bluff</span></div>
+        <div class="kpi"><span class="l">Advisor tenure with Sotheby&rsquo;s</span><span class="v">since 2016</span><span class="d">Following nine years institutional</span></div>
+      </div>
+    </div>
+  </section>
+
+
+
+</Chapter>

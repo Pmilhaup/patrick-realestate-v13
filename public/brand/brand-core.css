@@ -1,0 +1,74 @@
+/* ═══════════════════════════════════════════════════════════════════
+   BRAND-CORE — the consolidated token vocabulary (v11.3 test / v13 canon)
+   One gold. One neutral ramp. One motion table.
+   Spec: _audit-2026-07/02_BRAND_IDENTITY_IMPROVEMENTS.md
+   Currently loaded ONLY by about.html (approved test page).
+   On approval: becomes the single source of truth in v13; the legacy
+   token layers (css/tokens.css, brand-dark gold family) are retired.
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── THE GOLD — 14k antique, compressed value range, no #FFD700 ── */
+  --gold-100: #F2E7C9;  /* specular / rare highlight only */
+  --gold-200: #EAD9AE;  /* gold text on dark (13.7:1 on navy-0) */
+  --gold-300: #D9BE85;  /* icons, active states on dark (10.2:1) */
+  --gold-400: #C2A265;  /* THE brand gold — eyebrows, rules, borders (7.9:1) */
+  --gold-500: #8C6B3F;  /* borders on light; gradient shadow stop */
+  --gold-600: #7A5F33;  /* gold TEXT on white/paper (6.0:1 AA) */
+  --gold-700: #4E3D1F;  /* deepest trough, engraved detail */
+
+  /* Brushed gold — single-pass sweep only, never infinite */
+  --gold-brushed: linear-gradient(100deg,
+    #8C6B3F 0%, #C2A265 38%, #EAD9AE 50%, #C2A265 62%, #8C6B3F 100%);
+  --gold-catch-shadow: 0 1px 14px rgba(140, 107, 63, .25);
+
+  /* ── NEUTRALS — one canvas, AA floor everywhere ── */
+  --void:   #04070F;
+  --navy-0: #060D1F;
+  --navy-1: #0B1730;
+  --navy-2: #122246;
+  --navy-3: #1A3060;
+  --ink-1:  #FFFFFF;
+  --ink-2:  #D6DDE8;
+  --ink-3:  #93A0B8;   /* captions ≥7:1 */
+  --ink-4:  #6C7A96;   /* dim labels ≥4.6:1 — the legibility floor */
+
+  /* ── SIGNAL (links, live) — AA-compliant ── */
+  --signal:      #8B8BFA;
+  --signal-deep: #2F6BFF;
+
+  /* ── MOTION — the only timing vocabulary ── */
+  --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-inout: cubic-bezier(0.4, 0, 0.2, 1);
+  --t-instant: 120ms;
+  --t-fast:    200ms;
+  --t-med:     450ms;
+  --t-slow:    800ms;
+  --t-hero:    1400ms;
+
+  /* ═══ COMPATIBILITY MAP — repaints legacy tokens with the new values.
+     This is what makes the test page work without rewriting components.
+     Delete this block in v13 once components use the names above. ═══ */
+  --gold-dark:   var(--gold-700);
+  --gold-deep:   var(--gold-500);
+  --gold-base:   var(--gold-500);
+  --gold-mid:    var(--gold-400);
+  --gold-lit:    var(--gold-200);
+  --gold-bright: var(--gold-300);   /* was #FFD700 — retired */
+  --gold-pale:   var(--gold-100);
+  --gold-gradient: var(--gold-brushed);
+  --glow-gold:        var(--gold-catch-shadow);
+  --glow-gold-strong: var(--gold-catch-shadow);  /* glows retired */
+  --ink-5: var(--ink-4);            /* fine print promoted to legible */
+  --fg-link: var(--signal);
+  --indigo-base: var(--signal);
+  --ease-cinema:   var(--ease-out);
+  --ease-standard: var(--ease-inout);
+  --ease-spring:   var(--ease-inout); /* bounce retired — editorial real estate does not bounce */
+}
+
+/* Ambient-loop diet on the test page: signature sweeps become single-pass. */
+@media (prefers-reduced-motion: no-preference) {
+  .test-brand-core [class*="foil"],
+  .test-brand-core [class*="goldRule"] { animation-iteration-count: 1 !important; }
+}

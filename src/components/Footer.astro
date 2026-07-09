@@ -1,0 +1,37 @@
+---
+const year = new Date().getFullYear();
+const index = [
+  ['Properties', '/properties'], ['Neighborhoods', '/neighborhoods'],
+  ['Intelligence', '/intelligence'], ['Market Map', '/market-map'],
+  ['Buying', '/buying'], ['Selling', '/selling'],
+  ['Heritage', '/heritage'], ['About', '/about'], ['Contact', '/contact'],
+];
+---
+<footer class="bg-void border-t border-gold-400/20 px-6 py-14">
+  <div class="max-w-5xl mx-auto grid gap-10 sm:grid-cols-3">
+    <div class="flex flex-col gap-3">
+      <img src="/brand/assets/logos/wordmark-white-md.png" alt="Sotheby's International Realty" class="h-6 w-auto self-start" />
+      <div>
+        <div class="font-serif text-ink-1">Patrick Milhaupt</div>
+        <div class="font-mono text-[10px] tracking-[0.2em] uppercase text-ink-3">Global Advisor</div>
+      </div>
+    </div>
+    <div>
+      <div class="font-mono text-[10px] tracking-[0.2em] uppercase text-gold-400 mb-3">Index</div>
+      <ul class="grid grid-cols-2 gap-x-6 gap-y-1.5 list-none p-0 m-0">
+        {index.map(([label, href]) => (
+          <li><a href={href} class="text-[13px] text-ink-3 hover:text-gold-200 no-underline transition-colors duration-200">{label}</a></li>
+        ))}
+      </ul>
+    </div>
+    <div class="font-mono text-[11px] leading-6 text-ink-3">
+      <div class="text-[10px] tracking-[0.2em] uppercase text-gold-400 mb-3">The Practice</div>
+      <a href="tel:+18478499828" class="block text-inherit no-underline">(847) 849-9828</a>
+      <a href="mailto:pmilhaupt@jamesonsir.com" class="block text-inherit no-underline">pmilhaupt@jamesonsir.com</a>
+      <div class="mt-4 text-ink-4 text-[10px] leading-5">
+        © {year} Patrick Milhaupt · Jameson Sotheby's International Realty<br />
+        Illinois License #475.177332 · Equal Housing Opportunity
+      </div>
+    </div>
+  </div>
+</footer>

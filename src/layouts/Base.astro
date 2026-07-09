@@ -1,0 +1,50 @@
+---
+// Base layout — head, canonical, OG, JSON-LD slot, nav, footer. Once.
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+const {
+  title,
+  description,
+  current = '',
+  ogImage = 'https://patrick.realestate/images/patrick-headshot.jpg',
+  jsonLd = null,
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname.replace(/\.html$/, ''), Astro.site).href;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <link rel="icon" href="/favicon.ico" sizes="48x48" />
+  <link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:site_name" content="Patrick Milhaupt — North Shore" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+  {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  <slot name="head" />
+</head>
+<body class="bg-navy-0 text-ink-2 font-sans antialiased">
+  <a href="#main" class="absolute -left-full focus:left-0 top-0 z-[60] bg-navy-1 text-gold-200 font-mono text-xs tracking-wider px-5 py-3 border border-gold-400 rounded-br-md no-underline">
+    Skip to content
+  </a>
+  <Nav current={current} />
+  <main id="main">
+    <slot />
+  </main>
+  <Footer />
+</body>
+</html>

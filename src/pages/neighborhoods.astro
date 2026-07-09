@@ -1,0 +1,123 @@
+---
+import Chapter from '../layouts/Chapter.astro';
+const lds = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://patrick.realestate/"}, {"@type": "ListItem", "position": 2, "name": "Neighborhoods", "item": "https://patrick.realestate/neighborhoods"}]}];
+---
+<Chapter
+  title="Neighborhoods — Patrick Milhaupt · North Shore"
+  description="Six villages across the North Shore corridor — Lake Forest, Winnetka, Kenilworth, Glencoe, Wilmette, Highland Park. Live market snapshots, school context, and an honest read on each."
+  path="/neighborhoods" current="/neighborhoods" palette="0.50"
+  jsonLd={lds.length>=1 ? lds[0] : null}
+  rail={[{"id": "ch-00", "num": "00", "label": "Opening"}, {"id": "ch-01", "num": "01", "label": "The Corridor"}]}
+>
+  <style slot="head" is:global>
+.village-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 8px; }
+.village-tile {
+  display: flex; flex-direction: column; gap: 14px;
+  padding: 24px;
+  background: rgba(10,24,56,0.55);
+  border: 1px solid rgba(197,165,114,0.18);
+  border-radius: 14px;
+  text-decoration: none; color: inherit;
+  transition: border-color .25s ease, transform .35s ease;
+  opacity: 0; transform: translateY(20px);
+}
+.village-tile.vis { opacity: 1; transform: translateY(0); transition: opacity .8s ease, transform .8s ease, border-color .25s ease; }
+.village-tile:hover { border-color: var(--gold-lit, #E0BC7E); transform: translateY(-2px); }
+.village-tile .name { font-family: var(--font-serif); font-size: 28px; font-weight: 400; color: #FFF6E0; letter-spacing: -0.01em; }
+.village-tile .name em { font-style: italic;
+  background: linear-gradient(120deg,#C5A572,#E0BC7E,#F0D68A,#E0BC7E,#C5A572);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.village-tile .stats { display: flex; gap: 18px; flex-wrap: wrap; }
+.village-tile .stat { display: flex; flex-direction: column; gap: 2px; }
+.village-tile .stat .l { font-family: var(--font-mono); font-size: 10px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--ink-3, #8896AD); }
+.village-tile .stat .v { font-family: var(--font-mono); font-size: 18px; font-weight: 600; color: #FFF6E0; }
+.village-tile .blurb { font-family: var(--font-sans); font-size: 13px; line-height: 1.55; color: var(--ink-2, #C6CDDA); }
+.village-tile .more { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--gold-lit, #E0BC7E); margin-top: auto; }
+</style>
+
+
+  <section class="chapter" id="ch-00" data-chapter="0" data-palette="0.20">
+    <div class="inner" style="text-align:center; align-items:center;">
+      <div class="ch-head fade-up" style="justify-content:center;">
+        <span class="hashmark"><i></i></span>
+        <div class="meta" style="border:0; padding:0;">
+          <span class="eyebrow">Neighborhoods &middot; North Shore</span>
+        </div>
+      </div>
+      <h1 class="headline" data-headline="">
+        Eighteen miles of <em>coastline</em>,<br>six distinct micro-markets.
+      </h1>
+      <p class="body fade-up" style="margin: 0 auto; text-align:center;">
+        Each village carries its own architectural vocabulary, its own school feeder, its own price band, its own rhythm. A discerning read on each &mdash; with live data and lived-in context &mdash; is below.
+      </p>
+      <div class="cta-row fade-up" style="justify-content:center;">
+        <a class="btn" href="#ch-01">View the corridor &darr;</a>
+        <a class="btn btn-outline" href="/intelligence">Open the live dashboard</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="ch-01" data-chapter="1" data-palette="0.50">
+    <div class="inner" style="max-width: 1280px;">
+      <div class="ch-head fade-up">
+        <span class="num">01</span>
+        <div class="meta">
+          <span class="eyebrow">Chapter One</span>
+          <span class="sub">The Corridor</span>
+        </div>
+      </div>
+      <h2 class="headline" data-headline="">
+        Six villages.<br><em>One</em> corridor.
+      </h2>
+
+      <div class="village-grid fade-up">
+
+        <a class="village-tile" href="/neighborhoods/lake-forest">
+          <div class="name">Lake <em>Forest</em></div>
+          <div class="stats"><div class="stat"><span class="l">Median</span><span class="v">$1.32M</span></div><div class="stat"><span class="l">DOM</span><span class="v">34d</span></div><div class="stat"><span class="l">SP/OLP</span><span class="v">98.4%</span></div></div>
+          <p class="blurb">The corridor's anchor. Storied architectural roots, a venerable school district, and the most institutional ownership patterns on the North Shore &mdash; six distinct sub-markets within a single village.</p>
+          <span class="more">Open Lake Forest &rarr;</span>
+        </a>
+
+        <a class="village-tile" href="/neighborhoods/winnetka">
+          <div class="name"><em>Winnetka</em></div>
+          <div class="stats"><div class="stat"><span class="l">Median</span><span class="v">$2.10M</span></div><div class="stat"><span class="l">DOM</span><span class="v">22d</span></div><div class="stat"><span class="l">SP/OLP</span><span class="v">99.1%</span></div></div>
+          <p class="blurb">The tightest market in the corridor. Walkable, lakefront, and the lowest inventory-to-demand ratio of any North Shore village over a decade of records.</p>
+          <span class="more">Open Winnetka &rarr;</span>
+        </a>
+
+        <a class="village-tile" href="/neighborhoods/kenilworth">
+          <div class="name"><em>Kenilworth</em></div>
+          <div class="stats"><div class="stat"><span class="l">Median</span><span class="v">$2.35M</span></div><div class="stat"><span class="l">DOM</span><span class="v">26d</span></div><div class="stat"><span class="l">SP/OLP</span><span class="v">98.8%</span></div></div>
+          <p class="blurb">The smallest village by parcel count and the highest median price per square foot. Architectural pedigree carried at scale &mdash; Howard Van Doren Shaw, George Washington Maher, an iconic Prairie-school inheritance.</p>
+          <span class="more">Open Kenilworth &rarr;</span>
+        </a>
+
+        <a class="village-tile" href="/neighborhoods/glencoe">
+          <div class="name"><em>Glencoe</em></div>
+          <div class="stats"><div class="stat"><span class="l">Median</span><span class="v">$1.95M</span></div><div class="stat"><span class="l">DOM</span><span class="v">28d</span></div><div class="stat"><span class="l">SP/OLP</span><span class="v">98.6%</span></div></div>
+          <p class="blurb">Lakefront ravines, the Chicago Botanic Garden, a quietly venerable school district. The corridor's most consistently appreciating sub-market across the last decade.</p>
+          <span class="more">Open Glencoe &rarr;</span>
+        </a>
+
+        <a class="village-tile" href="/neighborhoods/wilmette">
+          <div class="name"><em>Wilmette</em></div>
+          <div class="stats"><div class="stat"><span class="l">Median</span><span class="v">$1.18M</span></div><div class="stat"><span class="l">DOM</span><span class="v">18d</span></div><div class="stat"><span class="l">SP/OLP</span><span class="v">99.4%</span></div></div>
+          <p class="blurb">The most accessible gateway to the corridor and consistently the fastest-moving market. Walkable to the L, a strong family-migration story, the lowest days-on-market figure of any North Shore village.</p>
+          <span class="more">Open Wilmette &rarr;</span>
+        </a>
+
+        <a class="village-tile" href="/neighborhoods/highland-park">
+          <div class="name">Highland <em>Park</em></div>
+          <div class="stats"><div class="stat"><span class="l">Median</span><span class="v">$985K</span></div><div class="stat"><span class="l">DOM</span><span class="v">30d</span></div><div class="stat"><span class="l">SP/OLP</span><span class="v">97.9%</span></div></div>
+          <p class="blurb">The most architecturally varied village on the corridor &mdash; mid-century moderns alongside Tudor revivals alongside contemporary lakefront estates. The widest price-band range north of Chicago, where the Harris estate at Woodbridge Lane currently rests.</p>
+          <span class="more">Open Highland Park &rarr;</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+
+</Chapter>

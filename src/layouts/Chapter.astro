@@ -1,0 +1,78 @@
+---
+// v11-identical chapter-page chrome, defined once (Phase A).
+import NavExact from '../components/NavExact.astro';
+import FooterExact from '../components/FooterExact.astro';
+
+const {
+  title, description, path, current = '',
+  palette = '0.50',
+  ogImage = 'https://patrick.realestate/images/patrick-headshot.jpg',
+  jsonLd = null,
+  rail = [],
+  stdScripts = true,
+  orchestrator = true,       // [{id:'ch-00', num:'00', label:'Begin'}, ...]
+} = Astro.props;
+const canonical = 'https://patrick.realestate' + path;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href={canonical}>
+<title>{title}</title>
+<meta name="description" content={description}>
+<meta property="og:title" content={title}>
+<meta property="og:description" content={description}>
+<meta property="og:type" content="website">
+<meta property="og:url" content={canonical}>
+<meta property="og:image" content={ogImage}>
+<meta property="og:site_name" content="Patrick Milhaupt — North Shore">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content={title}>
+<meta name="twitter:description" content={description}>
+{jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/brand/brand-shared.css">
+<link rel="stylesheet" href="/brand/brand-dark.css">
+<link rel="stylesheet" href="/brand/chapter.css">
+<script src="/brand/nav-mobile.js" defer is:inline></script>
+<slot name="head" />
+</head>
+<body data-liquid-palette={palette}>
+<a class="skip-link" href="#main">Skip to content</a>
+<slot name="bodytop" />
+
+<canvas id="paint"></canvas>
+<div class="veil"></div>
+
+<NavExact current={current} />
+
+{rail.length > 0 && (
+<aside class="rail" aria-label="Chapter index">
+  {rail.map((r, i) => (
+    <a class={i===0 ? 'dot active' : 'dot'} href={'#'+r.id} data-rail={String(i)}>{r.num}<span class="label">&nbsp;&nbsp;{r.label}</span></a>
+  ))}
+</aside>
+)}
+
+<main id="main">
+<slot />
+</main>
+
+<FooterExact />
+
+{stdScripts && <script src="/lib/three.min.js" is:inline></script>}
+{stdScripts && <script src="/lib/lenis.min.js" is:inline></script>}
+{stdScripts && <script src="/lib/gsap.min.js" is:inline></script>}
+{stdScripts && <script src="/lib/ScrollTrigger.min.js" is:inline></script>}
+{stdScripts && <script src="/brand/liquid-bg.js" is:inline></script>}
+{orchestrator && <script src="/js/chapter-orchestrator.js" is:inline></script>}
+<slot name="scripts" />
+</body>
+</html>

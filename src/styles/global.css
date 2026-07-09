@@ -1,0 +1,41 @@
+/* v13 — Tailwind v4 theme seeded from brand-core (the consolidated tokens).
+   Source of truth: patrick.realestate.v11/brand/brand-core.css */
+@import "tailwindcss";
+
+@theme {
+  --color-gold-100: #F2E7C9;
+  --color-gold-200: #EAD9AE;
+  --color-gold-300: #D9BE85;
+  --color-gold-400: #C2A265;
+  --color-gold-500: #8C6B3F;
+  --color-gold-600: #7A5F33;
+  --color-gold-700: #4E3D1F;
+  --color-void:   #04070F;
+  --color-navy-0: #060D1F;
+  --color-navy-1: #0B1730;
+  --color-navy-2: #122246;
+  --color-navy-3: #1A3060;
+  --color-ink-1: #FFFFFF;
+  --color-ink-2: #D6DDE8;
+  --color-ink-3: #93A0B8;
+  --color-ink-4: #6C7A96;
+  --color-signal: #8B8BFA;
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-inout: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:root {
+  --gold-brushed: linear-gradient(100deg,
+    #8C6B3F 0%, #C2A265 38%, #EAD9AE 50%, #C2A265 62%, #8C6B3F 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://patrick.realestate/intelligence-signals">
+<meta property="og:title" content="Signals — North Shore Market Intelligence · Patrick Milhaupt">
+<meta property="og:description" content="Live North Shore luxury housing signals — supply & demand, market momentum, and price-per-square-foot by village. Reconciled MLS + Infosparks data, rendered bespoke.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://patrick.realestate/intelligence-signals">
+<meta property="og:image" content="https://patrick.realestate/images/patrick-headshot.jpg">
+<meta property="og:site_name" content="Patrick Milhaupt — North Shore">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Signals — North Shore Market Intelligence · Patrick Milhaupt">
+<meta name="twitter:description" content="Live North Shore luxury housing signals — supply & demand, market momentum, and price-per-square-foot by village. Reconciled MLS + Infosparks data, rendered bespoke.">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://patrick.realestate/"}, {"@type": "ListItem", "position": 2, "name": "Signals", "item": "https://patrick.realestate/intelligence-signals"}]}</script>
+<title>Signals — North Shore Market Intelligence · Patrick Milhaupt</title>
+<meta name="description" content="Live North Shore luxury housing signals — supply & demand, market momentum, and price-per-square-foot by village. Reconciled MLS + Infosparks data, rendered bespoke." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/core.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="brand/charts/d3-brand.js"></script>
+<style>
+  /* page-scoped, all colours via design-system tokens */
+  body{background:var(--bg-0);color:var(--text-1);font-family:var(--sans);margin:0}
+  .sig-nav{display:flex;align-items:center;justify-content:space-between;padding:20px clamp(18px,5vw,56px);
+    border-bottom:1px solid var(--border-1);position:sticky;top:0;background:rgba(6,8,15,.82);backdrop-filter:blur(12px);z-index:40}
+  .sig-nav .wm{font-family:var(--serif);font-size:19px;letter-spacing:.02em;color:var(--text-1)}
+  .sig-nav .wm b{color:var(--gold);font-weight:500}
+  .sig-nav nav a{color:var(--text-2);text-decoration:none;font-size:13px;margin-left:22px;letter-spacing:.02em}
+  .sig-nav nav a:hover,.sig-nav nav a.on{color:var(--gold)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 clamp(18px,5vw,56px)}
+  .hero{padding:56px 0 28px;border-bottom:1px solid var(--border-1)}
+  .eyebrow{font-size:var(--text-sm);letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--gold)}
+  .hero h1{font-family:var(--serif);font-weight:500;font-size:clamp(2.2rem,5vw,3.4rem);line-height:1.05;margin:14px 0 10px}
+  .hero h1 em{font-style:italic;color:var(--gold-light)}
+  .hero p{color:var(--text-2);max-width:64ch;line-height:1.65;font-size:var(--text-md)}
+  .statusbar{display:flex;align-items:center;gap:14px;margin-top:20px;flex-wrap:wrap}
+  .pill{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--text-2);
+    border:1px solid var(--border-2);border-radius:999px;padding:6px 13px}
+  .pill .dot{width:7px;height:7px;border-radius:50%;background:var(--emerald);box-shadow:0 0 10px var(--emerald)}
+  .pill.loading .dot{background:var(--amber);box-shadow:0 0 10px var(--amber);animation:pulse 1s infinite}
+  .pill.sample .dot{background:var(--amber);box-shadow:0 0 10px var(--amber)}
+  .pill.error .dot{background:var(--rose);box-shadow:0 0 10px var(--rose)}
+  @keyframes pulse{50%{opacity:.35}}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{font-family:var(--sans);font-size:12.5px;color:var(--text-2);background:var(--bg-2);border:1px solid var(--border-1);
+    border-radius:999px;padding:7px 15px;cursor:pointer;transition:.15s}
+  .chip:hover{border-color:var(--border-2);color:var(--text-1)}
+  .chip.active{background:var(--gold);color:#141414;border-color:var(--gold);font-weight:600}
+  section.block{padding:44px 0;border-bottom:1px solid var(--border-1)}
+  .block-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:8px;flex-wrap:wrap}
+  .kick{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600}
+  .block h2{font-family:var(--serif);font-weight:500;font-size:var(--text-xl);margin:6px 0 4px}
+  .block .lead{color:var(--text-2);font-size:14px;line-height:1.55;max-width:70ch;margin:0 0 20px}
+  .panel{background:linear-gradient(180deg,var(--bg-2),var(--bg-1));border:1px solid var(--border-1);border-radius:14px;padding:20px;position:relative;overflow:hidden}
+  .panel::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold) 30%,var(--gold-light) 50%,var(--gold) 70%,transparent);opacity:.6}
+  .gauge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+  .gcard{background:var(--bg-2);border:1px solid var(--border-1);border-radius:12px;padding:16px 16px 12px}
+  .gcard .g-top{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3)}
+  .gcard .g-tier{color:var(--gold)}
+  .gcard .g-name{font-family:var(--serif);font-size:19px;margin:6px 0 2px}
+  .gcard .g-conf{font-family:var(--mono);font-size:11px;color:var(--text-3);margin-bottom:6px}
+  .gcard .g-spark{height:40px}
+  .gcard .g-narr{font-size:11.5px;color:var(--text-2);line-height:1.45;margin-top:8px;min-height:2.6em}
+  .two{display:grid;grid-template-columns:1fr;gap:22px}
+  @media(min-width:920px){.two{grid-template-columns:1.15fr .85fr}}
+  footer{padding:40px 0 70px;color:var(--text-3);font-size:12.5px;line-height:1.7}
+  footer b{color:var(--gold)}
+  .foot-note{font-size:11.5px;color:var(--text-3);margin-top:6px}
+  .subhint{font-family:var(--mono);font-size:11px;color:var(--text-3)}
+</style>
+</head>
+<body>
+<div class="sig-nav">
+  <div class="wm">Patrick <b>Milhaupt</b></div>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/intelligence">Intelligence</a>
+    <a href="/intelligence-signals" class="on">Signals</a>
+    <a href="/properties">Properties</a>
+    <a href="/contact">Contact</a>
+  </nav>
+</div>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">North Shore · Live Market Signals</div>
+    <h1>The market, read as a <em>lit instrument panel</em>.</h1>
+    <p>Supply and demand, momentum, and price-per-foot for the North Shore's luxury villages — reconciled from live MLS and Infosparks data, rendered bespoke. Not screenshots of someone else's dashboard. Yours.</p>
+    <div class="statusbar">
+      <span class="pill loading" id="statusPill"><span class="dot"></span><span id="statusText">Connecting to live data…</span></span>
+      <div class="chips" id="villageChips"></div>
+    </div>
+  </header>
+
+  <section class="block">
+    <div class="block-head">
+      <div>
+        <div class="kick">Supply &amp; Demand</div>
+        <h2 id="sdTitle">North Shore · Housing Supply &amp; Demand</h2>
+      </div>
+      <div class="subhint" id="sdRange">last 18 months</div>
+    </div>
+    <p class="lead">Shaded areas are <b style="color:var(--text-1)">supply</b> — homes for sale, new listings, under contract. Bright signal lines are <b style="color:var(--text-1)">demand</b> — months of supply and 7-day contract pace — on the right axis. Hover for any date.</p>
+    <div class="panel"><div id="chartSupplyDemand"></div></div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <div>
+        <div class="kick">Market Momentum</div>
+        <h2>Where the wind is blowing</h2>
+      </div>
+    </div>
+    <p class="lead">A composite momentum score per village (−100 to +100) from the <code>get_smart_momentum</code> model, with the trailing 28-day trace. Green needles favor sellers; red favor buyers.</p>
+    <div class="gauge-grid" id="momentumGrid"></div>
+  </section>
+
+  <section class="block">
+    <div class="two">
+      <div>
+        <div class="block-head"><div><div class="kick">Price / Square Foot</div><h2>Distribution by village</h2></div></div>
+        <p class="lead">Not a single median — the full 18-month spread of $/SF for each village, stacked richest on top. Instantly frames where a home sits in the market.</p>
+        <div class="panel"><div id="chartRidgeline"></div></div>
+      </div>
+      <div>
+        <div class="block-head"><div><div class="kick">The North Shore at a glance</div><h2>Villages, positioned</h2></div></div>
+        <p class="lead">Each dot a village, placed by months of supply (left = seller's market), sized by closed-sale volume, shaded by absorption. Hover any village.</p>
+        <div class="panel"><div id="chartVillageSwarm"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>Live from Supabase — reconciled MLS daily + Infosparks. Charts by <b>BrandD3</b> (d3-viz engine), the bespoke sibling to the practice's Plotly system. One visual language across site, dashboard, listings, and print.</div>
+    <div class="foot-note" id="footNote">© Patrick Milhaupt · Jameson Sotheby's International Realty · Illinois license #475.177332</div>
+  </footer>
+</div>
+
+<script>
+/* ── live data layer (mirrors intelligence.html) ── */
+const SUPA = { URL:'https://itupjrknklzvmmqicuyc.supabase.co', KEY:'sb_publishable_fQnZLJnaC-dAHBuGBHJgjQ_RUHCe_7S' };
+const VILLAGES = ['North Shore','Glencoe','Highland Park','Kenilworth','Lake Bluff','Lake Forest','Wilmette','Winnetka'];
+const LUX_TIER = ['Kenilworth','Winnetka','Glencoe','Lake Forest','Lake Bluff','Highland Park','Wilmette'];
+const STATE = { village:'North Shore', live:false };
+let RAW = [];            // all rows
+let BYVIL = {};          // BYVIL[village][metric] = [{d,value}]
+
+function setStatus(kind,msg){ const p=document.getElementById('statusPill'); p.className='pill '+kind;
+  document.getElementById('statusText').textContent=msg; }
+
+async function supaFetch(path, params={}) {
+  const url = new URL(SUPA.URL+'/rest/v1/'+path);
+  Object.entries(params).forEach(([k,v])=>url.searchParams.append(k,v));
+  const r = await fetch(url,{headers:{apikey:SUPA.KEY,Authorization:'Bearer '+SUPA.KEY}});
+  if(!r.ok) throw new Error('supabase '+r.status);
+  return r.json();
+}
+async function supaRpc(name, body={}) {
+  const r = await fetch(SUPA.URL+'/rest/v1/rpc/'+name,{method:'POST',
+    headers:{apikey:SUPA.KEY,Authorization:'Bearer '+SUPA.KEY,'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(!r.ok) throw new Error('rpc '+r.status);
+  return r.json();
+}
+
+function indexRows(rows){
+  const out={};
+  for(const r of rows){
+    if(r.scope && r.scope!=='all') continue;            // public page = all single-family
+    const v=r.village, m=r.metric;
+    (out[v]=out[v]||{}); (out[v][m]=out[v][m]||[]).push({d:r.d,value:+r.value});
+  }
+  for(const v in out) for(const m in out[v]) out[v][m].sort((a,b)=>a.d.localeCompare(b.d));
+  return out;
+}
+function nsAggregate(){
+  // North Shore = sum supply counts / median of rates across villages, per date+metric
+  const SUMS=new Set(['closed_sales','new_listings','under_contract','active_inventory','pending_last_7_days']);
+  const bucket={};
+  for(const r of RAW){ if(r.scope && r.scope!=='all') continue; if(r.village==='North Shore') continue;
+    const k=r.d+'|'+r.metric; (bucket[k]=bucket[k]||[]).push(+r.value); }
+  const out={};
+  for(const k in bucket){ const [d,m]=k.split('|'); const arr=bucket[k].filter(x=>!isNaN(x)); if(!arr.length) continue;
+    const v=SUMS.has(m)?arr.reduce((a,b)=>a+b,0):arr.sort((a,b)=>a-b)[Math.floor(arr.length/2)];
+    (out[m]=out[m]||[]).push({d,value:v}); }
+  for(const m in out) out[m].sort((a,b)=>a.d.localeCompare(b.d));
+  return out;
+}
+function seriesFor(village){ return village==='North Shore' ? nsAggregate() : (BYVIL[village]||{}); }
+function last18(series){ if(!series||!series.length) return series||[];
+  const cut=new Date(); cut.setMonth(cut.getMonth()-18); const iso=cut.toISOString().slice(0,10);
+  return series.filter(p=>p.d>=iso); }
+
+/* ── renders ── */
+function renderSupplyDemand(){
+  const s=seriesFor(STATE.village);
+  const pick=m=>last18((s[m]||[]).filter(p=>p.value!=null));
+  document.getElementById('sdTitle').textContent = STATE.village+' · Housing Supply & Demand';
+  BrandD3.supplyDemand('#chartSupplyDemand',{
+    series:{ active_inventory:pick('active_inventory'), new_listings:pick('new_listings'),
+             under_contract:pick('under_contract'), months_supply:pick('months_supply'),
+             pending_last_7_days:pick('pending_last_7_days') },
+    watermark:'brand/assets/logos/wordmark-white-xl.png'
+  });
+}
+function renderRidgeline(){
+  const groups=[];
+  LUX_TIER.forEach(v=>{ const arr=last18(((BYVIL[v]||{})['median_price_per_sqft']||[])).map(p=>p.value).filter(x=>x>0);
+    if(arr.length>=6) groups.push({name:v, values:arr}); });
+  groups.sort((a,b)=>d3.median(b.values)-d3.median(a.values));
+  if(!groups.length){ document.getElementById('chartRidgeline').innerHTML='<div class="subhint" style="padding:30px">$/SF series not available for this view.</div>'; return; }
+  BrandD3.ridgeline('#chartRidgeline',groups,{ width:560, height:groups.length*56+70, xLabel:'closed $/sq ft',
+    tickFormat:d=>'$'+d3.format(',.0f')(d) });
+}
+function renderVillageSwarm(){
+  const data=[];
+  LUX_TIER.forEach(v=>{ const b=BYVIL[v]||{};
+    const ms=b['months_supply']&&b['months_supply'].slice(-1)[0]; const cs=b['closed_sales']&&b['closed_sales'].slice(-1)[0];
+    const ab=b['absorption_rate']&&b['absorption_rate'].slice(-1)[0];
+    if(ms&&cs) data.push({village:v, months:ms.value, closed:cs.value, absorption:ab?ab.value:0.2}); });
+  if(!data.length){ document.getElementById('chartVillageSwarm').innerHTML='<div class="subhint" style="padding:30px">Positioning data not available.</div>'; return; }
+  BrandD3.beeswarm('#chartVillageSwarm',data,{ height:300, xField:'months', rField:'closed',
+    rMin:8, rMax:26, colorDomain:[0.05,0.4],
+    xLabel:'← seller’s market   ·   months of supply   ·   buyer’s market →',
+    labelField:'village',
+    tip:d=>`<b>${d.village}</b><br>${d.months.toFixed(1)} mo supply<br><span style="color:#9FB0CC">${d3.format(',')(d.closed)} closed · ${(d.absorption*100).toFixed(0)}% absorption</span>` });
+}
+async function renderMomentum(){
+  const grid=document.getElementById('momentumGrid'); grid.innerHTML='';
+  let data=[];
+  try{ data=await supaRpc('get_smart_momentum',{scope_filter:'all'})||[]; }catch(e){ data=SAMPLE.momentum; }
+  if(!data.length) data=SAMPLE.momentum;
+  data.slice(0,6).forEach((m,i)=>{
+    const score=m.composite_score!=null?+m.composite_score:null;
+    const card=document.createElement('div'); card.className='gcard';
+    card.innerHTML=`<div class="g-top"><span class="g-tier">${(m.tier||'').toUpperCase()||'—'}</span><span>${m.scope||'all'}</span></div>
+      <div class="g-name">${m.village||'North Shore'}</div>
+      <div class="g-conf">${m.confidence||'—'} confidence</div>
+      <div class="g-gauge" id="mg_${i}"></div>
+      <div class="g-spark" id="ms_${i}"></div>
+      <div class="g-narr">${m.narrative||''}</div>`;
+    grid.appendChild(card);
+    BrandD3.radialGauge('#mg_'+i, score, {width:210,height:118});
+    BrandD3.sparkline('#ms_'+i, (m.sparkline_28d||[]).map(Number), {bipolar:true, width:210, height:40});
+  });
+}
+
+function renderVillageChips(){
+  const wrap=document.getElementById('villageChips'); wrap.innerHTML='';
+  VILLAGES.forEach(v=>{ const b=document.createElement('button'); b.className='chip'+(v===STATE.village?' active':'');
+    b.textContent=v; b.onclick=()=>{ STATE.village=v; document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('active',c.textContent===v)); renderSupplyDemand(); };
+    wrap.appendChild(b); });
+}
+
+/* ── sample fallback (only if live fetch fails; clearly badged) ── */
+const SAMPLE={ momentum:[
+  {village:'Kenilworth',tier:'prime',scope:'all',composite_score:31.4,confidence:'high',narrative:'Inventory tight; contract pace accelerating into summer.',sparkline_28d:Array.from({length:28},(_,i)=>10+18*Math.sin(i/5))},
+  {village:'Winnetka',tier:'strong',scope:'all',composite_score:22.1,confidence:'high',narrative:'Steady seller advantage; $/SF firm above trend.',sparkline_28d:Array.from({length:28},(_,i)=>8+14*Math.sin(i/6+1))},
+  {village:'Glencoe',tier:'strong',scope:'all',composite_score:14.8,confidence:'med',narrative:'Absorption improving; watch new-listing surge.',sparkline_28d:Array.from({length:28},(_,i)=>4+12*Math.cos(i/7))},
+  {village:'Lake Forest',tier:'balanced',scope:'all',composite_score:6.2,confidence:'high',narrative:'Luxury tier balanced; days-on-market easing.',sparkline_28d:Array.from({length:28},(_,i)=>2+9*Math.sin(i/8))},
+  {village:'Highland Park',tier:'balanced',scope:'all',composite_score:-3.1,confidence:'med',narrative:'Supply building modestly at entry price bands.',sparkline_28d:Array.from({length:28},(_,i)=>-1+8*Math.sin(i/6+2))},
+  {village:'Wilmette',tier:'watch',scope:'all',composite_score:-9.4,confidence:'med',narrative:'Buyer leverage returning below $2M.',sparkline_28d:Array.from({length:28},(_,i)=>-4-7*Math.sin(i/9))}
+]};
+function sampleSeries(){
+  const days=540, base=new Date(); base.setMonth(base.getMonth()-18);
+  const iso=i=>new Date(base.getTime()+i*86400000).toISOString().slice(0,10);
+  RAW=[];
+  LUX_TIER.forEach((v,vi)=>{ const s=1-vi*0.09;
+    for(let i=0;i<days;i+=5){ const d=iso(i);
+      const push=(metric,value)=>RAW.push({village:v,scope:'all',d,metric,value});
+      push('active_inventory', Math.max(8,40*s+14*Math.sin(i/40)+ (Math.random()*6-3)));
+      push('new_listings', Math.max(2,14*s+6*Math.sin(i/30)));
+      push('under_contract', Math.max(2,11*s+5*Math.cos(i/34)));
+      push('months_supply', Math.max(0.6, 3.2/s + Math.sin(i/60)));
+      push('pending_last_7_days', Math.max(0, 4*s+2*Math.cos(i/20)));
+      push('closed_sales', Math.max(1, 9*s+3*Math.sin(i/45)));
+      push('absorption_rate', Math.max(0.05, Math.min(0.5, 0.28*s+0.05*Math.sin(i/50))));
+      push('median_price_per_sqft', Math.max(180, (680-vi*55)+45*Math.sin(i/70)+(Math.random()*40-20)));
+    }
+  });
+}
+
+async function boot(){
+  if(window.__sigBooted) return; window.__sigBooted=true;
+  renderVillageChips();
+  try{
+    setStatus('loading','Connecting to live data…');
+    const rows = await supaFetch('mv_market_intelligence',{
+      select:'village,scope,d,source,metric,value',
+      village:'in.('+LUX_TIER.map(v=>`"${v}"`).join(',')+')',
+      scope:'in.(all,luxury)', order:'d.asc', limit:250000 });
+    if(!rows || !rows.length) throw new Error('empty');
+    RAW=rows; STATE.live=true;
+    BYVIL=indexRows(RAW);
+    setStatus('','Live · reconciled MLS + Infosparks');
+  }catch(e){
+    console.warn('live fetch failed, using sample:',e.message);
+    sampleSeries(); BYVIL=indexRows(RAW); STATE.live=false;
+    setStatus('sample','Sample data — connect on your network for live');
+    document.getElementById('footNote').innerHTML='Showing representative sample data (live Supabase fetch unavailable in this context). © Patrick Milhaupt · Jameson Sotheby’s International Realty · Illinois license #475.177332';
+  }
+  renderSupplyDemand();
+  renderRidgeline();
+  renderVillageSwarm();
+  renderMomentum();
+}
+document.addEventListener('DOMContentLoaded', boot);
+</script>
+</body>
+</html>

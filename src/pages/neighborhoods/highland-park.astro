@@ -1,0 +1,116 @@
+---
+import Chapter from '../../layouts/Chapter.astro';
+const lds = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://patrick.realestate/"}, {"@type": "ListItem", "position": 2, "name": "Neighborhoods", "item": "https://patrick.realestate/neighborhoods"}, {"@type": "ListItem", "position": 3, "name": "Highland Park", "item": "https://patrick.realestate/neighborhoods/highland-park"}]}, {"@context": "https://schema.org", "@type": "Place", "name": "Highland Park, Illinois", "url": "https://patrick.realestate/neighborhoods/highland-park", "containedInPlace": {"@type": "Place", "name": "North Shore, Chicago, IL"}}];
+---
+<Chapter
+  title="Highland Park — Patrick Milhaupt · North Shore"
+  description="Highland Park village brief — the corridor's most architecturally diverse village, mid-century moderns alongside Tudor revivals, with District 113 high school anchor."
+  path="/neighborhoods/highland-park" current="/neighborhoods" palette="0.15"
+  jsonLd={lds.length>=1 ? lds[0] : null}
+  rail={[{"id": "ch-00", "num": "00", "label": "Opening"}, {"id": "ch-01", "num": "01", "label": "Snapshot"}, {"id": "ch-02", "num": "02", "label": "Architecture"}, {"id": "ch-03", "num": "03", "label": "Begin"}]}
+>
+
+
+  <section class="chapter" id="ch-00" data-chapter="0" data-palette="0.15">
+    <div class="inner" style="text-align:center; align-items:center;">
+      <div class="ch-head fade-up" style="justify-content:center;">
+        <span class="hashmark"><i></i></span>
+        <div class="meta" style="border:0; padding:0;">
+          <span class="eyebrow">Highland Park &middot; North Shore</span>
+        </div>
+      </div>
+      <h1 class="headline" data-headline="">
+        The corridor's most <em>varied</em> village.
+      </h1>
+      <p class="body fade-up" style="margin: 0 auto; text-align:center;">
+        Highland Park carries the widest architectural and price range of any North Shore village &mdash; mid-century moderns alongside Tudor revivals alongside contemporary lakefront estates, with price bands stretching from entry-level to extraordinary. There is no single Highland Park; there are six. The storied Harris estate at 2441 Woodbridge Lane currently rests here.
+      </p>
+      <div class="cta-row fade-up" style="justify-content:center;">
+        <a class="btn" href="#ch-01">View the snapshot &darr;</a>
+        <a class="btn btn-outline" href="/intelligence#ch-02">Open live dashboard</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="ch-01" data-chapter="1" data-palette="0.40">
+    <div class="inner">
+      <div class="ch-head fade-up">
+        <span class="num">01</span>
+        <div class="meta">
+          <span class="eyebrow">Chapter One</span>
+          <span class="sub">Highland Park Snapshot</span>
+        </div>
+      </div>
+      <h2 class="headline" data-headline="">
+        A village of <em>range</em>, breadth, and architectural variety.
+      </h2>
+      <p class="body fade-up">
+        Highland Park's median list price of $985K is the corridor's most accessible &mdash; but the village median tells only part of the story, since the range from entry-level to estate is the widest on the North Shore. Days-on-market run 30 and sale-to-list ratios sit at 97.9%, reflecting a buyer pool that is more price-sensitive than its southern neighbors. The $385 price-per-square-foot is the lowest on the corridor and a meaningful factor for buyers prioritizing square footage and architectural variety over the New Trier feeder.
+      </p>
+      <div class="kpi-grid">
+        <div class="kpi pop"><span class="l">Median Price</span><span class="v" style="font-size:22px;">$985K</span><span class="d up">Most accessible village median</span></div>
+        <div class="kpi"><span class="l">Days on Market</span><span class="v" style="font-size:22px;">30 days</span><span class="d">Measured pace</span></div>
+        <div class="kpi"><span class="l">SP/OLP</span><span class="v" style="font-size:22px;">97.9%</span><span class="d">Sale-to-list ratio</span></div>
+        <div class="kpi"><span class="l">$/SqFt</span><span class="v" style="font-size:22px;">$385</span><span class="d">Value per square foot</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="market-blend" style="padding:16px 24px 56px;">
+  <div style="max-width:1120px;margin:0 auto;background:#0A1838;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px 22px 12px;box-shadow:0 24px 70px rgba(0,0,0,.35);">
+    <div id="blendedMarket"></div>
+  </div>
+</section>
+
+  <section class="chapter" id="ch-02" data-chapter="2" data-palette="0.65">
+    <div class="inner">
+      <div class="ch-head fade-up">
+        <span class="num">02</span>
+        <div class="meta">
+          <span class="eyebrow">Chapter Two</span>
+          <span class="sub">Architecture &amp; Schools</span>
+        </div>
+      </div>
+      <h2 class="headline" data-headline="">
+        Eclectic <em>vocabulary</em>, anchor schools.
+      </h2>
+      <p class="body fade-up">
+        Highland Park is the corridor's <strong>most architecturally diverse village</strong> &mdash; significant mid-century modern commissions sit blocks away from Tudor revivals, contemporary lakefront homes, classic American foursquares, and a meaningful inventory of architect-designed ravine houses. The largest price-band range north of Chicago lives within the village boundaries, and the eastern lakefront blocks command premiums that approach the Glencoe price ladder.
+      </p>
+      <p class="body fade-up">
+        Highland Park's high-school students attend <strong>Township High School District 113</strong>, which includes both Highland Park High School and Deerfield High School. Three feeder K&ndash;8 districts serve the village &mdash; a structural complexity that nuances the price map, since the strength of the feeder district materially affects sub-market pricing within Highland Park itself.
+      </p>
+    </div>
+  </section>
+
+  <section class="chapter" id="ch-03" data-chapter="3" data-palette="1.00">
+    <div class="inner" style="text-align:center; align-items:center;">
+      <div class="ch-head fade-up" style="justify-content:center;">
+        <span class="num">03</span>
+        <div class="meta">
+          <span class="eyebrow">Begin</span>
+          <span class="sub">A 30-minute call</span>
+        </div>
+      </div>
+      <h2 class="headline" data-headline="">
+        Move in <em>Highland Park</em>.
+      </h2>
+      <p class="body fade-up" style="margin: 0 auto; text-align:center;">
+        Thirty minutes. We'll walk through the feeder-district sub-markets, the architectural cohort that fits your brief, and an honest three-to-six month forward read on the village. No pitch.
+      </p>
+      <div class="begin-block fade-up">
+        <div class="col"><div class="l">Direct</div><div class="v"><a href="tel:+18478499828" style="color:inherit;text-decoration:none;">(847) 849-9828</a></div></div>
+        <div class="col"><div class="l">Email</div><div class="v"><a href="mailto:pmilhaupt@jamesonsir.com">pmilhaupt@jamesonsir.com</a></div></div>
+      </div>
+      <div class="cta-row fade-up" style="justify-content:center; margin-top: 32px;">
+        <a class="btn" href="mailto:pmilhaupt@jamesonsir.com">Schedule the Call &rarr;</a>
+        <a class="btn btn-outline" href="/neighborhoods">Back to neighborhoods</a>
+      </div>
+    </div>
+  </section>
+
+
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(lds[1])} />
+  <script slot="scripts" src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js" is:inline></script>
+  <script slot="scripts" src="/brand/charts/d3-brand.js" is:inline></script>
+</Chapter>

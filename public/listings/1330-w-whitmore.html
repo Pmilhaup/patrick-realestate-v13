@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://patrick.realestate/listings/1330-w-whitmore">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SingleFamilyResidence", "name": "1330 W. Whitmore Court", "url": "https://patrick.realestate/listings/1330-w-whitmore", "address": {"@type": "PostalAddress", "streetAddress": "1330 W. Whitmore Court", "addressLocality": "Lake Forest", "addressRegion": "IL", "addressCountry": "US"}, "numberOfBedrooms": 5, "numberOfBathroomsTotal": 5.5, "floorSize": {"@type": "QuantitativeValue", "value": 7200, "unitCode": "FTK"}, "image": "https://patrick.realestate/listings/1330-w-whitmore/og.jpg", "offers": {"@type": "Offer", "price": 3250000, "priceCurrency": "USD", "availability": "https://schema.org/InStock", "offeredBy": {"@id": "https://patrick.realestate/#agent"}}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://patrick.realestate/"}, {"@type": "ListItem", "position": 2, "name": "Properties", "item": "https://patrick.realestate/properties"}, {"@type": "ListItem", "position": 3, "name": "1330 W. Whitmore Court", "item": "https://patrick.realestate/listings/1330-w-whitmore"}]}</script>
+<meta name="theme-color" content="#06080f">
+<title>1330 W. Whitmore Court &middot; Lake Forest &middot; Milhaupt &middot; Jakaitis</title>
+<meta name="description" content="1330 W. Whitmore Court — a stately stone manor on a private cul-de-sac in Lake Forest, Illinois. Listed at $3,250,000 by Patrick Milhaupt of Jameson Sotheby's International Realty.">
+<meta property="og:title" content="1330 W. Whitmore Court · Lake Forest, IL · $3,250,000">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://patrick.realestate/listings/1330-w-whitmore">
+<meta property="og:description" content="A stately stone manor on a private cul-de-sac in Lake Forest — 5 bedrooms, 5.5 baths, 7,200 sq ft on 1.2 acres. Presented by Patrick Milhaupt, Jameson Sotheby's International Realty.">
+<meta property="og:image" content="https://patrick.realestate/listings/1330-w-whitmore/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="896">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════════════════════
+   1330 W. WHITMORE COURT — Property Site
+   v11 brand · Three.js liquid-bg + particle field · Dark theme
+   Reusable template — duplicate for every listing
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  --bg-0: #06080f;
+  --bg-1: #0c1021;
+  --bg-2: #131a30;
+  --bg-3: #1a2340;
+  --navy: #0A1838;
+  --navy2: #1B2C5C;
+  --border-1: #1e2d52;
+  --border-2: #2a3e6a;
+  --gold: #c9a96e;
+  --gold-light: #e0c992;
+  --gold-deep: #a8782a;
+  --gold-lux: #b98b3c;
+  --burgundy: #5C1A1A;
+  --text-1: #e8e0d4;
+  --text-2: #b0b8d1;
+  --text-3: #6b7a99;
+  --white: #ffffff;
+  --glass: rgba(12, 16, 33, 0.72);
+  --glass-2: rgba(6, 8, 15, 0.82);
+  --glass-border: rgba(201, 169, 110, 0.20);
+
+  --display: 'Playfair Display', Georgia, serif;
+  --serif: 'EB Garamond', Georgia, serif;
+  --sans: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+
+  --maxw: 1280px;
+  --maxw-text: 720px;
+  --pad-x: clamp(20px, 5vw, 56px);
+  --pad-y: clamp(56px, 12vh, 120px);
+
+  --ease: cubic-bezier(0.4, 0.0, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --atmosphere:
+    radial-gradient(140% 110% at 18% 12%, rgba(201, 169, 110, 0.12) 0%, rgba(201, 169, 110, 0.0) 42%),
+    radial-gradient(120% 100% at 88% 78%, rgba(168, 120, 42, 0.20) 0%, rgba(168, 120, 42, 0.0) 50%),
+    radial-gradient(180% 140% at 50% 50%, rgba(27, 44, 92, 0.58) 0%, rgba(6, 8, 15, 0.95) 75%),
+    linear-gradient(180deg, #060815 0%, #0c1021 50%, #060815 100%);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  background: var(--atmosphere);
+  background-attachment: fixed;
+  color: var(--text-1);
+  font-family: var(--sans);
+  font-weight: 300;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+/* ═══════════════ MOTION CANVASES ═══════════════ */
+#paint { position: fixed; inset: 0; z-index: 0; pointer-events: none;
+         filter: brightness(1.15) saturate(1.12); }
+#particles { position: fixed; inset: 0; z-index: 1; pointer-events: none; mix-blend-mode: screen; opacity: 0.85; }
+.veil {
+  position: fixed; inset: 0; z-index: 2; pointer-events: none;
+  background:
+    radial-gradient(120% 80% at 50% 10%, rgba(6, 8, 15, 0.04) 0%, rgba(6, 8, 15, 0.32) 60%, rgba(6, 8, 15, 0.58) 100%),
+    linear-gradient(180deg, rgba(6, 8, 15, 0.10) 0%, rgba(6, 8, 15, 0.02) 30%, rgba(6, 8, 15, 0.02) 70%, rgba(6, 8, 15, 0.42) 100%);
+}
+
+/* ═══════════════ CUSTOM CURSOR (desktop only) ═══════════════ */
+.cursor {
+  position: fixed; top: 0; left: 0;
+  width: 28px; height: 28px;
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.25s var(--ease-out), height 0.25s var(--ease-out),
+              border-color 0.25s, background 0.25s;
+  mix-blend-mode: difference;
+  display: none;
+}
+.cursor.scale { width: 56px; height: 56px; background: rgba(201, 169, 110, 0.12); }
+@media (hover: hover) and (pointer: fine) { .cursor { display: block; } body { cursor: none; } a, button { cursor: none; } }
+
+/* ═══════════════ TOP BAR ═══════════════ */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 80;
+  padding: 18px var(--pad-x);
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(180deg, rgba(6, 8, 15, 0.85) 0%, rgba(6, 8, 15, 0.0) 100%);
+  transition: background 0.4s var(--ease);
+}
+.topbar.scrolled {
+  background: rgba(6, 8, 15, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(201, 169, 110, 0.12);
+  padding: 12px var(--pad-x);
+}
+.topbar .back {
+  font-family: var(--mono);
+  font-size: 10px; letter-spacing: 0.24em;
+  text-transform: uppercase; color: var(--gold);
+  text-decoration: none;
+  display: flex; align-items: center; gap: 8px;
+}
+.topbar .back::before { content: '←'; font-size: 14px; }
+.topbar .back:hover { color: var(--gold-light); }
+.topbar .price-tag {
+  font-family: var(--display);
+  font-size: 18px;
+  color: var(--gold-light);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.005em;
+  opacity: 0; transform: translateY(-8px);
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+}
+.topbar.scrolled .price-tag { opacity: 1; transform: translateY(0); }
+.topbar .cta {
+  font-family: var(--mono);
+  font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--gold-light);
+  text-decoration: none;
+  padding: 9px 18px;
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  transition: all 0.3s var(--ease);
+  background: rgba(201, 169, 110, 0.05);
+}
+.topbar .cta:hover { background: rgba(201, 169, 110, 0.15); border-color: var(--gold-light); }
+
+/* ═══════════════ TYPOGRAPHY ═══════════════ */
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 10px; letter-spacing: 0.32em;
+  text-transform: uppercase; color: var(--gold);
+  padding-bottom: 7px;
+  border-bottom: 1px solid var(--gold);
+  display: inline-block;
+  position: relative;
+  margin-bottom: 24px;
+}
+.eyebrow::after {
+  content: ''; position: absolute;
+  left: 0; bottom: -3px;
+  width: 28px; height: 1px;
+  background: var(--gold-deep);
+}
+.h-hero {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(48px, 9vw, 112px);
+  line-height: 0.98;
+  letter-spacing: -0.022em;
+  color: var(--text-1);
+  text-wrap: balance;
+}
+.h-hero em { font-style: italic; font-weight: 500; color: var(--gold-light); }
+.h-display {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(36px, 6vw, 64px);
+  line-height: 1.04;
+  letter-spacing: -0.018em;
+  color: var(--text-1);
+  margin-bottom: 22px;
+}
+.h-display em { font-style: italic; font-weight: 500; color: var(--gold-light); }
+.h-section {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(28px, 4.4vw, 46px);
+  line-height: 1.08;
+  letter-spacing: -0.012em;
+  color: var(--text-1);
+  margin-bottom: 18px;
+}
+.h-section em { font-style: italic; color: var(--gold-light); }
+.lede {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(17px, 2.4vw, 22px);
+  line-height: 1.52;
+  color: var(--text-2);
+  margin-bottom: 24px;
+  max-width: 620px;
+}
+.body-text, p.body {
+  font-family: var(--serif);
+  font-size: clamp(15px, 2vw, 17.5px);
+  line-height: 1.66;
+  color: var(--text-2);
+  margin-bottom: 18px;
+}
+.body-text strong { color: var(--text-1); font-weight: 500; }
+.pull {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(22px, 3.4vw, 32px);
+  line-height: 1.32;
+  color: var(--text-1);
+  padding-left: 24px;
+  border-left: 2px solid var(--gold);
+  margin: 32px 0 24px;
+}
+.pull em { font-weight: 500; color: var(--gold-light); }
+.fine {
+  font-family: var(--mono);
+  font-size: 9.5px; letter-spacing: 0.10em;
+  line-height: 1.7; color: var(--text-3);
+}
+
+/* ═══════════════ REVEAL ANIMATIONS ═══════════════ */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out); }
+.reveal.in { opacity: 1; transform: translateY(0); }
+.reveal.delay-1 { transition-delay: 0.10s; }
+.reveal.delay-2 { transition-delay: 0.20s; }
+.reveal.delay-3 { transition-delay: 0.30s; }
+.reveal.delay-4 { transition-delay: 0.40s; }
+.reveal.delay-5 { transition-delay: 0.50s; }
+.reveal.delay-6 { transition-delay: 0.60s; }
+
+/* ═══════════════ SECTION SHELL ═══════════════ */
+section {
+  position: relative; z-index: 4;
+  padding: var(--pad-y) var(--pad-x);
+}
+.inner { max-width: var(--maxw); margin: 0 auto; width: 100%; }
+.inner.narrow { max-width: var(--maxw-text); }
+
+/* ═══════════════ HERO ═══════════════ */
+.hero {
+  min-height: 100vh; min-height: 100dvh;
+  display: flex; flex-direction: column;
+  justify-content: flex-end;
+  padding: 100px var(--pad-x) 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-photo-wrap {
+  position: absolute; inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+.hero-photo {
+  position: absolute; inset: 0;
+  background-image: url('1330-w-whitmore/hero.jpg'),
+                    url('../lf-market-assets/1330-w-whitmore.jpg');
+  background-size: cover;
+  background-position: center 35%;
+  transform: scale(1.04);
+  will-change: transform;
+  /* Slow parallax — adjusted by JS on scroll */
+}
+.hero-photo::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(180deg, rgba(6, 8, 15, 0.35) 0%, rgba(6, 8, 15, 0.0) 30%, rgba(6, 8, 15, 0.0) 50%, rgba(6, 8, 15, 0.85) 100%),
+    linear-gradient(90deg, rgba(6, 8, 15, 0.42) 0%, rgba(6, 8, 15, 0.0) 50%);
+}
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  width: 100%;
+}
+.hero-meta {
+  display: flex; align-items: center; gap: 14px;
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--gold-light); margin-bottom: 18px;
+}
+.hero-meta::before {
+  content: ''; width: 36px; height: 1px;
+  background: var(--gold);
+}
+.hero-title { margin-bottom: 24px; }
+.hero-addr {
+  font-family: var(--display);
+  font-weight: 400; font-style: italic;
+  font-size: clamp(20px, 2.8vw, 28px);
+  color: var(--text-1); margin-bottom: 32px;
+}
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 18px 32px;
+  margin-bottom: 28px;
+  padding: 22px 0;
+  border-top: 1px solid rgba(201, 169, 110, 0.30);
+  border-bottom: 1px solid rgba(201, 169, 110, 0.30);
+  max-width: 720px;
+}
+.hero-stat .lbl {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 4px; display: block;
+}
+.hero-stat .val {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(22px, 3vw, 28px);
+  color: var(--text-1);
+  letter-spacing: -0.012em;
+  font-variant-numeric: tabular-nums;
+}
+.hero-price {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(36px, 5.4vw, 54px);
+  color: var(--gold-light);
+  letter-spacing: -0.022em;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 6px 28px rgba(201, 169, 110, 0.20);
+}
+.hero-scroll-cue {
+  position: absolute; bottom: 28px; left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--gold-light); opacity: 0.75;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  animation: bounce 2.4s infinite;
+  z-index: 5;
+}
+.hero-scroll-cue::after {
+  content: ''; width: 1px; height: 28px;
+  background: linear-gradient(180deg, var(--gold) 0%, transparent 100%);
+}
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.75; }
+  50% { transform: translateX(-50%) translateY(6px); opacity: 1; }
+}
+
+/* ═══════════════ THE STORY ═══════════════ */
+.story-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+}
+@media (min-width: 920px) {
+  .story-grid { grid-template-columns: 1fr 1fr; gap: 64px; }
+}
+.story-narrative .lede { font-size: clamp(18px, 2.4vw, 22px); }
+.story-aside {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-left: 2px solid var(--gold);
+  padding: 28px 30px;
+  border-radius: 4px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  position: relative;
+  height: fit-content;
+  align-self: start;
+  position: sticky;
+  top: 96px;
+}
+.story-aside .tag {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.30em; text-transform: uppercase;
+  color: var(--gold-deep); display: block; margin-bottom: 14px;
+}
+.story-aside-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 11px 0;
+  border-bottom: 1px solid rgba(201, 169, 110, 0.15);
+}
+.story-aside-row:last-child { border-bottom: none; }
+.story-aside-row .k {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.10em; color: var(--text-3);
+  text-transform: uppercase;
+}
+.story-aside-row .v {
+  font-family: var(--display);
+  font-size: 15px; color: var(--text-1);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.003em;
+}
+.story-aside-row .v.gold { color: var(--gold-light); }
+
+/* ═══════════════ GALLERY ═══════════════ */
+.gallery-section { padding-top: 40px; }
+.gallery-header {
+  display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between;
+  gap: 20px; margin-bottom: 36px;
+}
+.gallery {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+@media (min-width: 700px) {
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 240px;
+    gap: 16px;
+  }
+  .gallery .g-1 { grid-column: span 2; grid-row: span 2; }
+}
+@media (min-width: 1000px) {
+  .gallery {
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 220px;
+  }
+  .gallery .g-1 { grid-column: span 2; grid-row: span 2; }
+}
+.g-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--bg-2);
+  border: 1px solid var(--border-1);
+  cursor: pointer;
+  transition: transform 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out), border-color 0.4s;
+  will-change: transform;
+}
+.g-item::before {
+  content: ''; position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(180deg, transparent 60%, rgba(6, 8, 15, 0.4) 100%);
+  opacity: 0; transition: opacity 0.4s var(--ease);
+}
+.g-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+  border-color: rgba(201, 169, 110, 0.35);
+}
+.g-item:hover::before { opacity: 1; }
+.g-item img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.8s var(--ease-out);
+}
+.g-item:hover img { transform: scale(1.05); }
+.g-item .g-cap {
+  position: absolute; bottom: 14px; left: 16px; right: 16px;
+  z-index: 2;
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--text-1); opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s, transform 0.4s var(--ease-out);
+}
+.g-item:hover .g-cap { opacity: 1; transform: translateY(0); }
+/* ── Neighborhood map ── */
+.neighborhood-map {
+  margin-top: 40px; border-radius: 8px; overflow: hidden;
+  border: 1px solid rgba(201, 169, 110, 0.22);
+  box-shadow: 0 28px 80px rgba(0,0,0,0.5);
+  background: #0c1320;
+}
+.neighborhood-map iframe {
+  display: block; width: 100%; height: min(70vh, 620px); border: 0;
+}
+@media (max-width: 700px){ .neighborhood-map iframe { height: 480px; } }
+/* ── Zenlist private-network (Zenlist blue) ── */
+.zen-band { position: relative; overflow: hidden; padding: clamp(64px,9vh,120px) 24px; text-align: center;
+  background: linear-gradient(125deg,#10307a 0%,#1E4FC0 28%,#2D6CE0 52%,#3F7FE8 78%,#5B8FF0 100%);
+  background-size: 260% 260%; animation: zenPan 18s ease infinite; }
+@keyframes zenPan { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+.zen-blob { position: absolute; border-radius: 50%; filter: blur(64px); opacity: .55; pointer-events: none; z-index: 1; }
+.zen-blob.b1 { width: 380px; height: 380px; background: #6E9CF2; top: -130px; left: -70px; animation: zenFloat1 15s ease-in-out infinite; }
+.zen-blob.b2 { width: 320px; height: 320px; background: #163C9E; bottom: -140px; right: -70px; animation: zenFloat2 19s ease-in-out infinite; }
+.zen-blob.b3 { width: 240px; height: 240px; background: #9DBEFF; top: 26%; right: 16%; animation: zenFloat1 23s ease-in-out infinite reverse; }
+@keyframes zenFloat1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(46px,-34px)} }
+@keyframes zenFloat2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-36px,44px)} }
+.zen-glass { position: relative; z-index: 2; max-width: 660px; margin: 0 auto;
+  padding: clamp(36px,5vw,58px) clamp(26px,4vw,52px);
+  background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.24); border-radius: 20px;
+  backdrop-filter: blur(20px) saturate(1.25); -webkit-backdrop-filter: blur(20px) saturate(1.25);
+  box-shadow: 0 36px 90px rgba(6,20,68,0.42), inset 0 1px 0 rgba(255,255,255,0.28); }
+.zen-band .ze { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; color: #d8e6ff; }
+.zen-band h2 { color: #fff; margin-top: 14px; }
+.zen-band h2 em { color: #cfe0ff; font-style: italic; }
+.zen-band p { color: #e8efff; max-width: 520px; margin: 16px auto 0; line-height: 1.6; }
+.zen-btn { display: inline-flex; align-items: center; gap: 9px; margin-top: 28px; padding: 16px 34px; border-radius: 7px;
+  background: rgba(255,255,255,0.18); color: #fff; border: 1px solid rgba(255,255,255,0.5);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  font-family: var(--sans, 'Inter', sans-serif); font-size: 13px; font-weight: 600; letter-spacing: .04em; text-decoration: none;
+  transition: transform .35s var(--ease-out, ease), box-shadow .35s, background .35s, border-color .35s; }
+.zen-btn:hover { transform: translateY(-2px); background: rgba(255,255,255,0.3); border-color: #fff; box-shadow: 0 18px 48px rgba(6,20,68,.45); }
+@media (prefers-reduced-motion: reduce){ .zen-band{ animation: none; } .zen-blob{ animation: none; } }
+/* ── Intro splash overlay ── */
+#intro { position: fixed; inset: 0; z-index: 99999; background: #050E26; transition: opacity .9s ease; }
+#intro.hide { opacity: 0; pointer-events: none; }
+#introGl { display: block; width: 100%; height: 100%; }
+.zen-inline { color: #3F7FE8; text-decoration: none; border-bottom: 1px solid rgba(63,127,232,.4); }
+.zen-inline:hover { color: #2D6CE0; border-color: #2D6CE0; }
+/* header + footer link helpers */
+.topbar-left { display: flex; align-items: center; gap: 18px; }
+.topbar-link { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--text-2, #cdd5e0); text-decoration: none; transition: color .3s; }
+.topbar-link:hover { color: var(--gold-light, #C9A96E); }
+@media (max-width: 640px){ .topbar-link { display: none; } }
+.foot-links { display: flex; gap: 22px; justify-content: center; flex-wrap: wrap; margin: 4px 0 18px; }
+.foot-links a { font-family: var(--mono); font-size: 12px; letter-spacing: .04em;
+  color: var(--text-3, #8896ad); text-decoration: none; transition: color .3s; }
+.foot-links a:hover { color: var(--gold-light, #C9A96E); }
+.foot-links a.zen { color: #5a8ff0; }
+.foot-links a.zen:hover { color: #8ab2ff; }
+.advisors-more { text-align: center; margin-top: 34px; }
+/* ── Lightbox ── */
+.lightbox { position: fixed; inset: 0; z-index: 1000; display: none; align-items: center; justify-content: center;
+  background: rgba(3, 6, 12, 0.92); backdrop-filter: blur(6px); }
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 92vw; max-height: 84vh; object-fit: contain; border-radius: 4px;
+  box-shadow: 0 40px 120px rgba(0,0,0,0.7); }
+.lb-cap { position: absolute; bottom: 28px; left: 0; right: 0; text-align: center;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold-light); }
+.lb-x { position: absolute; top: 22px; right: 28px; font-size: 30px; line-height: 1; color: #fff; cursor: pointer; opacity: 0.8; }
+.lb-x:hover { opacity: 1; }
+.lb-nav { position: absolute; top: 50%; transform: translateY(-50%); font-size: 44px; color: #fff; cursor: pointer;
+  opacity: 0.55; padding: 0 22px; user-select: none; transition: opacity 0.2s; }
+.lb-nav:hover { opacity: 1; }
+.lb-prev { left: 6px; } .lb-next { right: 6px; }
+@media (max-width: 700px){ .lb-nav { font-size: 32px; padding: 0 12px; } }
+.g-placeholder {
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, var(--bg-2) 0%, var(--bg-3) 100%);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-3);
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.20em; text-transform: uppercase;
+  text-align: center;
+  padding: 12px;
+}
+
+/* ═══════════════ VIDEO PLAYER STUB ═══════════════ */
+.video-section { padding-top: 48px; padding-bottom: 48px; }
+.video-frame {
+  position: relative;
+  aspect-ratio: 16/9;
+  background: var(--bg-1);
+  border: 1px solid var(--border-1);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 28px 72px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+}
+.video-frame .play {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 2;
+}
+.video-frame .play-btn {
+  width: 92px; height: 92px;
+  border-radius: 999px;
+  background: rgba(201, 169, 110, 0.16);
+  border: 1px solid var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: transform 0.4s var(--ease-out), background 0.4s;
+}
+.video-frame:hover .play-btn { transform: scale(1.12); background: rgba(201, 169, 110, 0.28); }
+.video-frame .play-btn::before {
+  content: '';
+  width: 0; height: 0;
+  border-left: 18px solid var(--gold-light);
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  margin-left: 5px;
+}
+.video-frame .label {
+  position: absolute; bottom: 20px; left: 24px;
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--gold-light);
+  z-index: 2;
+}
+.video-frame .label b { color: var(--text-1); font-weight: 500; }
+.video-frame .poster {
+  position: absolute; inset: 0; z-index: 1;
+  background-image: url('1330-w-whitmore/hero.jpg'),
+                    url('../lf-market-assets/1330-w-whitmore.jpg');
+  background-size: cover; background-position: center;
+  filter: brightness(0.65) blur(1px);
+}
+
+/* ═══════════════ MARKET CONTEXT ═══════════════ */
+.market-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 36px;
+}
+@media (min-width: 920px) {
+  .market-grid { grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+}
+.market-stat-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-top: 2px solid var(--gold);
+  padding: 32px 32px 36px;
+  border-radius: 4px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  position: relative;
+}
+.market-stat-card .lbl {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.30em; text-transform: uppercase;
+  color: var(--gold); display: block; margin-bottom: 16px;
+}
+.market-stat-card .figure {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(56px, 8vw, 96px);
+  color: var(--gold-light);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 12px;
+}
+.market-stat-card .figure sup {
+  font-size: 0.35em; color: var(--gold);
+  font-style: italic; vertical-align: 0.65em;
+  font-weight: 400;
+}
+.market-stat-card .caption {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 16px;
+  color: var(--text-2); line-height: 1.5;
+}
+.chart-frame {
+  background: linear-gradient(180deg, rgba(12, 16, 33, 0.78) 0%, rgba(6, 8, 15, 0.72) 100%);
+  border: 1px solid rgba(201, 169, 110, 0.30);
+  border-radius: 8px;
+  padding: 18px 12px 14px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.50);
+  position: relative;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.chart-frame::before {
+  content: ''; position: absolute; top: 0; left: 0;
+  width: 36px; height: 2px;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
+}
+.chart-mount { width: 100%; height: 320px; }
+.chart-cap {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gold); text-align: center;
+  margin-top: 12px; padding-top: 10px;
+  border-top: 1px solid rgba(201, 169, 110, 0.20);
+}
+
+/* ═══════════════ LOCATION ═══════════════ */
+.location-section { padding-bottom: 48px; }
+.location-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+}
+@media (min-width: 800px) {
+  .location-grid { grid-template-columns: 1.4fr 1fr; gap: 36px; }
+}
+.amenities {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-top: 24px;
+}
+.amenity {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  padding: 18px 20px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform 0.4s var(--ease-out), border-color 0.3s;
+}
+.amenity:hover {
+  transform: translateY(-3px);
+  border-color: rgba(201, 169, 110, 0.30);
+}
+.amenity .lbl {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--gold); display: block; margin-bottom: 6px;
+}
+.amenity .v {
+  font-family: var(--display); font-size: 16px;
+  color: var(--text-1); font-weight: 500;
+  letter-spacing: -0.005em; line-height: 1.2;
+}
+
+/* ═══════════════ ADVISORS ═══════════════ */
+.advisors {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 36px;
+}
+@media (min-width: 760px) {
+  .advisors { grid-template-columns: 1fr 1fr; gap: 48px; }
+}
+.advisor-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-left: 2px solid var(--gold);
+  padding: 28px 30px 32px;
+  border-radius: 4px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.advisor-card .role {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.30em; text-transform: uppercase;
+  color: var(--gold-deep); display: block; margin-bottom: 12px;
+}
+.advisor-card .name {
+  font-family: var(--display); font-weight: 500;
+  font-size: 28px; color: var(--text-1);
+  margin-bottom: 14px; letter-spacing: -0.012em;
+  padding-bottom: 10px; position: relative;
+}
+.advisor-card .name::after {
+  content: ''; position: absolute;
+  left: 0; bottom: 0;
+  width: 32px; height: 1px;
+  background: var(--gold-deep);
+}
+.advisor-card .phone {
+  font-family: var(--display);
+  font-size: 26px; color: var(--gold-light);
+  letter-spacing: -0.005em;
+  display: block; margin-bottom: 8px;
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+}
+.advisor-card .email {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.04em; color: var(--text-2);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(201, 169, 110, 0.25);
+  padding-bottom: 1px;
+  display: inline-block;
+}
+.advisor-card .email:hover { color: var(--gold-light); border-color: var(--gold); }
+
+/* ═══════════════ PRIVATE SHOWING (CTA) ═══════════════ */
+.cta-section {
+  text-align: center;
+  padding-top: 80px; padding-bottom: 80px;
+}
+.cta-form-wrap {
+  max-width: 540px;
+  margin: 32px auto 0;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-top: 2px solid var(--gold);
+  padding: 32px 28px;
+  border-radius: 6px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  text-align: left;
+}
+.cta-form-wrap label {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gold); display: block; margin: 14px 0 6px;
+}
+.cta-form-wrap input, .cta-form-wrap textarea {
+  width: 100%;
+  padding: 12px 14px;
+  font-family: var(--serif); font-size: 16px;
+  background: rgba(6, 8, 15, 0.4);
+  border: 1px solid var(--border-1);
+  border-radius: 3px;
+  color: var(--text-1);
+  outline: none;
+  transition: border-color 0.3s;
+}
+.cta-form-wrap input:focus, .cta-form-wrap textarea:focus {
+  border-color: var(--gold);
+  background: rgba(6, 8, 15, 0.55);
+}
+.cta-form-wrap textarea { min-height: 100px; resize: vertical; }
+.cta-form-wrap button {
+  margin-top: 22px;
+  width: 100%;
+  padding: 14px;
+  font-family: var(--mono); font-size: 10.5px;
+  letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--gold-light);
+  background: rgba(201, 169, 110, 0.10);
+  border: 1px solid var(--gold);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+}
+.cta-form-wrap button:hover {
+  background: var(--gold);
+  color: var(--navy);
+}
+
+/* ═══════════════ FOOTER ═══════════════ */
+footer.site-foot {
+  padding: 36px var(--pad-x);
+  border-top: 1px solid var(--border-1);
+  text-align: center;
+  position: relative;
+  z-index: 4;
+}
+footer.site-foot .row {
+  font-family: var(--mono); font-size: 9.5px;
+  letter-spacing: 0.20em; text-transform: uppercase;
+  color: var(--text-3); line-height: 1.7;
+  margin: 4px 0;
+}
+footer.site-foot .gold-line {
+  display: inline-block; width: 40px; height: 1px;
+  background: var(--gold); margin-bottom: 18px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .hero-scroll-cue { animation: none; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body data-liquid-palette="0.62">
+<script src="../js/opening-scene.js"></script>
+
+<!-- ═══════════════ MOTION LAYERS ═══════════════ -->
+<canvas id="paint"></canvas>
+<div class="veil"></div>
+
+<!-- ═══════════════ CUSTOM CURSOR ═══════════════ -->
+<div class="cursor" id="cursor"></div>
+
+<!-- ═══════════════ TOP BAR ═══════════════ -->
+<nav class="topbar" id="topbar">
+  <div class="topbar-left">
+    <a href="/" class="back">Milhaupt &middot; Jakaitis</a>
+    <a href="/intelligence" class="topbar-link">Market Intelligence</a>
+  </div>
+  <div class="price-tag">$3,250,000</div>
+  <a href="#showing" class="cta">Private Showing</a>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     CHAPTER 00 — HERO (full-bleed property photo + key facts)
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="hero" id="hero">
+  <div class="hero-photo-wrap">
+    <div class="hero-photo" id="heroPhoto"></div>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-meta reveal">A New Lake Forest Listing &middot; Spring 2026</div>
+    <h1 class="h-hero hero-title reveal delay-1">A stone manor on a <em>private</em><br>cul-de-sac.</h1>
+    <div class="hero-addr reveal delay-2">1330 W. Whitmore Court &middot; Lake Forest, Illinois 60045</div>
+
+    <div class="hero-stats reveal delay-3">
+      <div class="hero-stat"><span class="lbl">Bedrooms</span><div class="val" data-count="5">—</div></div>
+      <div class="hero-stat"><span class="lbl">Bathrooms</span><div class="val">5.5</div></div>
+      <div class="hero-stat"><span class="lbl">Square Feet</span><div class="val"><span data-count="7200">—</span></div></div>
+      <div class="hero-stat"><span class="lbl">Lot</span><div class="val">1.2 ac</div></div>
+      <div class="hero-stat"><span class="lbl">Year Built</span><div class="val">2002</div></div>
+    </div>
+
+    <div class="hero-price reveal delay-4">$3,250,000</div>
+  </div>
+  <div class="hero-scroll-cue">Scroll the property</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     CHAPTER 01 — THE STORY (narrative + facts dashboard)
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="story">
+  <div class="inner">
+    <div class="story-grid">
+      <div class="story-narrative">
+        <span class="eyebrow reveal">The Residence</span>
+        <h2 class="h-display reveal delay-1">A house composed<br>for <em>generations</em>.</h2>
+        <p class="lede reveal delay-2">
+          1330 W. Whitmore Court sits at the close of a private cul-de-sac in central Lake Forest &mdash;
+          stone, slate, and copper resolved into a Tudor-inflected manor that holds its corner of the lakeshore corridor with quiet authority.
+        </p>
+        <p class="body-text reveal delay-3">
+          The architectural restraint is the point. The lime-washed stone fa&ccedil;ade reads warm in late light;
+          the copper roofs over the bay windows take on the patina the climate has been slowly painting since the home was built;
+          the slate above the central gable is hand-cut in the European measure. The result is a residence that does not announce itself
+          and, for that reason, will outlast the listings around it.
+        </p>
+        <p class="body-text reveal delay-4">
+          Inside, the home is composed in three distinct wings &mdash; a formal entertaining axis, a private family wing, and a guest-and-staff suite
+          tucked off the porte-coch&egrave;re. Ceiling heights step from twelve feet in the central hall to ten in the bedrooms, holding the proportion
+          that distinguishes a great Lake Forest house from a merely large one.
+        </p>
+        <p class="body-text reveal delay-5">
+          The appointments earn the address. A gourmet kitchen anchored by Sub-Zero refrigeration and a Wolf professional range,
+          its distressed-alder cabinetry opening to a breakfast room over the open lands. A full-paneled alder library with custom
+          shelving and a fireplace. A sunroom under cathedral ceilings and barn-wood beams, a wall of glass to the preserve beyond.
+          Below, a level built to host &mdash; recreation room with a barn-wood mantel and wet bar, a wired theater, an exercise room,
+          and a sixth bedroom suite. White-oak floors throughout; a Vermont-slate roof with copper dormers and a custom cupola above.
+        </p>
+        <div class="pull reveal delay-5">
+          A residence the data <em>and</em> the eye agree on:<br>
+          the kind of house that does not need to argue for itself.
+        </div>
+        <p class="body-text reveal delay-6">
+          The grounds &mdash; just over one and one-fifth acres &mdash; were laid by Doreen Atkinson, who has shaped a measured progression of garden rooms
+          around the central paver brick courtyard: a formal boxwood parterre to the south, mature serviceberry to the east, and a private rear lawn
+          framed by mature maples that screen the property from every neighbor. The result is total privacy on what is, by Lake Forest measure, an unusually deep lot.
+        </p>
+      </div>
+
+      <aside class="story-aside reveal delay-2">
+        <span class="tag">Property Card</span>
+        <div class="story-aside-row"><div class="k">Address</div><div class="v">1330 W. Whitmore Ct</div></div>
+        <div class="story-aside-row"><div class="k">City</div><div class="v">Lake Forest, IL</div></div>
+        <div class="story-aside-row"><div class="k">Bedrooms</div><div class="v">5</div></div>
+        <div class="story-aside-row"><div class="k">Full Baths</div><div class="v">5</div></div>
+        <div class="story-aside-row"><div class="k">Half Baths</div><div class="v">1</div></div>
+        <div class="story-aside-row"><div class="k">Above-grade SqFt</div><div class="v">7,200</div></div>
+        <div class="story-aside-row"><div class="k">Below-grade SqFt</div><div class="v">2,800</div></div>
+        <div class="story-aside-row"><div class="k">Lot</div><div class="v">1.20 acres</div></div>
+        <div class="story-aside-row"><div class="k">Year Built</div><div class="v">2002</div></div>
+        <div class="story-aside-row"><div class="k">Style</div><div class="v">Tudor / Stone Manor</div></div>
+        <div class="story-aside-row"><div class="k">Garage</div><div class="v">4-car attached</div></div>
+        <div class="story-aside-row"><div class="k">School Dist.</div><div class="v">LF 67 / LFHS 115</div></div>
+        <div class="story-aside-row"><div class="k">List price</div><div class="v gold">$3,250,000</div></div>
+        <div class="story-aside-row"><div class="k">Price / SqFt</div><div class="v gold">$451</div></div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     CHAPTER 02 — THE GALLERY
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="gallery-section" id="gallery">
+  <div class="inner">
+    <div class="gallery-header">
+      <div>
+        <span class="eyebrow reveal">A Walk Through</span>
+        <h2 class="h-section reveal delay-1">The <em>estate</em>.</h2>
+      </div>
+      <span class="fine reveal delay-2">Tap any image to enlarge &middot; architectural &amp; aerial photography</span>
+    </div>
+    <div class="gallery">
+      <div class="g-item g-1 reveal" data-img="hero">
+        <img src="1330-w-whitmore/hero.jpg"
+             onerror="this.src='../lf-market-assets/1330-w-whitmore.jpg'"
+             alt="1330 W. Whitmore — front elevation">
+        <div class="g-cap">Front elevation &middot; stone manor</div>
+      </div>
+      <div class="g-item g-2 reveal delay-1"><img src="1330-w-whitmore/02.jpg" loading="lazy" alt="Two-story foyer"><div class="g-cap">Two-story foyer</div></div>
+      <div class="g-item g-3 reveal delay-1"><img src="1330-w-whitmore/03.jpg" loading="lazy" alt="The great room"><div class="g-cap">The great room &middot; exposed beams</div></div>
+      <div class="g-item g-4 reveal delay-2"><img src="1330-w-whitmore/04.jpg" loading="lazy" alt="Living room"><div class="g-cap">Living room &middot; stone fireplace</div></div>
+      <div class="g-item g-5 reveal delay-2"><img src="1330-w-whitmore/05.jpg" loading="lazy" alt="Chef's kitchen"><div class="g-cap">Chef&rsquo;s kitchen</div></div>
+      <div class="g-item g-6 reveal delay-3"><img src="1330-w-whitmore/06.jpg" loading="lazy" alt="Kitchen island"><div class="g-cap">Kitchen &middot; center island</div></div>
+      <div class="g-item g-7 reveal delay-3"><img src="1330-w-whitmore/07.jpg" loading="lazy" alt="Formal dining room"><div class="g-cap">Formal dining</div></div>
+      <div class="g-item g-8 reveal delay-4"><img src="1330-w-whitmore/08.jpg" loading="lazy" alt="The library"><div class="g-cap">The library</div></div>
+      <div class="g-item g-9 reveal delay-1"><img src="1330-w-whitmore/09.jpg" loading="lazy" alt="Primary suite"><div class="g-cap">Primary suite</div></div>
+      <div class="g-item g-10 reveal delay-2"><img src="1330-w-whitmore/10.jpg" loading="lazy" alt="Spa bath"><div class="g-cap">Spa bath</div></div>
+      <div class="g-item g-11 reveal delay-2"><img src="1330-w-whitmore/11.jpg" loading="lazy" alt="Bedroom"><div class="g-cap">Bedroom</div></div>
+      <div class="g-item g-12 reveal delay-3"><img src="1330-w-whitmore/12.jpg" loading="lazy" alt="Rear terrace"><div class="g-cap">Rear terrace &middot; outdoor living</div></div>
+      <div class="g-item g-13 reveal delay-3"><img src="1330-w-whitmore/13.jpg" loading="lazy" alt="Pond and grounds"><div class="g-cap">Pond &amp; grounds</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     CHAPTER 03 — VIDEO TOUR
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="video-section" id="video">
+  <div class="inner">
+    <span class="eyebrow reveal">A Cinematic Walkthrough</span>
+    <h2 class="h-section reveal delay-1">The <em>film</em>.</h2>
+    <div class="video-frame reveal delay-2" id="videoFrame" data-src="" style="background-image:linear-gradient(to top,rgba(3,8,20,.7),rgba(3,8,20,.2)),url('1330-w-whitmore/hero.jpg');background-size:cover;background-position:center;">
+      <div class="poster"></div>
+      <div class="label"><b>1330 W. Whitmore Court</b> &middot; Property film &middot; debuting with the listing</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     CHAPTER 04 — THE MARKET CONTEXT
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="market">
+  <div class="inner">
+    <span class="eyebrow reveal">Why This Listing, This Moment</span>
+    <h2 class="h-display reveal delay-1">The seller's <em>window</em><br>has opened.</h2>
+
+    <div class="market-grid" style="margin-top: 36px;">
+      <div>
+        <div class="market-stat-card reveal delay-2">
+          <span class="lbl">Lake Forest Luxury &middot; Apr-May 2026</span>
+          <div class="figure"><span data-count="101.9">0</span><sup>%</sup></div>
+          <div class="caption">
+            Average sale-to-original-list-price ratio across Lake Forest closed luxury sales in April and May 2026 &mdash;
+            the first two-month stretch above 100% since the post-pandemic peak of summer 2022.
+          </div>
+        </div>
+
+        <p class="body-text reveal delay-3" style="margin-top: 24px;">
+          1330 W. Whitmore Court enters this corridor at $3,250,000 &mdash; in the $3M&ndash;$5M band where average days on market in the trailing twelve
+          is one hundred and forty-nine days. A correctly priced, correctly prepared, correctly presented home in this band materially outperforms the band average.
+          That is the position this listing is built on.
+        </p>
+      </div>
+
+      <div class="reveal delay-3">
+        <div class="chart-frame">
+          <div class="chart-mount" id="market-chart"></div>
+          <div class="chart-cap">Fig. 01 &middot; Lake Forest luxury SP/LP ratio &middot; trailing 36 months</div>
+        </div>
+        <p class="fine reveal delay-4" style="margin-top: 18px; text-align: center;">
+          Source &middot; MRED MLS &middot; All closed single-family transactions in Lake Forest at or above $1,000,000
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     CHAPTER 05 — LOCATION & AMENITIES
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="location-section" id="location">
+  <div class="inner">
+    <div class="location-grid">
+      <div>
+        <span class="eyebrow reveal">The Neighborhood</span>
+        <h2 class="h-section reveal delay-1">Central <em>Lake Forest</em>.</h2>
+        <p class="body-text reveal delay-2">
+          Set amidst acres of Open Lands and forest preserve, 1330 W. Whitmore Court occupies a quiet cul-de-sac
+          at the edge of <em>Middlefork Savanna</em> &mdash; one of the finest tallgrass savannas in the Midwest, more than
+          700 acres of restored prairie, oak woodland, and trail. Historic <em>Elawa Farm</em> sits just to the north,
+          and downtown Lake Forest is minutes east.
+        </p>
+        <p class="body-text reveal delay-3">
+          That preserve is the home's permanent neighbor: protected open space wrapping the property line, the source
+          of the uncompromising four-season views the brochure first promised &mdash; from the travertine foyer straight
+          through to the sunroom's wall of windows and the bluestone patio beyond.
+        </p>
+      </div>
+
+      <div>
+        <span class="eyebrow reveal delay-1">Within Reach</span>
+        <div class="amenities">
+          <div class="amenity reveal delay-2"><span class="lbl">Metra to Chicago</span><div class="v">14 minutes</div></div>
+          <div class="amenity reveal delay-2"><span class="lbl">Market Square</span><div class="v">6 minutes</div></div>
+          <div class="amenity reveal delay-3"><span class="lbl">Onwentsia Club</span><div class="v">9 minutes</div></div>
+          <div class="amenity reveal delay-3"><span class="lbl">Lake Michigan</span><div class="v">12 minutes</div></div>
+          <div class="amenity reveal delay-4"><span class="lbl">LFCDS</span><div class="v">7 minutes</div></div>
+          <div class="amenity reveal delay-4"><span class="lbl">Open space</span><div class="v">Adjacent</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="neighborhood-map reveal delay-2">
+      <iframe src="1330-w-whitmore/neighborhood.html" title="1330 W. Whitmore — interactive neighborhood map" loading="lazy"></iframe>
+    </div>
+    <p class="fine reveal" style="margin-top:14px;text-align:center">Interactive map &middot; hover or tap any marker for distances and detail</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     CHAPTER 06 — THE ADVISORS
+     ═══════════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════
+     ZENLIST — THE PRIVATE NETWORK
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="zen-band">
+  <span class="zen-blob b1"></span><span class="zen-blob b2"></span><span class="zen-blob b3"></span>
+  <div class="inner">
+    <div class="zen-glass reveal">
+      <div class="ze">Powered by Zenlist</div>
+      <h2 class="h-section" style="margin-top:12px">Join the <em>private network</em>.</h2>
+      <p>
+        The most sought-after North Shore homes move before they ever reach the public market.
+        Create a private Zenlist account to see off-market and coming-soon listings the moment they surface &mdash;
+        shared with you directly by Milhaupt &middot; Jakaitis.
+      </p>
+      <a class="zen-btn" href="https://zenlist.realestate" target="_blank" rel="noopener">
+        Request Private Access &rarr;
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     CHAPTER 06 — THE ADVISORS
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="advisors">
+  <div class="inner">
+    <span class="eyebrow reveal">Your Advisors</span>
+    <h2 class="h-section reveal delay-1">In <em>discreet</em> hands.</h2>
+    <div class="advisors" style="margin-top: 36px;">
+      <div class="advisor-card reveal delay-2">
+        <span class="role">Listing Agent</span>
+        <div class="name">Patrick Milhaupt</div>
+        <a href="tel:8478499828" class="phone">847.849.9828</a>
+        <a href="mailto:pmilhaupt@jamesonsir.com" class="email">pmilhaupt@jamesonsir.com</a>
+      </div>
+      <div class="advisor-card reveal delay-3">
+        <span class="role">Global Advisor &middot; Partner</span>
+        <div class="name">Elizabeth Jakaitis</div>
+        <a href="tel:8478407842" class="phone">847.840.7842</a>
+        <a href="mailto:ejakaitis@jamesonsir.com" class="email">ejakaitis@jamesonsir.com</a>
+      </div>
+    </div>
+    <div class="advisors-more reveal delay-4">
+      <a href="/about" style="display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border:1px solid rgba(201,169,110,.4);border-radius:4px;color:var(--gold-light,#C9A96E);font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;transition:.3s" onmouseover="this.style.borderColor='#C9A96E';this.style.background='rgba(201,169,110,.06)'" onmouseout="this.style.borderColor='rgba(201,169,110,.4)';this.style.background='transparent'">Learn more about the agents &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     CHAPTER 07 — PRIVATE SHOWING
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="cta-section" id="showing">
+  <div class="inner narrow">
+    <span class="eyebrow reveal">Begin a Private Showing</span>
+    <h2 class="h-display reveal delay-1">A thirty-minute<br><em>walk-through</em>.</h2>
+    <p class="lede reveal delay-2" style="margin-left: auto; margin-right: auto;">
+      Showings of 1330 W. Whitmore Court are by appointment only.
+      Leave your name and number and Patrick or Elizabeth will arrange a private window for you.
+    </p>
+
+    <form class="cta-form-wrap reveal delay-3" id="showingForm" novalidate>
+      <label for="nm">Your name</label>
+      <input id="nm" type="text" required maxlength="200">
+      <label for="ph">Phone</label>
+      <input id="ph" type="tel" required maxlength="50">
+      <label for="em">Email</label>
+      <input id="em" type="email" required maxlength="200">
+      <label for="ms">Preferred showing window (optional)</label>
+      <textarea id="ms" maxlength="2000" placeholder="Mornings \u00b7 weekends \u00b7 etc."></textarea>
+      <input id="hp" type="text" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;" aria-hidden="true">
+      <button type="submit" id="showingBtn">Request a Showing</button>
+      <p id="showingStatus" role="status" style="margin-top:12px;font-size:12.5px;color:var(--text-3,#6b7a99);"></p>
+    </form>
+    <script>
+    (function(){
+      var f = document.getElementById('showingForm');
+      var b = document.getElementById('showingBtn');
+      var s = document.getElementById('showingStatus');
+      f.addEventListener('submit', function(e){
+        e.preventDefault();
+        if (document.getElementById('hp').value) return;
+        if (!f.reportValidity()) return;
+        b.disabled = true; s.textContent = 'Sending\u2026';
+        fetch('https://itupjrknklzvmmqicuyc.supabase.co/rest/v1/leads', {
+          method: 'POST',
+          headers: {
+            'apikey': 'sb_publishable_fQnZLJnaC-dAHBuGBHJgjQ_RUHCe_7S',
+            'Authorization': 'Bearer sb_publishable_fQnZLJnaC-dAHBuGBHJgjQ_RUHCe_7S',
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({
+            source: 'showing-1330',
+            name: document.getElementById('nm').value.trim(),
+            phone: document.getElementById('ph').value.trim(),
+            email: document.getElementById('em').value.trim(),
+            message: 'Showing request \u2014 1330 W. Whitmore. Window: ' + (document.getElementById('ms').value.trim() || 'not specified'),
+            page: location.pathname,
+            user_agent: navigator.userAgent.slice(0, 250)
+          })
+        }).then(function(r){
+          if (!r.ok) throw new Error(r.status);
+          f.reset(); b.disabled = false;
+          s.textContent = 'Received. Patrick or Elizabeth will be in touch within 24 hours to arrange your private window.';
+          s.style.color = 'var(--gold-light, #C9A96E)';
+        }).catch(function(){
+          b.disabled = false;
+          s.textContent = 'Something went wrong \u2014 please call 847.849.9828 or email pmilhaupt@jamesonsir.com.';
+        });
+      });
+    })();
+    </script>
+    <p class="fine reveal delay-4" style="margin-top: 24px;">
+      Prefer to watch the market first? <a class="zen-inline" href="https://zenlist.realestate" target="_blank" rel="noopener">Join the private network on Zenlist</a> for off-market and coming-soon access.
+    </p>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="gold-line"></div>
+  <div class="foot-links">
+    <a href="/intelligence">Market Intelligence</a>
+    <a href="/">patrick.realestate</a>
+    <a href="/about">About the Agents</a>
+    <a class="zen" href="https://zenlist.realestate" target="_blank" rel="noopener">Join the Private Network</a>
+  </div>
+  <div class="row">Jameson Sotheby&rsquo;s International Realty &middot; Lake Forest Office</div>
+  <div class="row">Patrick Milhaupt &middot; Global Real Estate Advisor &middot; patrick.realestate</div>
+  <div class="row">Equal Housing Opportunity</div>
+</footer>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     THREE.JS + LIQUID-BG + PLOTLY
+     ═══════════════════════════════════════════════════════════════ -->
+<script>
+/* Mobile WebGL hardening — force pixel ratio 1 on small viewports */
+(function() {
+  if (window.innerWidth <= 820) {
+    Object.defineProperty(window, 'devicePixelRatio', { value: 1, configurable: true });
+  }
+})();
+</script>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.1/three.min.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   INTRO SPLASH — Sotheby's International Realty mark, three.js fade (~3s)
+   Fail-safe: always reveals the page even if WebGL/texture fails.
+   ═══════════════════════════════════════════════════════════════════ */
+(function(){
+  var intro = document.getElementById('intro');
+  if (!intro) return;
+  var done = false;
+  function finish(){ if (done) return; done = true; intro.classList.add('hide'); setTimeout(function(){ if (intro.parentNode) intro.remove(); }, 950); }
+  var hardStop = setTimeout(finish, 3800); // never trap the user
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canvas = document.getElementById('introGl');
+
+  // Fallback: plain logo fade if no WebGL / reduced motion
+  if (typeof THREE === 'undefined' || reduce) {
+    var im = document.createElement('img'); im.src = '1330-w-whitmore/sir-wordmark.png';
+    im.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(46vw,420px);opacity:0;transition:opacity .8s ease';
+    intro.appendChild(im); requestAnimationFrame(function(){ im.style.opacity = '1'; });
+    setTimeout(function(){ im.style.opacity = '0'; }, reduce ? 900 : 2100);
+    setTimeout(finish, reduce ? 1400 : 3000); return;
+  }
+
+  var renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true }); }
+  catch (e) { finish(); return; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(40, window.innerWidth/window.innerHeight, 0.1, 100);
+  camera.position.z = 5;
+
+  var aspect = 2048/709, w = 3.3, h = w/aspect;
+  var mat = new THREE.MeshBasicMaterial({ transparent:true, opacity:0, depthWrite:false });
+  new THREE.TextureLoader().load('1330-w-whitmore/sir-wordmark.png', function(t){ if (t.colorSpace !== undefined) t.colorSpace = THREE.SRGBColorSpace; mat.map = t; mat.needsUpdate = true; });
+  var logo = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat); scene.add(logo);
+
+  var glowMat = new THREE.MeshBasicMaterial({ color:0xC9A96E, transparent:true, opacity:0, blending:THREE.AdditiveBlending, depthWrite:false });
+  var glow = new THREE.Mesh(new THREE.PlaneGeometry(w*1.5, h*2.6), glowMat); glow.position.z = -0.3; scene.add(glow);
+
+  var N = 360, pos = new Float32Array(N*3);
+  for (var i=0;i<N;i++){ pos[i*3]=(Math.random()-0.5)*7.2; pos[i*3+1]=(Math.random()-0.5)*4.6; pos[i*3+2]=(Math.random()-0.5)*2; }
+  var g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  var dust = new THREE.Points(g, new THREE.PointsMaterial({ color:0xF0D68A, size:0.022, transparent:true, opacity:0, blending:THREE.AdditiveBlending, depthWrite:false }));
+  scene.add(dust);
+
+  window.addEventListener('resize', function(){ camera.aspect = window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
+
+  function env(t){ if (t < 0.85) return t/0.85; if (t < 2.0) return 1; if (t < 3.0) return 1-(t-2.0)/1.0; return 0; }
+  var t0 = performance.now();
+  (function loop(){
+    var t = (performance.now()-t0)/1000, e = env(t);
+    mat.opacity = e; glowMat.opacity = e*0.32; dust.material.opacity = e*0.8;
+    logo.scale.setScalar(0.93 + 0.07*Math.min(1, t/2));
+    logo.position.y = Math.sin(t*0.6)*0.03;
+    dust.rotation.z = t*0.05;
+    var p = dust.geometry.attributes.position.array;
+    for (var i=0;i<N;i++){ p[i*3+1]-=0.0032; if (p[i*3+1] < -2.4) p[i*3+1]=2.4; }
+    dust.geometry.attributes.position.needsUpdate = true;
+    camera.position.x = Math.sin(t*0.3)*0.1;
+    renderer.render(scene, camera);
+    if (t < 3.05) requestAnimationFrame(loop);
+    else { clearTimeout(hardStop); finish(); try{ renderer.dispose(); }catch(e){} }
+  })();
+})();
+</script>
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   GOLD-DUST SHADER v2 — "Millions in liquid"
+   12-octave procedural falling particles + liquid domain-warp medium
+   Per-particle fall speed, organic sine-wave sway tied to depth,
+   caustic gold highlights under navy. No more orbs.
+   ═══════════════════════════════════════════════════════════════════ */
+(function() {
+  if (typeof THREE === 'undefined') return;
+  var canvas = document.getElementById('paint');
+  if (!canvas) return;
+  var renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: false, alpha: false, powerPreference: 'high-performance' });
+  } catch (e) { return; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+  var uniforms = {
+    uTime:       { value: 0 },
+    uResolution: { value: new THREE.Vector2(1, 1) },
+    uScroll:     { value: 0 },
+    uDensity:    { value: window.innerWidth <= 720 ? 0.85 : 1.0 }
+  };
+
+  var vert = 'void main() { gl_Position = vec4(position, 1.0); }';
+
+  var frag = [
+    'precision highp float;',
+    'uniform float uTime;',
+    'uniform vec2  uResolution;',
+    'uniform float uScroll;',
+    'uniform float uDensity;',
+    '',
+    '// ─── HASH FUNCTIONS ───',
+    'float hash11(float n) { return fract(sin(n) * 43758.5453123); }',
+    'float hash21(vec2 p) {',
+    '  p = fract(p * vec2(443.8975, 397.2973));',
+    '  p += dot(p, p.yx + 19.19);',
+    '  return fract((p.x + p.y) * p.x);',
+    '}',
+    'vec2 hash22(vec2 p) {',
+    '  return fract(sin(vec2(dot(p, vec2(127.1, 311.7)),',
+    '                        dot(p, vec2(269.5, 183.3)))) * 43758.5453);',
+    '}',
+    '',
+    '// ─── 2D SIMPLEX-LIKE NOISE ───',
+    'vec2 hashN2(vec2 p) {',
+    '  p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));',
+    '  return -1.0 + 2.0 * fract(sin(p) * 43758.5453123);',
+    '}',
+    'float noise(vec2 p) {',
+    '  const float K1 = 0.366025404;',
+    '  const float K2 = 0.211324865;',
+    '  vec2 i = floor(p + (p.x + p.y) * K1);',
+    '  vec2 a = p - i + (i.x + i.y) * K2;',
+    '  float m = step(a.y, a.x);',
+    '  vec2 o = vec2(m, 1.0 - m);',
+    '  vec2 b = a - o + K2;',
+    '  vec2 c = a - 1.0 + 2.0 * K2;',
+    '  vec3 h = max(0.5 - vec3(dot(a, a), dot(b, b), dot(c, c)), 0.0);',
+    '  vec3 n = h * h * h * h * vec3(',
+    '    dot(a, hashN2(i + 0.0)),',
+    '    dot(b, hashN2(i + o)),',
+    '    dot(c, hashN2(i + 1.0))',
+    '  );',
+    '  return dot(n, vec3(70.0));',
+    '}',
+    '',
+    'float fbm(vec2 p) {',
+    '  float v = 0.0; float a = 0.5;',
+    '  for (int i = 0; i < 4; i++) {',
+    '    v += a * noise(p); p = p * 2.03 + vec2(1.7, 9.2); a *= 0.5;',
+    '  }',
+    '  return v;',
+    '}',
+    '',
+    '// ─── LIQUID MEDIUM FLOW (domain warping) ───',
+    'vec2 liquidFlow(vec2 p, float t) {',
+    '  vec2 q = vec2(fbm(p + vec2(0.0, t * 0.5)),',
+    '                fbm(p + vec2(5.2, t * 0.4)));',
+    '  vec2 r = vec2(fbm(p + 2.0 * q + vec2(1.7, 9.2) + t * 0.3),',
+    '                fbm(p + 2.0 * q + vec2(8.3, 2.8) + t * 0.25));',
+    '  return r * 0.06;',
+    '}',
+    '',
+    '// ─── SINGLE OCTAVE OF FALLING PARTICLES ───',
+    '// Each cell contains AT MOST one particle, with per-particle physics.',
+    'float dustOctave(vec2 uv, float time, float seed, float density, float radius) {',
+    '  vec2 cell = floor(uv);',
+    '  vec2 local = fract(uv);',
+    '  float h = hash21(cell + seed * 17.0);',
+    '  if (h > 1.0 - density) {',
+    '    // Random center within cell',
+    '    vec2 c = vec2(0.5) + 0.40 * (hash22(cell + seed * 31.0) - 0.5);',
+    '    // Per-particle fall speed (0.5 to 1.3x layer base)',
+    '    float fallVar = 0.5 + hash21(cell + seed * 43.0) * 0.8;',
+    '    float driftPhase = hash21(cell + seed * 59.0) * 6.2832;',
+    '    // Vertical fall — modulo wraps the particle infinitely',
+    '    float yFall = mod(time * fallVar, 1.4);',
+    '    c.y -= yFall;',
+    '    // Organic horizontal drift tied to vertical position (liquid current)',
+    '    c.x += sin(time * 0.4 + driftPhase + uv.y * 2.5) * 0.045;',
+    '    c.x += cos(time * 0.18 + driftPhase * 1.3) * 0.025;',
+    '    // Wrap so particles dont vanish off the bottom',
+    '    if (c.y < -0.2) c.y += 1.4;',
+    '    float d = distance(local, c);',
+    '    // Tight radius — no more orbs',
+    '    float sz = radius * (0.45 + hash21(cell + seed * 71.0) * 0.55);',
+    '    // Soft core only — no glow halo (was creating orb feel)',
+    '    float core = smoothstep(sz, 0.0, d);',
+    '    return core * (0.45 + h * 0.55);',
+    '  }',
+    '  return 0.0;',
+    '}',
+    '',
+    '// ─── 12 OCTAVES ROLLED OUT (GLSL cannot index varying loops cleanly) ───',
+    '// Density CURVE: far layers densest, foreground sparse',
+    '// Radius CURVE: far layers tiny (pixel scale), foreground slightly larger',
+    '// Fall speed CURVE: far layers FASTER (parallax depth illusion)',
+    'void main() {',
+    '  vec2 uv = gl_FragCoord.xy / uResolution.xy;',
+    '  float aspect = uResolution.x / uResolution.y;',
+    '  vec2 auv = vec2(uv.x * aspect, uv.y);',
+    '  ',
+    '  // ── LIQUID MEDIUM BASE ──',
+    '  vec2 flow = liquidFlow(auv * 1.4, uTime * 0.04);',
+    '  float bg = fbm(auv * 2.2 + flow);',
+    '  bg = bg * 0.5 + 0.5;',
+    '  vec3 navy0 = vec3(0.012, 0.038, 0.115);',
+    '  vec3 navy1 = vec3(0.034, 0.082, 0.205);',
+    '  vec3 navy2 = vec3(0.062, 0.142, 0.310);',
+    '  vec3 col = mix(navy0, navy1, smoothstep(0.0, 0.55, bg));',
+    '  col = mix(col, navy2, smoothstep(0.50, 0.88, bg) * 0.62);',
+    '  ',
+    '  // Caustic gold-amber under-glow — light through liquid',
+    '  float caustic = pow(bg, 2.4);',
+    '  vec3 amber = vec3(0.18, 0.12, 0.03);',
+    '  col += amber * caustic * 0.35;',
+    '  ',
+    '  // Apply liquid distortion to particle UVs — they appear to bend through the medium',
+    '  vec2 puv = auv + flow * 0.045;',
+    '  float scrollY = uScroll * 0.40;',
+    '  ',
+    '  // Gold tones',
+    '  vec3 goldA = vec3(0.722, 0.525, 0.043);   // warm bronze',
+    '  vec3 goldB = vec3(0.941, 0.839, 0.541);   // lit gold',
+    '  vec3 goldC = vec3(1.000, 0.917, 0.625);   // bright pale gold',
+    '  ',
+    '  // ── 12 OCTAVES OF FALLING DUST ──',
+    '  // Density rises with depth, radius falls with depth, speed rises with depth',
+    '  ',
+    '  float p; vec3 c;',
+    '  ',
+    '  // Octave 1 — closest, slowest, sparse, slightly larger',
+    '  p = dustOctave(puv *   5.0, (uTime + scrollY) * 0.045, 1.0, 0.014 * uDensity, 0.085);',
+    '  c = mix(goldA, goldB, 0.30); col += c * p * 0.85;',
+    '  ',
+    '  // Octave 2',
+    '  p = dustOctave(puv *   8.0, (uTime + scrollY) * 0.065, 2.0, 0.022 * uDensity, 0.072);',
+    '  c = mix(goldA, goldB, 0.55); col += c * p * 0.78;',
+    '  ',
+    '  // Octave 3',
+    '  p = dustOctave(puv *  12.5, (uTime + scrollY) * 0.090, 3.0, 0.034 * uDensity, 0.060);',
+    '  c = mix(goldB, goldC, 0.20); col += c * p * 0.72;',
+    '  ',
+    '  // Octave 4',
+    '  p = dustOctave(puv *  19.0, (uTime + scrollY) * 0.118, 4.0, 0.050 * uDensity, 0.050);',
+    '  c = mix(goldA, goldB, 0.70); col += c * p * 0.65;',
+    '  ',
+    '  // Octave 5',
+    '  p = dustOctave(puv *  29.0, (uTime + scrollY) * 0.148, 5.0, 0.068 * uDensity, 0.042);',
+    '  c = mix(goldB, goldC, 0.10); col += c * p * 0.58;',
+    '  ',
+    '  // Octave 6',
+    '  p = dustOctave(puv *  44.0, (uTime + scrollY) * 0.182, 6.0, 0.090 * uDensity, 0.035);',
+    '  c = mix(goldA, goldB, 0.85); col += c * p * 0.50;',
+    '  ',
+    '  // Octave 7',
+    '  p = dustOctave(puv *  68.0, (uTime + scrollY) * 0.220, 7.0, 0.115 * uDensity, 0.028);',
+    '  c = mix(goldB, goldC, 0.05); col += c * p * 0.42;',
+    '  ',
+    '  // Octave 8',
+    '  p = dustOctave(puv * 104.0, (uTime + scrollY) * 0.260, 8.0, 0.142 * uDensity, 0.022);',
+    '  c = mix(goldA, goldB, 0.60); col += c * p * 0.34;',
+    '  ',
+    '  // Octave 9 — fine pollen',
+    '  p = dustOctave(puv * 158.0, (uTime + scrollY) * 0.300, 9.0, 0.170 * uDensity, 0.018);',
+    '  c = mix(goldB, goldC, 0.30); col += c * p * 0.28;',
+    '  ',
+    '  // Octave 10 — micro-pollen',
+    '  p = dustOctave(puv * 240.0, (uTime + scrollY) * 0.340, 10.0, 0.190 * uDensity, 0.015);',
+    '  c = mix(goldA, goldB, 0.50); col += c * p * 0.22;',
+    '  ',
+    '  // Octave 11 — pixel-scale specks',
+    '  p = dustOctave(puv * 365.0, (uTime + scrollY) * 0.380, 11.0, 0.210 * uDensity, 0.013);',
+    '  c = mix(goldB, goldC, 0.00); col += c * p * 0.17;',
+    '  ',
+    '  // Octave 12 — atmospheric far-field (millions effect)',
+    '  p = dustOctave(puv * 555.0, (uTime + scrollY) * 0.420, 12.0, 0.230 * uDensity, 0.011);',
+    '  c = goldB; col += c * p * 0.12;',
+    '  ',
+    '  // Subtle brush texture — final hand-feel',
+    '  float brush = fbm(auv * 5.5 + uTime * 0.018);',
+    '  col *= 0.92 + brush * 0.12;',
+    '  ',
+    '  // Vignette',
+    '  vec2 vu = uv - 0.5;',
+    '  float vig = smoothstep(1.05, 0.30, length(vu * vec2(1.3, 1.0)));',
+    '  col *= mix(0.42, 1.0, vig);',
+    '  ',
+    '  // Subtle grain',
+    '  float grain = (fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453) - 0.5) * 0.018;',
+    '  col += grain;',
+    '  ',
+    '  gl_FragColor = vec4(col, 1.0);',
+    '}'
+  ].join('\n');
+
+  var mat = new THREE.ShaderMaterial({ uniforms: uniforms, vertexShader: vert, fragmentShader: frag });
+  var mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat);
+  scene.add(mesh);
+
+  function resize() {
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    renderer.setSize(w, h, false);
+    uniforms.uResolution.value.set(w, h);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  window.addEventListener('scroll', function() {
+    uniforms.uScroll.value = window.scrollY / window.innerHeight;
+  }, { passive: true });
+
+  window.__paintUniforms = uniforms;
+
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) {
+    uniforms.uTime.value = 8.0;
+    renderer.render(scene, camera);
+    return;
+  }
+
+  var start = performance.now();
+  (function tick() {
+    uniforms.uTime.value = (performance.now() - start) / 1000;
+    renderer.render(scene, camera);
+    requestAnimationFrame(tick);
+  })();
+})();
+</script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   PROPERTY SITE ENGINE — particles + cursor + reveal + parallax + chart
+   ═══════════════════════════════════════════════════════════════════ */
+(function() {
+  'use strict';
+
+  // ────────────── CUSTOM CURSOR (desktop) ──────────────
+  const cursor = document.getElementById('cursor');
+  if (cursor && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    let tx = 0, ty = 0, cx = 0, cy = 0;
+    window.addEventListener('mousemove', (e) => { tx = e.clientX; ty = e.clientY; });
+    (function trail() {
+      cx += (tx - cx) * 0.22;
+      cy += (ty - cy) * 0.22;
+      cursor.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
+      requestAnimationFrame(trail);
+    })();
+    document.querySelectorAll('a, button, .g-item, .video-frame, input, textarea').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('scale'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('scale'));
+    });
+  }
+
+  // ────────────── REVEAL ON SCROLL ──────────────
+  const revealEls = document.querySelectorAll('.reveal');
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        revealObs.unobserve(e.target);
+      }
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+  revealEls.forEach(el => revealObs.observe(el));
+
+  // ────────────── NUMBER COUNT-UP ──────────────
+  function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+  function animateCount(el) {
+    const target = parseFloat(el.dataset.count);
+    const prefix = el.dataset.prefix || '';
+    const suffix = el.dataset.suffix || '';
+    const decimals = (el.dataset.count.split('.')[1] || '').length;
+    const dur = 1400;
+    const start = performance.now();
+    function tick(now) {
+      const t = Math.min(1, (now - start) / dur);
+      const v = target * easeOut(t);
+      el.textContent = prefix + (decimals > 0 ? v.toFixed(decimals) : Math.round(v).toLocaleString()) + suffix;
+      if (t < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  const countObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        animateCount(e.target);
+        countObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('[data-count]').forEach(el => countObs.observe(el));
+
+  // ────────────── HERO PARALLAX ──────────────
+  const heroPhoto = document.getElementById('heroPhoto');
+  if (heroPhoto) {
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (y < window.innerHeight) {
+        heroPhoto.style.transform = `scale(1.04) translateY(${y * 0.28}px)`;
+      }
+    }, { passive: true });
+  }
+
+  // ────────────── TOPBAR SCROLLED STATE ──────────────
+  const topbar = document.getElementById('topbar');
+  let scrolled = false;
+  window.addEventListener('scroll', () => {
+    const s = window.scrollY > 80;
+    if (s !== scrolled) { scrolled = s; topbar.classList.toggle('scrolled', s); }
+  }, { passive: true });
+
+  // ────────────── VIDEO TAP HANDLER ──────────────
+  const vf = document.getElementById('videoFrame');
+  if (vf) {
+    vf.addEventListener('click', () => {
+      const src = vf.dataset.src;
+      if (!src) return;   // no film yet — poster stays
+      vf.innerHTML = '<video controls autoplay style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000;" src="' + src + '"></video>';
+    });
+  }
+
+  // ────────────── GALLERY LIGHTBOX ──────────────
+  (function () {
+    const items = [...document.querySelectorAll('.gallery .g-item img')];
+    if (!items.length) return;
+    const shots = items.map(img => ({ src: img.getAttribute('src'), cap: (img.closest('.g-item').querySelector('.g-cap')||{}).textContent || '' }));
+    const lb = document.createElement('div');
+    lb.className = 'lightbox';
+    lb.innerHTML = '<span class="lb-x" aria-label="Close">&times;</span>'
+      + '<span class="lb-nav lb-prev" aria-label="Previous">&#8249;</span>'
+      + '<img alt=""><span class="lb-nav lb-next" aria-label="Next">&#8250;</span>'
+      + '<div class="lb-cap"></div>';
+    document.body.appendChild(lb);
+    const lbImg = lb.querySelector('img'), lbCap = lb.querySelector('.lb-cap');
+    let idx = 0;
+    const show = i => { idx = (i + shots.length) % shots.length; lbImg.src = shots[idx].src; lbCap.textContent = shots[idx].cap; };
+    const open = i => { show(i); lb.classList.add('open'); document.body.style.overflow = 'hidden'; };
+    const close = () => { lb.classList.remove('open'); document.body.style.overflow = ''; };
+    items.forEach((img, i) => img.closest('.g-item').addEventListener('click', () => open(i)));
+    lb.querySelector('.lb-x').addEventListener('click', close);
+    lb.querySelector('.lb-prev').addEventListener('click', e => { e.stopPropagation(); show(idx - 1); });
+    lb.querySelector('.lb-next').addEventListener('click', e => { e.stopPropagation(); show(idx + 1); });
+    lb.addEventListener('click', e => { if (e.target === lb || e.target === lbImg) close(); });
+    document.addEventListener('keydown', e => {
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowLeft') show(idx - 1);
+      else if (e.key === 'ArrowRight') show(idx + 1);
+    });
+  })();
+
+  // ────────────── INTERACTIVE MARKET CHART (Plotly, dark theme) ──────────────
+  if (typeof Plotly !== 'undefined' && document.getElementById('market-chart')) {
+    const NAVY = '#0A1838', GOLD = '#c9a96e', GOLD_LIT = '#e0c992';
+    const TEXT1 = '#e8e0d4', TEXT2 = '#b0b8d1', TEXT3 = '#6b7a99';
+    const months = [
+      'Jun 23','Jul 23','Aug 23','Sep 23','Oct 23','Nov 23','Dec 23',
+      'Jan 24','Feb 24','Mar 24','Apr 24','May 24','Jun 24','Jul 24','Aug 24','Sep 24','Oct 24','Nov 24','Dec 24',
+      'Jan 25','Feb 25','Mar 25','Apr 25','May 25','Jun 25','Jul 25','Aug 25','Sep 25','Oct 25','Nov 25','Dec 25',
+      'Jan 26','Feb 26','Mar 26','Apr 26','May 26'
+    ];
+    const splp = [97.35,95.39,95.67,96.16,92.76,92.66,97.11,
+                  94.83,97.12,96.01,99.62,96.23,98.27,96.35,98.95,98.31,100.11,95.32,93.03,
+                  95.17,93.93,96.37,95.11,95.22,98.17,99.50,98.58,97.39,91.43,98.21,99.49,
+                  100.09,90.49,94.33,102.06,101.74];
+    function r3(a) { return a.map((_, i) => { const s = a.slice(Math.max(0,i-2), i+1); return s.reduce((x,y)=>x+y,0) / s.length; }); }
+    const sR = r3(splp);
+    const tickStrs = [0,6,12,18,24,30,35].map(i => months[i]);
+    const tickLbls = ['Jun 23','Dec 23','Jun 24','Dec 24','Jun 25','Dec 25','May 26'];
+
+    Plotly.newPlot('market-chart', [
+      { x: months, y: splp, type: 'scatter', mode: 'lines+markers',
+        line: { color: TEXT3, width: 1 }, marker: { color: TEXT2, size: 3.5 },
+        opacity: 0.55, hovertemplate: '<b>%{x}</b><br>%{y:.1f}%<extra></extra>' },
+      { x: months, y: sR, type: 'scatter', mode: 'lines',
+        line: { color: GOLD_LIT, width: 3 },
+        hovertemplate: '<b>%{x}</b><br>3-mo avg: <b>%{y:.1f}%</b><extra></extra>' },
+      { x: [months[0], months[35]], y: [100, 100], type: 'scatter', mode: 'lines',
+        line: { color: GOLD, width: 1, dash: 'dash' }, opacity: 0.7,
+        hoverinfo: 'skip', showlegend: false }
+    ], {
+      paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',
+      font: { family: 'EB Garamond, serif', size: 11, color: TEXT1 },
+      margin: { l: 50, r: 18, t: 20, b: 42 },
+      showlegend: false,
+      hovermode: 'closest',
+      hoverlabel: { bgcolor: NAVY, bordercolor: GOLD, font: { family: 'Inter', size: 11, color: TEXT1 } },
+      dragmode: false,
+      xaxis: { showgrid: false, linecolor: 'rgba(201,169,110,0.30)', tickmode: 'array',
+               tickvals: tickStrs, ticktext: tickLbls, tickangle: 0,
+               tickfont: { family: 'JetBrains Mono', size: 9, color: TEXT2 }, fixedrange: true },
+      yaxis: { gridcolor: 'rgba(201,169,110,0.10)', linecolor: 'rgba(201,169,110,0.25)',
+               zeroline: false, ticksuffix: '%', range: [88, 107], fixedrange: true,
+               tickfont: { family: 'JetBrains Mono', size: 9, color: TEXT2 } },
+      annotations: [
+        { x: 'Apr 26', y: 102.06, text: '<b>101.9%</b><br>Apr–May 26',
+          showarrow: true, arrowhead: 0, arrowcolor: GOLD_LIT, arrowwidth: 1.2, ax: -45, ay: -28,
+          font: { family: 'EB Garamond', size: 10, color: TEXT1 },
+          bgcolor: 'rgba(10,24,56,0.85)', bordercolor: GOLD, borderwidth: 1, borderpad: 5, align: 'center' }
+      ]
+    }, {
+      displayModeBar: false, displaylogo: false, responsive: true,
+      scrollZoom: false, doubleClick: false, showAxisDragHandles: false
+    });
+  }
+
+  // ────────────── 3D-STYLE HOVER TILT (gallery) ──────────────
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    document.querySelectorAll('.g-item').forEach(item => {
+      item.addEventListener('mousemove', (e) => {
+        const rect = item.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top)  / rect.height - 0.5;
+        item.style.transform = `translateY(-4px) perspective(900px) rotateY(${x * 4}deg) rotateX(${-y * 4}deg)`;
+      });
+      item.addEventListener('mouseleave', () => { item.style.transform = ''; });
+    });
+  }
+
+  console.log('[1330] property site engine ready');
+})();
+</script>
+</body>
+</html>

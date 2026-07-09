@@ -1,0 +1,159 @@
+---
+import Chapter from '../layouts/Chapter.astro';
+const lds = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://patrick.realestate/"}, {"@type": "ListItem", "position": 2, "name": "Contact", "item": "https://patrick.realestate/contact"}]}];
+---
+<Chapter
+  title="Contact — Patrick Milhaupt · North Shore"
+  description="Schedule a 30-minute call with Patrick Milhaupt — Global Advisor at Jameson Sotheby's International Realty. Direct line, email, calendar."
+  path="/contact" current="/contact" palette="0.50"
+  jsonLd={lds.length>=1 ? lds[0] : null}
+  rail={[{"id": "ch-00", "num": "00", "label": "Begin"}, {"id": "ch-01", "num": "01", "label": "Form"}]}
+>
+  <style slot="head" is:global>
+.contact-form {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  padding: 28px;
+  background: rgba(10,24,56,0.55);
+  border: 1px solid rgba(197,165,114,0.18);
+  border-radius: 14px;
+  margin-top: 16px;
+}
+.contact-form .full { grid-column: 1 / -1; }
+.contact-form label {
+  display: flex; flex-direction: column; gap: 6px;
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 1.2px;
+  text-transform: uppercase; color: var(--ink-3, #8896AD);
+}
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+  font-family: var(--font-sans); font-size: 14px;
+  padding: 12px 14px;
+  background: rgba(5,14,38,0.55);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px; color: var(--ink-1, #F0E6D2);
+  transition: border-color .2s ease;
+}
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus {
+  outline: none; border-color: var(--gold-lit, #E0BC7E);
+}
+.contact-form textarea { min-height: 120px; resize: vertical; }
+.contact-form .submit-row { display: flex; gap: 12px; align-items: center; }
+
+@media (max-width: 720px) {
+  .contact-form { grid-template-columns: 1fr; padding: 18px; }
+}
+</style>
+
+
+  <section class="chapter" id="ch-00" data-chapter="0" data-palette="0.30">
+    <div class="inner" style="text-align:center; align-items:center;">
+      <div class="ch-head fade-up" style="justify-content:center;">
+        <span class="hashmark"><i></i></span>
+        <div class="meta" style="border:0; padding:0;">
+          <span class="eyebrow">Contact &middot; A 30-minute call</span>
+        </div>
+      </div>
+      <h1 class="headline" data-headline="">
+        Let's <em>talk</em>.
+      </h1>
+      <p class="body fade-up" style="margin: 0 auto; text-align:center;">
+        Thirty minutes. No pitch. A direct conversation about what you're trying to do &mdash; and an honest read on whether I'm the right advisor for it. If I'm not, I know who is.
+      </p>
+      <div class="begin-block fade-up">
+        <div class="col"><div class="l">Direct</div><div class="v"><a href="tel:+18478499828" style="color:inherit;text-decoration:none;">(847) 849-9828</a></div></div>
+        <div class="col"><div class="l">Email</div><div class="v"><a href="mailto:pmilhaupt@jamesonsir.com">pmilhaupt@jamesonsir.com</a></div></div>
+      </div>
+      <div class="cta-row fade-up" style="justify-content:center; margin-top: 32px;">
+        <a class="btn" href="mailto:pmilhaupt@jamesonsir.com">Email Patrick &rarr;</a>
+        <a class="btn btn-outline" href="#ch-01">Send a message below</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="ch-01" data-chapter="1" data-palette="0.75">
+    <div class="inner">
+      <div class="ch-head fade-up">
+        <span class="num">01</span>
+        <div class="meta">
+          <span class="eyebrow">Chapter One</span>
+          <span class="sub">Send a Message</span>
+        </div>
+      </div>
+      <h2 class="headline" data-headline="">
+        Tell me <em>briefly</em>.
+      </h2>
+      <p class="body fade-up">
+        Whether you're considering representation, exploring an off-market introduction, or simply curious what your home is truly worth &mdash; a short note below and I'll be in touch within the business day.
+      </p>
+
+      <form class="contact-form fade-up" id="leadForm" novalidate>
+        <label>Name<input type="text" name="name" required maxlength="200"></label>
+        <label>Email<input type="email" name="email" required maxlength="200"></label>
+        <label>Phone<input type="tel" name="phone" maxlength="50"></label>
+        <label>I'm interested in
+          <select name="interest">
+            <option value="selling">Selling my home</option>
+            <option value="buying">Buying on the North Shore</option>
+            <option value="off-market">Off-market access (ZenList)</option>
+            <option value="valuation">A home valuation</option>
+            <option value="general">General conversation</option>
+          </select>
+        </label>
+        <label class="full">Address or village (optional)<input type="text" name="address" maxlength="200" placeholder="e.g. Lake Forest, Winnetka, or a street address"></label>
+        <label class="full">Message<textarea name="message" maxlength="4000" placeholder="A short note &mdash; timeline, price range, what you're trying to do."></textarea></label>
+        <label class="full" style="position:absolute;left:-9999px;" aria-hidden="true">Company<input type="text" name="company" tabindex="-1" autocomplete="off"></label>
+        <div class="full submit-row">
+          <button class="btn" type="submit" id="leadSubmit">Send Message &rarr;</button>
+          <span id="leadStatus" role="status" style="font-family:var(--font-mono);font-size:10.5px;color:var(--ink-3,#8896AD);">Delivered directly to Patrick</span>
+        </div>
+      </form>
+      <script is:inline>
+      (function(){
+        var form = document.getElementById('leadForm');
+        var btn = document.getElementById('leadSubmit');
+        var status = document.getElementById('leadStatus');
+        form.addEventListener('submit', function(e){
+          e.preventDefault();
+          if (form.company && form.company.value) return;
+          if (!form.reportValidity()) return;
+          btn.disabled = true; status.textContent = 'Sending\u2026';
+          var msg = (form.interest.value ? '[' + form.interest.value + '] ' : '') +
+                    (form.address.value ? form.address.value + ' \u2014 ' : '') +
+                    form.message.value;
+          fetch('https://itupjrknklzvmmqicuyc.supabase.co/rest/v1/leads', {
+            method: 'POST',
+            headers: {
+              'apikey': 'sb_publishable_fQnZLJnaC-dAHBuGBHJgjQ_RUHCe_7S',
+              'Authorization': 'Bearer sb_publishable_fQnZLJnaC-dAHBuGBHJgjQ_RUHCe_7S',
+              'Content-Type': 'application/json',
+              'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({
+              source: 'contact',
+              name: form.name.value.trim(),
+              email: form.email.value.trim(),
+              phone: form.phone.value.trim(),
+              message: msg.trim(),
+              page: location.pathname,
+              user_agent: navigator.userAgent.slice(0, 250)
+            })
+          }).then(function(r){
+            if (!r.ok) throw new Error(r.status);
+            form.reset(); btn.disabled = false;
+            status.textContent = 'Received. You\u2019ll hear back within the business day.';
+            status.style.color = 'var(--gold-lit, #E0BC7E)';
+          }).catch(function(){
+            btn.disabled = false;
+            status.textContent = 'Something went wrong \u2014 please email pmilhaupt@jamesonsir.com directly.';
+          });
+        });
+      })();
+      </script>
+    </div>
+  </section>
+
+
+</Chapter>

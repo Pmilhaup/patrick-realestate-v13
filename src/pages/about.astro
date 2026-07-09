@@ -1,0 +1,149 @@
+---
+import Chapter from '../layouts/Chapter.astro';
+const lds = [{"@context": "https://schema.org", "@type": "Person", "@id": "https://patrick.realestate/#patrick", "name": "Patrick Milhaupt", "url": "https://patrick.realestate/about", "image": "https://patrick.realestate/images/patrick-headshot.jpg", "jobTitle": "Global Advisor, Jameson Sotheby's International Realty", "telephone": "+1-847-849-9828", "email": "pmilhaupt@jamesonsir.com", "alumniOf": [{"@type": "CollegeOrUniversity", "name": "University of Notre Dame"}, {"@type": "CollegeOrUniversity", "name": "University of San Diego"}], "worksFor": {"@type": "RealEstateAgent", "name": "Jameson Sotheby's International Realty"}}, {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://patrick.realestate/"}, {"@type": "ListItem", "position": 2, "name": "About", "item": "https://patrick.realestate/about"}]}];
+---
+<Chapter
+  title="About — Patrick Milhaupt · Global Advisor"
+  description="Patrick Milhaupt — Global Advisor at Jameson Sotheby's International Realty. More than fifteen years across institutional real estate and luxury brokerage. A curated, data-honest practice on the North Shore."
+  path="/about" current="/about" palette="0.20"
+  jsonLd={lds.length>=1 ? lds[0] : null}
+  rail={[{"id": "ch-00", "num": "00", "label": "Opening"}, {"id": "ch-01", "num": "01", "label": "Practice"}, {"id": "ch-02", "num": "02", "label": "Brand"}, {"id": "ch-03", "num": "03", "label": "Begin"}]}
+>
+  <link slot="head" rel="stylesheet" href="/brand/brand-core.css">
+
+
+  <section class="chapter" id="ch-00" data-chapter="0" data-palette="0.10">
+    <div class="inner" style="text-align:center; align-items:center;">
+      <div class="ch-head fade-up" style="justify-content:center;">
+        <span class="hashmark"><i></i></span>
+        <div class="meta" style="border:0; padding:0;">
+          <span class="eyebrow">About &middot; Patrick Milhaupt</span>
+        </div>
+      </div>
+      <h1 class="headline" data-headline="">
+        An advisor's <em>practice</em>.
+      </h1>
+      <p class="body fade-up" style="margin: 0 auto; text-align:center;">
+        More than fifteen years across real-estate investment, asset management, and luxury brokerage. One advisor, one calendar &mdash; and a market read that starts <strong>fresh every morning</strong>.
+      </p>
+      <div class="cta-row fade-up" style="justify-content:center;">
+        <a class="btn" href="#ch-01">Continue &darr;</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="ch-01" data-chapter="1" data-palette="0.30">
+    <div class="inner">
+      <div class="ch-head fade-up">
+        <span class="num">01</span>
+        <div class="meta">
+          <span class="eyebrow">Chapter One</span>
+          <span class="sub">The Practice</span>
+        </div>
+      </div>
+      <h2 class="headline" data-headline="">
+        Tailored service.<br>Institutional <em>discipline</em>.
+      </h2>
+      <p class="body fade-up">
+        Patrick came to brokerage from the institutional side of real estate. After a BA from Notre Dame and an MS in Real Estate from the University of San Diego, he spent nine years in acquisitions and asset management &mdash; AvalonBay Communities, Alliant Capital, World Class Holdings, and HG Capital &mdash; underwriting more than $500 million in institutional portfolios before joining Sotheby's International Realty in 2016.
+      </p>
+      <p class="body fade-up">
+        That training shapes the practice. Every listing call opens with a market dashboard pulled from the MLS that morning; every pricing recommendation is reconciled across three independent valuation methods before it goes to market. One advisor, one calendar &mdash; backed by a daily-reconciled market database and the Sotheby's pre-market network. In 2024 the practice closed $13.1 million in volume at an average price of $2.02 million, earning RealTrends Verified Top Agent recognition.
+      </p>
+      <div class="kpi-grid">
+        <div class="kpi"><span class="l">National Standing</span><span class="v" style="font-size:22px;">Top 2%</span><span class="d up">RealTrends Verified Top Agent &middot; 2024</span></div>
+        <div class="kpi pop"><span class="l">Villages Covered</span><span class="v">7</span><span class="d up">Lake Forest &middot; Winnetka &middot; Kenilworth &middot; Glencoe &middot; Wilmette &middot; Highland Park &middot; Lake Bluff</span></div>
+        <div class="kpi"><span class="l">Institutional Career</span><span class="v" style="font-size:22px;">$500M</span><span class="d up">Underwritten before brokerage</span></div>
+        <div class="kpi"><span class="l">Years in the Business</span><span class="v" style="font-size:22px;">15+</span><span class="d up">Investment &middot; asset mgmt &middot; brokerage</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="ch-02" data-chapter="2" data-palette="0.60">
+    <div class="inner">
+      <div class="ch-head fade-up">
+        <span class="num">02</span>
+        <div class="meta">
+          <span class="eyebrow">Chapter Two</span>
+          <span class="sub">Jameson Sotheby's International Realty</span>
+        </div>
+      </div>
+      <h2 class="headline" data-headline="">
+        The brand.<br>The <em>corridor</em>.
+      </h2>
+      <p class="body fade-up">
+        Jameson Sotheby's International Realty is the Chicago affiliate of the Sotheby's International Realty global network &mdash; founded in 1976 inside the venerable auction house (est. 1744), today connecting <strong>1,100+ offices across 86 countries and territories</strong> with the most-recognized brand in luxury real estate. For represented homes, the marketing footprint runs from a private pre-launch through global syndication into the Wall Street Journal Mansion section, the New York Times, the Financial Times, Architectural Digest, Mansion Global, Bloomberg, RESIDE&reg; Magazine, the Houseguest video series, and the only real-estate app on Apple TV. For discerning buyers, the same network is a gateway to homes that are never publicly advertised &mdash; a quiet, curated pipeline measured in days, not weeks.
+      </p>
+      <p class="body fade-up">
+        The Sotheby's editorial work has been cited on this practice. <em>Crain's Chicago Business</em> and <em>The Real Deal</em> have covered the listings, including the 999 Lake Road episode (the on-the-record source on the Caleb Williams story) and the Harris estate at 2441 Woodbridge Lane. The brand opens the door; the practice does the work.
+      </p>
+      <div class="kpi-grid">
+        <div class="kpi"><span class="l">Network</span><span class="v" style="font-size:22px;">1,100+ offices</span><span class="d">Across 86 countries &amp; territories</span></div>
+        <div class="kpi pop"><span class="l">2025 Global Volume</span><span class="v" style="font-size:22px;">$182.4B</span><span class="d up">+9.3% YoY in the U.S.</span></div>
+        <div class="kpi"><span class="l">Brokerage</span><span class="v" style="font-size:22px;">Jameson SIR</span><span class="d">Chicago affiliate &middot; Lake Forest &amp; Winnetka offices</span></div>
+        <div class="kpi"><span class="l">Illinois License</span><span class="v" style="font-size:22px;">#475.177332</span><span class="d">Active Member &middot; Fitzgerald Institute, Notre Dame</span></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Press & proof (v11.2 — verified citations only) -->
+  <section class="chapter" id="ch-press" data-chapter="2" data-palette="0.9" style="min-height:auto;padding:96px 0;">
+    <div class="inner">
+      <div class="ch-head fade-up">
+        <span class="hashmark"><i></i></span>
+        <div class="meta" style="border:0;padding:0;">
+          <span class="eyebrow">On the record</span>
+        </div>
+      </div>
+      <div class="fade-up" style="display:flex;flex-direction:column;gap:18px;max-width:680px;">
+        <div style="border-left:1px solid rgba(197,165,114,.4);padding-left:20px;">
+          <div style="font-family:var(--font-serif);font-size:19px;color:var(--ink-1,#F0E6D2);line-height:1.5;">&ldquo;Former Motorola exec lists Lake Forest mansion for almost $13 million&rdquo;</div>
+          <div style="font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3,#8896AD);margin-top:8px;">Crain's Chicago Business &middot; March 2024</div>
+        </div>
+        <div style="border-left:1px solid rgba(197,165,114,.4);padding-left:20px;">
+          <div style="font-family:var(--font-serif);font-size:19px;color:var(--ink-1,#F0E6D2);line-height:1.5;">&ldquo;$6.9 million Highland Park mansion comes with two pools and a beachfront&rdquo;</div>
+          <div style="font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3,#8896AD);margin-top:8px;">Crain's Chicago Business &middot; April 2025</div>
+        </div>
+        <div style="border-left:1px solid rgba(197,165,114,.4);padding-left:20px;">
+          <div style="font-family:var(--font-serif);font-size:19px;color:var(--ink-1,#F0E6D2);line-height:1.5;">&ldquo;We've got a lot of Bears players, several of which are my clients.&rdquo;</div>
+          <div style="font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3,#8896AD);margin-top:8px;">Patrick Milhaupt, quoted in <a href="https://therealdeal.com/people/patrick-milhaupt/" target="_blank" rel="noopener" style="color:inherit;">The Real Deal</a> &middot; September 2024</div>
+        </div>
+        <p style="font-family:var(--font-mono);font-size:10.5px;letter-spacing:.06em;color:var(--ink-3,#8896AD);margin-top:10px;">
+          Top 2% of Realtors nationally &middot; basis: RealTrends Verified, 2024 production ($13.1M volume &middot; 6.5 sides &middot; $2.02M average price).
+        </p>
+        <!-- TESTIMONIALS: intentionally empty until client quotes are supplied & approved.
+             Format when ready: quote · "Seller, east Lake Forest, 2024" attribution style. -->
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="ch-03" data-chapter="3" data-palette="1.00">
+    <div class="inner" style="text-align:center; align-items:center;">
+      <div class="ch-head fade-up" style="justify-content:center;">
+        <span class="num">03</span>
+        <div class="meta">
+          <span class="eyebrow">Begin</span>
+          <span class="sub">A 30-minute call</span>
+        </div>
+      </div>
+      <h2 class="headline" data-headline="">
+        A <em>conversation</em>.
+      </h2>
+      <p class="body fade-up" style="margin: 0 auto; text-align:center;">
+        Thirty minutes. No pitch. A direct conversation about what you're trying to do &mdash; and an honest read on whether I'm the right advisor to help you do it. If I'm not, I know who is.
+      </p>
+      <div class="begin-block fade-up">
+        <div class="col"><div class="l">Direct</div><div class="v"><a href="tel:+18478499828" style="color:inherit;text-decoration:none;">(847) 849-9828</a></div></div>
+        <div class="col"><div class="l">Email</div><div class="v"><a href="mailto:pmilhaupt@jamesonsir.com">pmilhaupt@jamesonsir.com</a></div></div>
+      </div>
+      <div class="cta-row fade-up" style="justify-content:center; margin-top: 32px;">
+        <a class="btn" href="mailto:pmilhaupt@jamesonsir.com">Schedule the Call &rarr;</a>
+        <a class="btn btn-outline" href="/">Back to the story</a>
+      </div>
+    </div>
+  </section>
+
+
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(lds[1])} />
+</Chapter>

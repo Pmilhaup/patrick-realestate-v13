@@ -1,0 +1,116 @@
+---
+import Chapter from '../../layouts/Chapter.astro';
+const lds = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://patrick.realestate/"}, {"@type": "ListItem", "position": 2, "name": "Neighborhoods", "item": "https://patrick.realestate/neighborhoods"}, {"@type": "ListItem", "position": 3, "name": "Kenilworth", "item": "https://patrick.realestate/neighborhoods/kenilworth"}]}, {"@context": "https://schema.org", "@type": "Place", "name": "Kenilworth, Illinois", "url": "https://patrick.realestate/neighborhoods/kenilworth", "containedInPlace": {"@type": "Place", "name": "North Shore, Chicago, IL"}}];
+---
+<Chapter
+  title="Kenilworth — Patrick Milhaupt · North Shore"
+  description="Kenilworth village brief — architectural pedigree from Howard Van Doren Shaw and George Washington Maher, smallest by parcel count, anchored by Joseph Sears School and New Trier District 203."
+  path="/neighborhoods/kenilworth" current="/neighborhoods" palette="0.15"
+  jsonLd={lds.length>=1 ? lds[0] : null}
+  rail={[{"id": "ch-00", "num": "00", "label": "Opening"}, {"id": "ch-01", "num": "01", "label": "Snapshot"}, {"id": "ch-02", "num": "02", "label": "Architecture"}, {"id": "ch-03", "num": "03", "label": "Begin"}]}
+>
+
+
+  <section class="chapter" id="ch-00" data-chapter="0" data-palette="0.15">
+    <div class="inner" style="text-align:center; align-items:center;">
+      <div class="ch-head fade-up" style="justify-content:center;">
+        <span class="hashmark"><i></i></span>
+        <div class="meta" style="border:0; padding:0;">
+          <span class="eyebrow">Kenilworth &middot; North Shore</span>
+        </div>
+      </div>
+      <h1 class="headline" data-headline="">
+        Architectural <em>pedigree</em> at scale.
+      </h1>
+      <p class="body fade-up" style="margin: 0 auto; text-align:center;">
+        Kenilworth is the smallest North Shore village by parcel count &mdash; and the most architecturally distinguished. Howard Van Doren Shaw and George Washington Maher authored much of the original village, and significant Maher and Shaw commissions remain intact, guarded carefully across more than a century.
+      </p>
+      <div class="cta-row fade-up" style="justify-content:center;">
+        <a class="btn" href="#ch-01">View the snapshot &darr;</a>
+        <a class="btn btn-outline" href="/intelligence#ch-02">Open live dashboard</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="ch-01" data-chapter="1" data-palette="0.40">
+    <div class="inner">
+      <div class="ch-head fade-up">
+        <span class="num">01</span>
+        <div class="meta">
+          <span class="eyebrow">Chapter One</span>
+          <span class="sub">Kenilworth Snapshot</span>
+        </div>
+      </div>
+      <h2 class="headline" data-headline="">
+        A village of <em>pedigree</em>, scale, and scarcity.
+      </h2>
+      <p class="body fade-up">
+        Kenilworth's median list price of $2.35M is the highest on the corridor &mdash; and the village's $658 price-per-square-foot is the corridor's clearest signal of architectural pedigree commanding a measurable premium. With days-on-market at 26 and sale-to-list ratios of 98.8%, the village trades efficiently when inventory becomes available; supply, however, remains structurally constrained by the small total parcel count. A typical year produces a fraction of the listing volume seen in adjoining villages.
+      </p>
+      <div class="kpi-grid">
+        <div class="kpi"><span class="l">Median Price</span><span class="v" style="font-size:22px;">$2.35M</span><span class="d">Highest median on the corridor</span></div>
+        <div class="kpi"><span class="l">Days on Market</span><span class="v" style="font-size:22px;">26 days</span><span class="d up">Trades efficiently when listed</span></div>
+        <div class="kpi"><span class="l">SP/OLP</span><span class="v" style="font-size:22px;">98.8%</span><span class="d">Sale-to-list ratio</span></div>
+        <div class="kpi pop"><span class="l">$/SqFt</span><span class="v" style="font-size:22px;">$658</span><span class="d up">Highest $/sqft on the corridor</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="market-blend" style="padding:16px 24px 56px;">
+  <div style="max-width:1120px;margin:0 auto;background:#0A1838;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px 22px 12px;box-shadow:0 24px 70px rgba(0,0,0,.35);">
+    <div id="blendedMarket"></div>
+  </div>
+</section>
+
+  <section class="chapter" id="ch-02" data-chapter="2" data-palette="0.65">
+    <div class="inner">
+      <div class="ch-head fade-up">
+        <span class="num">02</span>
+        <div class="meta">
+          <span class="eyebrow">Chapter Two</span>
+          <span class="sub">Architecture &amp; Schools</span>
+        </div>
+      </div>
+      <h2 class="headline" data-headline="">
+        Original <em>vocabulary</em>, anchor schools.
+      </h2>
+      <p class="body fade-up">
+        Much of Kenilworth's original village was authored by <strong>Howard Van Doren Shaw and George Washington Maher</strong> &mdash; two of the defining architects of the early-twentieth-century North Shore. The village has guarded that legacy with rare discipline; significant Maher and Shaw commissions remain intact, intact, and trade with provenance documentation that few other villages can match. Architectural review at the municipal level keeps the rebuild stock consistent with the original vocabulary.
+      </p>
+      <p class="body fade-up">
+        Kenilworth's K&ndash;8 students attend the village's single public school, <strong>Joseph Sears School (District 38)</strong>, before entering <strong>New Trier Township High School (District 203)</strong>. The single-school district structure and small graduating classes are a defining feature of village life and a meaningful part of why families remain in Kenilworth for multiple generations.
+      </p>
+    </div>
+  </section>
+
+  <section class="chapter" id="ch-03" data-chapter="3" data-palette="1.00">
+    <div class="inner" style="text-align:center; align-items:center;">
+      <div class="ch-head fade-up" style="justify-content:center;">
+        <span class="num">03</span>
+        <div class="meta">
+          <span class="eyebrow">Begin</span>
+          <span class="sub">A 30-minute call</span>
+        </div>
+      </div>
+      <h2 class="headline" data-headline="">
+        Move in <em>Kenilworth</em>.
+      </h2>
+      <p class="body fade-up" style="margin: 0 auto; text-align:center;">
+        Thirty minutes. We'll walk through current and quietly-pending inventory, the architectural lineage of what's actually likely to come to market, and an honest timing read. No pitch.
+      </p>
+      <div class="begin-block fade-up">
+        <div class="col"><div class="l">Direct</div><div class="v"><a href="tel:+18478499828" style="color:inherit;text-decoration:none;">(847) 849-9828</a></div></div>
+        <div class="col"><div class="l">Email</div><div class="v"><a href="mailto:pmilhaupt@jamesonsir.com">pmilhaupt@jamesonsir.com</a></div></div>
+      </div>
+      <div class="cta-row fade-up" style="justify-content:center; margin-top: 32px;">
+        <a class="btn" href="mailto:pmilhaupt@jamesonsir.com">Schedule the Call &rarr;</a>
+        <a class="btn btn-outline" href="/neighborhoods">Back to neighborhoods</a>
+      </div>
+    </div>
+  </section>
+
+
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(lds[1])} />
+  <script slot="scripts" src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js" is:inline></script>
+  <script slot="scripts" src="/brand/charts/d3-brand.js" is:inline></script>
+</Chapter>

@@ -1,0 +1,78 @@
+---
+// The canonical navigation — defined ONCE. This component replaces the
+// 16 copy-pasted nav blocks that drifted in v11.
+const links = [
+  { href: '/properties',    label: 'Properties' },
+  { href: '/neighborhoods', label: 'Neighborhoods' },
+  { href: '/intelligence',  label: 'Intelligence' },
+  { href: '/buying',        label: 'Buying' },
+  { href: '/selling',       label: 'Selling' },
+  { href: '/heritage',      label: 'Heritage' },
+  { href: '/about',         label: 'About' },
+];
+const { current = '' } = Astro.props;
+---
+<nav class="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-6 py-4 backdrop-blur-md bg-navy-0/70">
+  <a href="/" class="flex items-center gap-3 no-underline">
+    <img src="/brand/assets/logos/wordmark-white-md.png" alt="Sotheby's International Realty" class="h-6 w-auto" />
+    <span class="w-px h-6 bg-gold-400/60" aria-hidden="true"></span>
+    <span class="leading-tight">
+      <span class="block font-serif text-ink-1 text-sm">Patrick Milhaupt</span>
+      <span class="block font-mono text-[10px] tracking-[0.2em] uppercase text-ink-3">Global Advisor</span>
+    </span>
+  </a>
+
+  <div class="hidden min-[900px]:flex items-center gap-7">
+    {links.map(l => (
+      <a href={l.href}
+         aria-current={current === l.href ? 'page' : undefined}
+         class:list={["font-sans text-[13px] no-underline transition-colors duration-200",
+           current === l.href ? "text-gold-200" : "text-ink-2 hover:text-gold-200"]}>
+        {l.label}
+      </a>
+    ))}
+    <a href="/contact"
+       aria-current={current === '/contact' ? 'page' : undefined}
+       class="font-mono text-[11px] tracking-[0.18em] uppercase text-gold-300 border border-gold-400/40 rounded px-4 py-2 no-underline hover:border-gold-400 hover:bg-gold-400/10 transition-colors duration-200">
+      Contact
+    </a>
+  </div>
+
+  <button id="navToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu"
+    class="min-[900px]:hidden flex flex-col justify-center gap-[7px] w-11 h-11 p-2.5">
+    <span class="block h-[1.5px] w-full bg-gold-400 transition-transform duration-200"></span>
+    <span class="block h-[1.5px] w-full bg-gold-400 transition-transform duration-200"></span>
+  </button>
+</nav>
+
+<div id="mobileMenu" role="dialog" aria-modal="true" aria-label="Site navigation"
+  class="fixed inset-0 z-40 bg-void/95 backdrop-blur-lg hidden flex-col justify-center px-8 pt-24 pb-12">
+  <nav class="flex flex-col gap-1 overflow-y-auto max-h-[70vh]">
+    <a href="/" class="font-serif font-light text-[clamp(26px,6.5vw,31px)] text-ink-1 py-1.5 no-underline">Home</a>
+    {links.map(l => (
+      <a href={l.href} class="font-serif font-light text-[clamp(26px,6.5vw,31px)] text-ink-1 py-1.5 no-underline">{l.label}</a>
+    ))}
+    <a href="/contact" class="font-serif font-light text-[clamp(26px,6.5vw,31px)] text-gold-200 border-t border-gold-400/30 mt-4 pt-5 no-underline">Contact</a>
+  </nav>
+  <div class="mt-9 flex flex-col gap-2.5 font-mono text-xs tracking-wider text-ink-3">
+    <a href="tel:+18478499828" class="no-underline text-inherit">(847) 849-9828</a>
+    <a href="mailto:pmilhaupt@jamesonsir.com" class="no-underline text-inherit">pmilhaupt@jamesonsir.com</a>
+  </div>
+</div>
+
+<script>
+  const btn = document.getElementById('navToggle');
+  const menu = document.getElementById('mobileMenu');
+  let open = false;
+  function setOpen(v) {
+    open = v;
+    btn.setAttribute('aria-expanded', String(v));
+    btn.setAttribute('aria-label', v ? 'Close menu' : 'Open menu');
+    menu.classList.toggle('hidden', !v);
+    menu.classList.toggle('flex', v);
+    document.documentElement.classList.toggle('overflow-hidden', v);
+  }
+  btn?.addEventListener('click', () => setOpen(!open));
+  menu?.addEventListener('click', e => { if (e.target.tagName === 'A') setOpen(false); });
+  document.addEventListener('keydown', e => { if (open && e.key === 'Escape') setOpen(false); });
+</script>

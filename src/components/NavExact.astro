@@ -1,0 +1,28 @@
+---
+// Exact v11 nav markup — the canonical 8 links, defined once.
+const links = [
+  ['/properties','Properties'],['/neighborhoods','Neighborhoods'],['/intelligence','Intelligence'],
+  ['/buying','Buying'],['/selling','Selling'],['/heritage','Heritage'],['/about','About'],
+];
+const { current = '' } = Astro.props;
+---
+<nav class="nav">
+  <a class="lockup" href="/">
+    <img src="/brand/assets/logos/wordmark-white-md.png" alt="Sotheby's International Realty">
+    <span class="bar"></span>
+    <span class="name">
+      <span class="who">Patrick Milhaupt</span>
+      <span class="role">Global Advisor</span>
+    </span>
+  </a>
+  <div class="nav-links">
+    {links.map(([href,label]) => (
+      <a href={href}
+         class={current===href ? 'current' : undefined}
+         aria-current={current===href ? 'page' : undefined}>{label}</a>
+    ))}
+    <a href="/contact"
+       class={current==='/contact' ? 'cta current' : 'cta'}
+       aria-current={current==='/contact' ? 'page' : undefined}>Contact</a>
+  </div>
+</nav>
