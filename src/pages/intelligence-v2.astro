@@ -1,0 +1,357 @@
+---
+// INTELLIGENCE CONSOLIDATION PROTOTYPE — one page, three acts
+// (08_TECHNICAL_ARCHITECTURE §4). Preview route, noindexed.
+// Act 1: The Map · Act 2: One chart, selectable datasets, 5 consumer KPIs
+// Act 3: Momentum verdict + briefing signup
+import Chapter from '../layouts/Chapter.astro';
+---
+<Chapter
+  title="Intelligence — Patrick Milhaupt"
+  description="The North Shore market in one page: live map, one chart with every dataset, and a momentum read per village — reconciled daily from the MLS."
+  path="/intelligence-v2" current="/intelligence" palette="0.55"
+  rail={[{id:'act-1',num:'01',label:'Map'},{id:'act-2',num:'02',label:'Chart'},{id:'act-3',num:'03',label:'Verdict'}]}
+  stdScripts={true} orchestrator={true}
+>
+  <meta slot="head" name="robots" content="noindex">
+  <link slot="head" rel="stylesheet" href="/brand/brand-core.css">
+  <script slot="head" src="https://cdn.plot.ly/plotly-2.35.2.min.js" defer is:inline></script>
+  <script slot="head" src="/brand/charts/plotly-brand.js" defer is:inline></script>
+  <script slot="head" src="/js/intel-data.js" defer is:inline></script>
+  <style slot="head" is:global>
+  .act { padding: 110px 0 70px; }
+  .act .inner { width: min(1120px, calc(100% - 48px)); margin: 0 auto; }
+  .act-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: .25em;
+    text-transform: uppercase; color: var(--gold-400); display: block; margin-bottom: 18px; }
+  .act h1, .act h2 { font-family: var(--font-serif); font-weight: 300; color: var(--ink-1);
+    letter-spacing: -0.02em; line-height: 1.1; margin: 0 0 16px; font-size: clamp(32px, 4.4vw, 56px); }
+  .act h1 em, .act h2 em { font-style: italic; color: var(--gold-200); }
+  .act .lede { font-family: var(--font-sans); font-weight: 300; font-size: 16px; line-height: 1.65;
+    color: var(--ink-3); max-width: 620px; }
+  .pill-live { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono);
+    font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3);
+    border: 1px solid rgba(194,162,101,.25); border-radius: 999px; padding: 8px 16px; margin-top: 18px; }
+  .pill-live .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold-300); }
+  .pill-live.stale .dot { background: #D97706; }
+  .pill-live.err .dot { background: #BE1E44; }
+
+  .map-frame { margin-top: 34px; border: 1px solid rgba(194,162,101,.25); border-radius: 12px; overflow: hidden; }
+  .map-frame iframe { display: block; width: 100%; height: min(72vh, 640px); border: 0; }
+  .act-note { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .08em;
+    color: var(--ink-4); margin-top: 12px; }
+
+  .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 30px 0 16px; }
+  .chipset { display: flex; flex-wrap: wrap; gap: 7px; }
+  .chip { font-family: var(--font-sans); font-size: 12px; font-weight: 500; letter-spacing: .04em;
+    padding: 8px 14px; border-radius: 999px; border: 1px solid rgba(194,162,101,.28);
+    background: transparent; color: var(--ink-2); cursor: pointer;
+    transition: color var(--t-fast) var(--ease-inout), border-color var(--t-fast) var(--ease-inout), background var(--t-fast) var(--ease-inout); }
+  .chip:hover { color: var(--gold-200); border-color: var(--gold-400); }
+  .chip.on { background: rgba(194,162,101,.14); border-color: var(--gold-300); color: var(--gold-100); }
+  .chip:focus-visible { outline: 1.5px solid var(--gold-400); outline-offset: 2px; }
+  .seg { display: inline-flex; padding: 4px; gap: 4px; background: var(--navy-1);
+    border: 1px solid rgba(255,255,255,.06); border-radius: 999px; }
+  .seg button { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase;
+    padding: 7px 13px; border-radius: 999px; background: transparent; color: var(--ink-4); border: 0; cursor: pointer; }
+  .seg button.on { background: rgba(194,162,101,.12); color: var(--gold-200);
+    box-shadow: inset 0 0 0 1px rgba(194,162,101,.45); }
+
+  .chart-shell { background: var(--navy-1); border: 1px solid rgba(194,162,101,.2);
+    border-radius: 12px; padding: 10px; min-height: 480px; }
+  #bigchart { width: 100%; min-height: 460px; }
+  .foot-note2 { font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-4);
+    letter-spacing: .04em; line-height: 1.7; margin-top: 12px; max-width: 720px; }
+
+  .kpi-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-top: 18px; }
+  .kcard { background: var(--navy-1); border: 1px solid rgba(194,162,101,.18); border-radius: 10px;
+    padding: 16px 18px; cursor: pointer; text-align: left;
+    transition: border-color var(--t-fast) var(--ease-inout); }
+  .kcard:hover, .kcard.on { border-color: var(--gold-400); }
+  .kcard .l { font-family: var(--font-mono); font-size: 10px; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--ink-4); display: block; }
+  .kcard .v { font-family: var(--font-mono); font-weight: 500; font-size: 24px; color: var(--ink-1);
+    display: block; margin-top: 8px; font-variant-numeric: tabular-nums; }
+  .kcard .dl { font-family: var(--font-sans); font-size: 11px; margin-top: 6px; display: block; color: var(--ink-4); }
+  .kcard .dl.up { color: #6FBF9A; } .kcard .dl.down { color: #D98686; }
+  details.adv { margin-top: 16px; }
+  details.adv summary { font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--ink-4); cursor: pointer; list-style: none; }
+  details.adv summary:hover { color: var(--gold-300); }
+  details.adv summary::before { content: "+ "; color: var(--gold-400); }
+  details.adv[open] summary::before { content: "− "; }
+  details.adv .chipset { margin-top: 12px; }
+
+  .mom-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; margin-top: 30px; }
+  .mcard { background: var(--navy-1); border: 1px solid rgba(194,162,101,.18); border-radius: 12px; padding: 20px 22px; }
+  .mcard .head { display: flex; justify-content: space-between; font-family: var(--font-mono);
+    font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-4); }
+  .mcard .head .tier { color: var(--gold-300); }
+  .mcard .vn { font-family: var(--font-serif); font-size: 21px; color: var(--ink-1); margin-top: 8px; }
+  .mcard .score { font-family: var(--font-mono); font-size: 26px; font-weight: 500; color: var(--gold-200); margin-top: 6px; }
+  .mcard .narr { font-family: var(--font-sans); font-size: 12.5px; line-height: 1.55; color: var(--ink-3); margin-top: 10px; }
+
+  .signup { margin-top: 60px; background: var(--navy-1); border: 1px solid rgba(194,162,101,.25);
+    border-radius: 12px; padding: 30px; display: flex; flex-wrap: wrap; gap: 18px; align-items: center; justify-content: space-between; }
+  .signup .t { font-family: var(--font-serif); font-size: 22px; color: var(--ink-1); }
+  .signup .s { font-family: var(--font-sans); font-size: 13px; color: var(--ink-3); margin-top: 4px; }
+  .signup form { display: flex; gap: 10px; flex-wrap: wrap; }
+  .signup input { font-family: var(--font-sans); font-size: 14px; padding: 12px 16px; min-width: 240px;
+    background: var(--navy-0); border: 1px solid rgba(255,255,255,.1); border-radius: 6px; color: var(--ink-1); }
+  .signup input:focus { outline: none; border-color: var(--gold-400); }
+  .signup button { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    background: var(--gold-400); color: #10182B; font-weight: 600; border: 0; border-radius: 6px;
+    padding: 12px 22px; cursor: pointer; }
+  .signup button:hover { background: var(--gold-300); }
+  .signup .st { font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-4); width: 100%; }
+  </style>
+
+  <!-- ═══ ACT 1 · THE MAP — orientation first ═══ -->
+  <section class="chapter act" id="act-1" data-chapter="0" data-palette="0.40">
+    <div class="inner">
+      <span class="act-eyebrow fade-up">Intelligence &middot; Act I</span>
+      <h1 class="headline" data-headline="">Where is the market <em>moving</em>?</h1>
+      <p class="lede fade-up">Every closed sale on the corridor, plotted live. Bubble size is transaction activity; color is momentum.</p>
+      <div class="pill-live fade-up" id="livePill"><span class="dot"></span><span id="liveTxt">Connecting&hellip;</span></div>
+      <div class="map-frame fade-up">
+        <iframe src="/market-map" title="Live North Shore market map" loading="lazy"></iframe>
+      </div>
+      <p class="act-note fade-up">Updated daily from MLS &amp; Infosparks &middot; open full-screen at <a href="/market-map" style="color:var(--gold-300);">/market-map</a></p>
+    </div>
+  </section>
+
+  <!-- ═══ ACT 2 · ONE CHART, EVERY DATASET ═══ -->
+  <section class="chapter act" id="act-2" data-chapter="1" data-palette="0.60">
+    <div class="inner">
+      <span class="act-eyebrow fade-up">Intelligence &middot; Act II</span>
+      <h2 class="headline" data-headline="">One chart. Every <em>signal</em>.</h2>
+      <p class="lede fade-up">Pick the dataset, the village, and the window. Reconciled each morning against a five-year Infosparks baseline.</p>
+
+      <div class="controls fade-up">
+        <div class="chipset" id="villageChips" role="tablist" aria-label="Village"></div>
+        <div class="seg" id="scopeSeg">
+          <button data-scope="all" class="on">All SF</button>
+          <button data-scope="luxury">$2M+ Luxury</button>
+        </div>
+        <div class="seg" id="rangeSeg">
+          <button data-range="1">1Y</button>
+          <button data-range="3" class="on">3Y</button>
+          <button data-range="5">5Y</button>
+          <button data-range="99">All</button>
+        </div>
+      </div>
+
+      <div class="kpi-strip fade-up" id="kpiStrip"></div>
+
+      <details class="adv fade-up">
+        <summary>Advanced datasets</summary>
+        <div class="chipset" id="advChips"></div>
+      </details>
+
+      <div class="chart-shell fade-up" style="margin-top:18px;">
+        <div id="bigchart"></div>
+      </div>
+      <p class="foot-note2 fade-up">
+        &ldquo;North Shore&rdquo; medians are medians of the village medians &middot; $/SqFt and ratio metrics reflect the subset of
+        comps reporting the underlying fields &middot; Luxury scope begins where its data begins &mdash; ranges without data are not shown.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══ ACT 3 · THE VERDICT ═══ -->
+  <section class="chapter act" id="act-3" data-chapter="2" data-palette="0.80">
+    <div class="inner">
+      <span class="act-eyebrow fade-up">Intelligence &middot; Act III</span>
+      <h2 class="headline" data-headline="">Is it your <em>window</em>?</h2>
+      <p class="lede fade-up">A momentum read per village — supply, velocity, and pricing pressure resolved into one signal.</p>
+      <div class="mom-grid fade-up" id="momGrid"></div>
+
+      <div class="signup fade-up">
+        <div>
+          <div class="t">Get this briefing monthly.</div>
+          <div class="s">One email when the numbers move. No listings spam, ever.</div>
+        </div>
+        <form id="briefForm" novalidate>
+          <input type="email" id="briefEmail" placeholder="your@email.com" required maxlength="200" aria-label="Email for monthly briefing">
+          <button type="submit">Subscribe</button>
+          <span class="st" id="briefStatus"></span>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <script slot="scripts" is:inline>
+  document.addEventListener('DOMContentLoaded', function () {
+    /* intel-data.js provides: SUPA, VILLAGES, KPIS, FMT, supaFetch, supaRpc,
+       loadVillageSeries, aggregateNorthShore, indexByMetric, rollingMean,
+       linearInterpolate, latestOf, findNearDaysAgo, pctChange */
+    if (typeof loadVillageSeries === 'undefined') return;
+
+    var CONSUMER = ['median_price','units_sold','dom','sp_lp','months_supply'];
+    var S = { village: 'North Shore', scope: 'all', range: 3,
+              metric: 'median_price', data: null };
+    var CACHE = {};
+
+    /* ── controls ── */
+    var vc = document.getElementById('villageChips');
+    VILLAGES.forEach(function (v) {
+      var b = document.createElement('button');
+      b.className = 'chip' + (v === S.village ? ' on' : '');
+      b.textContent = v; b.setAttribute('role','tab');
+      b.addEventListener('click', function () { S.village = v; refresh(); });
+      vc.appendChild(b);
+    });
+    document.querySelectorAll('#scopeSeg button').forEach(function (b) {
+      b.addEventListener('click', function () { S.scope = b.dataset.scope; refresh(); });
+    });
+    document.querySelectorAll('#rangeSeg button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        S.range = Number(b.dataset.range);
+        document.querySelectorAll('#rangeSeg button').forEach(function (x) { x.classList.toggle('on', x === b); });
+        draw();
+      });
+    });
+    var adv = document.getElementById('advChips');
+    KPIS.filter(function (k) { return CONSUMER.indexOf(k.id) === -1; }).forEach(function (k) {
+      var b = document.createElement('button');
+      b.className = 'chip'; b.textContent = k.label;
+      b.addEventListener('click', function () { S.metric = k.metric; syncChips(); draw(); });
+      adv.appendChild(b);
+    });
+
+    function kpiById(id) { return KPIS.filter(function (k) { return k.id === id; })[0]; }
+    function kpiByMetric(m) { return KPIS.filter(function (k) { return k.metric === m; })[0]; }
+
+    function setPill(kind, msg) {
+      var p = document.getElementById('livePill');
+      p.className = 'pill-live' + (kind ? ' ' + kind : '');
+      document.getElementById('liveTxt').textContent = msg;
+    }
+
+    /* ── data ── */
+    function load(village, scope) {
+      var key = village + '|' + scope;
+      if (CACHE[key]) return Promise.resolve(CACHE[key]);
+      return loadVillageSeries(village, scope).then(function (rows) {
+        var data = (village === 'North Shore')
+          ? (function () {
+              var agg = aggregateNorthShore(rows, scope), d = {};
+              agg.forEach(function (r) { (d[r.metric] = d[r.metric] || []).push({ d: r.d, source: r.source, value: r.value }); });
+              Object.keys(d).forEach(function (m) { d[m].sort(function (a, b) { return a.d.localeCompare(b.d); }); });
+              return d;
+            })()
+          : indexByMetric(rows, scope);
+        CACHE[key] = data;
+        return data;
+      });
+    }
+
+    function refresh() {
+      document.querySelectorAll('#villageChips .chip').forEach(function (c) { c.classList.toggle('on', c.textContent === S.village); });
+      document.querySelectorAll('#scopeSeg button').forEach(function (b) { b.classList.toggle('on', b.dataset.scope === S.scope); });
+      load(S.village, S.scope).then(function (data) {
+        S.data = data;
+        var newest = null;
+        Object.keys(data).forEach(function (m) {
+          var a = data[m]; if (a.length && (!newest || a[a.length - 1].d > newest)) newest = a[a.length - 1].d;
+        });
+        if (newest) {
+          var age = Math.floor((Date.now() - new Date(newest + 'T12:00:00').getTime()) / 86400000);
+          setPill(age <= 2 ? '' : 'stale',
+            'Data as of ' + new Date(newest + 'T12:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) +
+            (age > 2 ? ' · reconciled ' + age + ' days ago' : ' · live'));
+        } else { setPill('err', 'Data unavailable'); }
+        strip(); draw();
+      }).catch(function () { setPill('err', 'Data unavailable'); });
+    }
+
+    /* ── KPI strip ── */
+    function strip() {
+      var el = document.getElementById('kpiStrip'); el.innerHTML = '';
+      CONSUMER.forEach(function (id) {
+        var k = kpiById(id); if (!k) return;
+        var series = S.data[k.metric] || [];
+        var last = latestOf(series), prior = findNearDaysAgo(series, 30);
+        var delta = prior && last ? pctChange(last.value, prior.value) : null;
+        var card = document.createElement('button');
+        card.className = 'kcard' + (S.metric === k.metric ? ' on' : '');
+        var cls = 'dl', txt = '—';
+        if (delta != null && !isNaN(delta)) {
+          var fav = k.invert ? delta < 0 : delta > 0;
+          cls += Math.abs(delta) < 0.5 ? '' : (fav ? ' up' : ' down');
+          txt = (delta > 0 ? '+' : '') + delta.toFixed(1) + '% vs 30d';
+        }
+        card.innerHTML = '<span class="l">' + k.label + '</span>' +
+          '<span class="v">' + (last ? (FMT[k.fmt] || FMT.int)(last.value) : '—') + '</span>' +
+          '<span class="' + cls + '">' + txt + '</span>';
+        card.addEventListener('click', function () { S.metric = k.metric; syncChips(); draw(); });
+        el.appendChild(card);
+      });
+    }
+    function syncChips() {
+      document.querySelectorAll('#kpiStrip .kcard').forEach(function (c, i) {
+        var k = kpiById(CONSUMER[i]); c.classList.toggle('on', k && k.metric === S.metric);
+      });
+    }
+
+    /* ── the one chart ── */
+    function draw() {
+      if (typeof Plotly === 'undefined' || !window.BrandCharts || !S.data) return;
+      var C = window.BrandCharts;
+      var k = kpiByMetric(S.metric) || kpiById('median_price');
+      var raw = S.data[k.metric] || [];
+      var cutoff = new Date(); cutoff.setFullYear(cutoff.getFullYear() - S.range);
+      var cut = cutoff.toISOString().slice(0, 10);
+      var series = S.range >= 99 ? raw : raw.filter(function (p) { return p.d >= cut; });
+      var dense = linearInterpolate(series);
+      var traces = [C.area(k.label, dense.map(function (p) { return p.d; }), dense.map(function (p) { return p.value; }), 'gold', { width: 1.5 })];
+      var ma = rollingMean(dense.filter(function (p) { return p.value != null; }), 90);
+      traces.push(C.line('90-day average', ma.map(function (p) { return p.d; }), ma.map(function (p) { return p.value; }), 'blue', { width: 2.2 }));
+      var tickformat = (k.fmt === 'money' || k.fmt === 'money0') ? '$,.0f'
+        : k.fmt === 'pct' ? '.1f' : k.fmt === 'pct01' ? '.1%' : k.fmt === 'dec1' ? '.1f' : ',d';
+      Plotly.react(document.getElementById('bigchart'), traces, C.layout({
+        title: k.label + ' · ' + S.village +
+          '<br><sub style="font-size:12px;color:#93A0B8">' + (S.scope === 'luxury' ? '$2M+ Luxury' : 'All single-family') + '</sub>',
+        y: { title: '', tickformat: tickformat },
+        margin: { l: 70, r: 28, t: 80, b: 56 }, showlegend: true
+      }), C.config);
+    }
+
+    /* ── momentum ── */
+    supaRpc('get_smart_momentum', { scope_filter: 'all' }).then(function (rows) {
+      var g = document.getElementById('momGrid');
+      (rows || []).forEach(function (m) {
+        var d = document.createElement('div'); d.className = 'mcard';
+        d.innerHTML = '<div class="head"><span>Momentum</span><span class="tier">' + (m.tier || '') + '</span></div>' +
+          '<div class="vn">' + m.village + '</div>' +
+          '<div class="score">' + (m.score != null ? Number(m.score).toFixed(0) : '—') + '</div>' +
+          '<div class="narr">' + (m.narrative || '') + '</div>';
+        g.appendChild(d);
+      });
+      if (!rows || !rows.length) g.innerHTML = '<p class="lede">Momentum signals are recalculating — see the map above for the live picture.</p>';
+    }).catch(function () {
+      document.getElementById('momGrid').innerHTML = '<p class="lede">Momentum signals are recalculating — see the map above for the live picture.</p>';
+    });
+
+    /* ── briefing signup → leads (source: briefing) ── */
+    var bf = document.getElementById('briefForm');
+    bf.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var em = document.getElementById('briefEmail');
+      if (!bf.reportValidity()) return;
+      var st = document.getElementById('briefStatus');
+      st.textContent = 'Subscribing…';
+      fetch(SUPA.URL + '/rest/v1/leads', {
+        method: 'POST',
+        headers: { apikey: SUPA.KEY, Authorization: 'Bearer ' + SUPA.KEY,
+          'Content-Type': 'application/json', Prefer: 'return=minimal' },
+        body: JSON.stringify({ source: 'briefing', email: em.value.trim(),
+          message: 'Monthly briefing signup', page: location.pathname })
+      }).then(function (r) {
+        if (!r.ok) throw new Error(r.status);
+        bf.reset(); st.textContent = 'Subscribed. First briefing arrives with the next monthly close.';
+      }).catch(function () { st.textContent = 'Something went wrong — email pmilhaupt@jamesonsir.com and I’ll add you.'; });
+    });
+
+    refresh();
+  });
+  </script>
+</Chapter>
