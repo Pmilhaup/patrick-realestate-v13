@@ -269,6 +269,10 @@ import Chapter from '../layouts/Chapter.astro';
       CONSUMER.forEach(function (id) {
         var k = kpiById(id); if (!k) return;
         var series = S.data[k.metric] || [];
+        var COUNTS = { closed_sales: 1, new_listings: 1 };
+        if (COUNTS[k.metric]) {
+          series = series.filter(function (p) { return p.value != null && p.value > 0; });
+        }
         var last = latestOf(series), prior = findNearDaysAgo(series, 30);
         var delta = prior && last ? pctChange(last.value, prior.value) : null;
         var card = document.createElement('button');
@@ -304,7 +308,7 @@ import Chapter from '../layouts/Chapter.astro';
       var dense = linearInterpolate(series);
       var traces = [C.area(k.label, dense.map(function (p) { return p.d; }), dense.map(function (p) { return p.value; }), 'gold', { width: 1.5 })];
       var ma = rollingMean(dense.filter(function (p) { return p.value != null; }), 90);
-      traces.push(C.line('90-day average', ma.map(function (p) { return p.d; }), ma.map(function (p) { return p.value; }), 'blue', { width: 2.2 }));
+      traces.push(C.line('90-day average', ma.map(function (p) { return p.d; }), ma.map(function (p) { return p.value; }), 'blue', { axis: 'left', width: 2.2 }));
       var tickformat = (k.fmt === 'money' || k.fmt === 'money0') ? '$,.0f'
         : k.fmt === 'pct' ? '.1f' : k.fmt === 'pct01' ? '.1%' : k.fmt === 'dec1' ? '.1f' : ',d';
       Plotly.react(document.getElementById('bigchart'), traces, C.layout({
