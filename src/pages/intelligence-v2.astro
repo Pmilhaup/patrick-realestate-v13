@@ -306,9 +306,13 @@ import Chapter from '../layouts/Chapter.astro';
       var cut = cutoff.toISOString().slice(0, 10);
       var series = S.range >= 99 ? raw : raw.filter(function (p) { return p.d >= cut; });
       var dense = linearInterpolate(series);
-      var traces = [C.area(k.label, dense.map(function (p) { return p.d; }), dense.map(function (p) { return p.value; }), 'gold', { width: 1.5 })];
+      // Raw daily readings are noisy (sparse-day medians spike) — show them faint;
+      // the 90-day trend carries the story in gold.
+      var raw_t = C.line(k.label + ' (daily)', dense.map(function (p) { return p.d; }), dense.map(function (p) { return p.value; }), 'blue', { axis: 'left', width: 1 });
+      raw_t.opacity = 0.28;
       var ma = rollingMean(dense.filter(function (p) { return p.value != null; }), 90);
-      traces.push(C.line('90-day average', ma.map(function (p) { return p.d; }), ma.map(function (p) { return p.value; }), 'blue', { axis: 'left', width: 2.2 }));
+      var ma_t = C.line('90-day trend', ma.map(function (p) { return p.d; }), ma.map(function (p) { return p.value; }), 'gold', { axis: 'left', width: 2.6 });
+      var traces = [raw_t, ma_t];
       var tickformat = (k.fmt === 'money' || k.fmt === 'money0') ? '$,.0f'
         : k.fmt === 'pct' ? '.1f' : k.fmt === 'pct01' ? '.1%' : k.fmt === 'dec1' ? '.1f' : ',d';
       Plotly.react(document.getElementById('bigchart'), traces, C.layout({
