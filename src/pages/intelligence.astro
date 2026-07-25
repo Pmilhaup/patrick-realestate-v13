@@ -565,6 +565,50 @@ function linearInterpolate(series) {
   return out;
 }
 function pctChange(now, prev) { if (now==null||prev==null||prev===0) return null; return ((now-prev)/prev)*100; }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   PARTIAL-PERIOD GUARD (added 2026-07-24)
+   The newest daily snapshot is almost always an incomplete period — a single
+   morning's closings. Reading it as "today's value" produced headline
+   nonsense on the flagship page: Median Price showed "−89.0% vs 30d" and
+   Closed Sales showed "2", because both were derived from one partial day.
+   On a practice that sells reconciliation, a visibly wrong number is the
+   most expensive defect on the site.
+   Fix: represent "current" as the median of the trailing complete window
+   (up to 7 valid observations) and compare against the same window centred
+   30 days earlier. Robust to partial days and single-sale outliers, and
+   still strictly a live MLS read.
+   ───────────────────────────────────────────────────────────────────────── */
+function medianOf(nums) {
+  const s = nums.filter(n => n != null && isFinite(n)).slice().sort((a,b) => a-b);
+  if (!s.length) return null;
+  const m = s.length >> 1;
+  return s.length % 2 ? s[m] : (s[m-1] + s[m]) / 2;
+}
+function validPoints(series) {
+  return (series || []).filter(p => p && p.value != null && isFinite(p.value));
+}
+function robustLatest(series, win) {
+  const v = validPoints(series);
+  if (!v.length) return null;
+  const tail = v.slice(-(win || 7));
+  const med = medianOf(tail.map(p => p.value));
+  if (med == null) return null;
+  return { date: v[v.length-1].date, value: med, n: tail.length };
+}
+function robustNearDaysAgo(series, days, win) {
+  const v = validPoints(series);
+  if (!v.length) return null;
+  const anchor = findNearDaysAgo(v, days);
+  if (!anchor) return null;
+  const i = v.indexOf(anchor);
+  if (i < 0) return { date: anchor.date, value: anchor.value, n: 1 };
+  const half = Math.floor((win || 7) / 2);
+  const slice = v.slice(Math.max(0, i - half), Math.min(v.length, i + half + 1));
+  const med = medianOf(slice.map(p => p.value));
+  if (med == null) return null;
+  return { date: anchor.date, value: med, n: slice.length };
+}
 function latestOf(series) { return series.length ? series[series.length-1] : null; }
 function findNearDaysAgo(series, days) {
   if (!series.length) return null;
@@ -726,13 +770,18 @@ function renderKpis() {
   grid.innerHTML = '';
   KPIS.forEach((k,i) => {
     const series = (STATE.data?.[k.metric]) || [];
-    const last = latestOf(series);
-    const prior30 = findNearDaysAgo(series, 30);
+    /* Trailing-window medians rather than the raw newest point — see the
+       PARTIAL-PERIOD GUARD note above. */
+    const last = robustLatest(series, 7) || latestOf(series);
+    const prior30 = robustNearDaysAgo(series, 30, 7);
     const delta = prior30 ? pctChange(last?.value, prior30.value) : null;
     const v = last?.value;
     const formatted = (FMT[k.fmt] || FMT.int)(v);
     let deltaCls = 'flat', deltaTxt = '—';
-    if (delta != null && !isNaN(delta)) {
+    /* Suppress physically implausible swings instead of publishing them: a
+       >60% month-over-month move in any of these metrics is a data artefact,
+       not a market event, and printing it destroys trust in the whole page. */
+    if (delta != null && !isNaN(delta) && Math.abs(delta) <= 60) {
       const favorable = k.invert ? (delta < 0) : (delta > 0);
       deltaCls = Math.abs(delta) < 0.5 ? 'flat' : (favorable ? 'up' : 'down');
       deltaTxt = (delta > 0 ? '+' : '') + delta.toFixed(1) + '% vs 30d';

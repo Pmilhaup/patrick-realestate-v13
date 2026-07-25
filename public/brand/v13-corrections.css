@@ -1,0 +1,238 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   v13 PRODUCTION CORRECTIONS · 2026-07-24
+   Loaded last in <head>, after brand-core.css, so these rules win.
+   Every block below closes a defect found in the published-v13 audit.
+   Each is commented with the observed symptom and the cause.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ───────────────────────────────────────────────────────────────────────────
+   FIX 1 · "MISSING HEADERS"
+   Symptom: on scroll, headlines and KPI cards passed *underneath* the fixed
+   nav and rendered through the Sotheby's wordmark and menu links — the header
+   of every section became illegible at exactly the moment it was read.
+   Cause: `.nav` is position:fixed with no surface of its own.
+   Fix: a soft navy scrim behind the nav band. Always present (no JS, no
+   flash-of-unstyled), strongest at the very top, fading to nothing so it
+   never reads as a hard bar on the hero.
+   ─────────────────────────────────────────────────────────────────────────── */
+.nav::before {
+  content: '';
+  position: absolute;
+  top: calc(-1 * clamp(20px, 2.5vw, 32px));
+  left: calc(-1 * clamp(20px, 4vw, 56px));
+  right: calc(-1 * clamp(20px, 4vw, 56px));
+  bottom: calc(-1 * clamp(22px, 2.6vw, 34px));
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(6, 13, 31, 0.94) 0%,
+    rgba(6, 13, 31, 0.86) 55%,
+    rgba(6, 13, 31, 0.58) 82%,
+    rgba(6, 13, 31, 0) 100%
+  );
+  -webkit-backdrop-filter: blur(9px) saturate(118%);
+          backdrop-filter: blur(9px) saturate(118%);
+}
+/* Hairline that separates chrome from canvas without drawing a "bar". */
+.nav::after {
+  content: '';
+  position: absolute;
+  left: calc(-1 * clamp(20px, 4vw, 56px));
+  right: calc(-1 * clamp(20px, 4vw, 56px));
+  bottom: calc(-1 * clamp(22px, 2.6vw, 34px));
+  height: 1px;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(194, 162, 101, 0.26) 18%,
+    rgba(194, 162, 101, 0.26) 82%,
+    transparent 100%
+  );
+}
+/* The nav must always sit above page content, rails and canvas. */
+.nav { z-index: 60; }
+
+/* Anchor jumps (rail dots, "Continue ↓", "#ch-0x" CTAs) previously landed
+   with the target heading tucked under the nav. Reserve the chrome height. */
+html { scroll-padding-top: clamp(96px, 12vh, 132px); }
+
+
+/* ───────────────────────────────────────────────────────────────────────────
+   FIX 2 · EVERY PAGE OPENED ON AN EMPTY SCREEN
+   Symptom: pages loaded showing ~450px of blank navy; the eyebrow and H1 sat
+   at roughly 55-60% viewport depth — below the fold on a laptop. Read as a
+   broken or still-loading page, and is the second half of the "missing
+   headers" report.
+   Cause: `.chapter { min-height:120vh; align-items:center }` centres content
+   in a box 1.2× taller than the screen, pushing it past the fold by design.
+   Fix: size the first screen to the actual viewport and reserve the nav band,
+   so the header is the first thing in view. Later chapters keep generous air.
+   ─────────────────────────────────────────────────────────────────────────── */
+.chapter {
+  min-height: 100svh;
+  padding-top: clamp(112px, 14vh, 168px);
+  padding-bottom: clamp(72px, 10vh, 128px);
+}
+/* Opening chapter: tighten further so the H1 lands in the optical centre. */
+.chapter#ch-00 {
+  min-height: 100svh;
+  padding-top: clamp(104px, 12vh, 148px);
+}
+@supports not (min-height: 100svh) {
+  .chapter, .chapter#ch-00 { min-height: 100vh; }
+}
+
+
+/* ───────────────────────────────────────────────────────────────────────────
+   FIX 3 · THE SIGNATURE GOLD WORD RENDERED INVISIBLE
+   Symptom: the italic gold emphasis word disappeared completely on some
+   loads — /properties shipped the H1 as "A ⟨nothing⟩, carried with
+   restraint." The word was absent, not dim.
+   Cause: a three-layer paint stack — <em> ▸ span.w ▸ span — where each layer
+   set a gradient background with `background-clip:text` and
+   `-webkit-text-fill-color:transparent`, over an inner span carrying
+   `will-change:transform`. Chrome does not paint background-clip:text on a
+   compositor-promoted layer, so whenever GSAP left will-change applied (a
+   race: cleared on animation complete, retained if the timeline was
+   interrupted) the glyphs had transparent fill and no painted background —
+   i.e. nothing. It also animated `foilSweep` infinitely, which BRAND.md
+   forbids, and referenced two never-defined custom properties
+   (--duration-foil, --glow-foil).
+   Fix: paint the emphasis word with the canonical solid gold text colour for
+   dark canvases (#EAD9AE, gold-200 — the AA-compliant on-navy value in
+   BRAND.md). Deterministic on every engine, no compositing dependency, no
+   infinite animation, no invisible words. The gesture stays: italic
+   Cormorant in gold.
+   ─────────────────────────────────────────────────────────────────────────── */
+h1 em, h2 em, h3 em, .headline em,
+.headline em > .w, .headline em > .w > span, .headline em > .w span,
+h1 em > .w > span, h2 em > .w > span, h3 em > .w > span,
+.gold-foil, .gold-foil > .w > span {
+  background: none !important;
+  background-image: none !important;
+  -webkit-background-clip: border-box !important;
+          background-clip: border-box !important;
+  color: var(--gold-200, #EAD9AE) !important;
+  -webkit-text-fill-color: var(--gold-200, #EAD9AE) !important;
+  animation: none !important;
+  filter: none !important;
+  will-change: auto !important;
+}
+h1 em, h2 em, h3 em, .headline em { font-style: italic; }
+
+
+/* ───────────────────────────────────────────────────────────────────────────
+   FIX 4 · PRIMARY CTAs WERE ROYAL BLUE
+   Symptom: "Continue ↓", "View active listings ↓", "Walk through the six
+   steps ↓", "Open the dashboard ↓", "Email Patrick →" all rendered as a
+   saturated web-app blue (#2563FF) with a blue glow — the single most
+   off-brand element on the site, and the first thing the eye lands on.
+   Cause: brand-dark.css v3.3 styled `.btn` with --btn-blue. Royal blue does
+   not exist in the canonical palette (BRAND.md defines one gold ramp on a
+   navy canvas; blue is reserved for links on dark only).
+   Fix: brushed gold fill, navy ink, gold edge. Static gradient — a single
+   pass, never animated, per the brand spec.
+   ─────────────────────────────────────────────────────────────────────────── */
+.btn {
+  background: linear-gradient(100deg, #8C6B3F 0%, #C2A265 38%, #D9BE85 50%, #C2A265 62%, #8C6B3F 100%) !important;
+  border: 1px solid rgba(234, 217, 174, 0.55) !important;
+  color: #0B1730 !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.04em !important;
+  text-shadow: none !important;
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.30) !important;
+}
+.btn:hover {
+  background: linear-gradient(100deg, #9A7746 0%, #CDAE71 38%, #EAD9AE 50%, #CDAE71 62%, #9A7746 100%) !important;
+  border-color: #EAD9AE !important;
+  color: #0B1730 !important;
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 26px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.38) !important;
+}
+.btn:active {
+  transform: translateY(0);
+  background: linear-gradient(100deg, #7A5F33 0%, #B8975C 50%, #7A5F33 100%) !important;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.38) !important;
+}
+.btn:focus-visible {
+  outline: 2px solid #EAD9AE !important;
+  outline-offset: 3px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.34) !important;
+}
+/* Secondary CTA sits beside the gold fill — keep it a gold hairline on navy
+   so the pair reads as one family rather than two competing accents. */
+.btn-outline {
+  background: rgba(194, 162, 101, 0.06) !important;
+  border: 1px solid rgba(194, 162, 101, 0.55) !important;
+  color: var(--gold-200, #EAD9AE) !important;
+}
+.btn-outline:hover {
+  background: rgba(194, 162, 101, 0.13) !important;
+  border-color: #EAD9AE !important;
+  color: #FFFFFF !important;
+}
+
+
+/* ───────────────────────────────────────────────────────────────────────────
+   FIX 5 · CHAPTER RAIL COLLIDED WITH CONTENT
+   Symptom: at common laptop widths (~1130-1400px) the fixed right-hand
+   chapter rail ("00 OPENING") overlapped headlines and KPI cards.
+   Fix: only show the rail when there is genuine margin for it.
+   ─────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 1440px) {
+  .rail { display: none !important; }
+}
+
+
+/* ───────────────────────────────────────────────────────────────────────────
+   FIX 6 · HORIZONTAL OVERFLOW
+   Symptom: /properties scrolled sideways; the Contact button in the nav was
+   clipped at the right edge.
+   ─────────────────────────────────────────────────────────────────────────── */
+html, body { max-width: 100%; overflow-x: hidden; }
+
+
+/* ───────────────────────────────────────────────────────────────────────────
+   FIX 7 · TYPOGRAPHIC POLISH
+   The word-stagger wrapper clipped italic descenders and opened an
+   over-large gap between headline lines (visible on /heritage as a ~70px
+   chasm between "A standard," and "not a slogan.").
+   ─────────────────────────────────────────────────────────────────────────── */
+.headline .w {
+  overflow: visible;          /* nothing left to clip once the sweep is gone */
+  padding-bottom: 0.04em;
+  line-height: 1.12;
+}
+.headline {
+  text-wrap: balance;
+  line-height: 1.1;
+}
+
+
+/* ───────────────────────────────────────────────────────────────────────────
+   FIX 8 · ACCESSIBILITY & MOTION
+   Guarantee content is visible for reduced-motion users and if a script
+   fails: never leave text at opacity 0 waiting for an animation.
+   ─────────────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .fade-up, .pinch-in, .kpi, .step, .village-tile, .lock-card,
+  .headline .w > span { opacity: 1 !important; transform: none !important; }
+}
+.fade-up, .pinch-in { opacity: 1; transform: none; }
+:where(a, button, [role="button"], input, select, textarea):focus-visible {
+  outline: 2px solid #EAD9AE;
+  outline-offset: 3px;
+}
