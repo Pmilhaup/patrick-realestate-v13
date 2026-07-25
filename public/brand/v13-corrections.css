@@ -245,7 +245,20 @@ html, body { max-width: 100%; overflow-x: clip; }
 
 
 /* ───────────────────────────────────────────────────────────────────────────
-   FIX 8 · ACCESSIBILITY & MOTION
+   FIX 8 · KPI DELTA PILL WRAPPED TO THREE LINES
+   "0.0% vs 30d" broke across three lines beside the headline figure on the
+   Median Price card, which is the first card read on the page.
+   ─────────────────────────────────────────────────────────────────────────── */
+.kpi-delta,
+.dashboard-mount .kpi-delta {
+  white-space: nowrap;
+  flex: 0 0 auto;
+  align-self: center;
+}
+
+
+/* ───────────────────────────────────────────────────────────────────────────
+   FIX 9 · ACCESSIBILITY & MOTION
    Guarantee content is visible for reduced-motion users and if a script
    fails: never leave text at opacity 0 waiting for an animation.
    ─────────────────────────────────────────────────────────────────────────── */
