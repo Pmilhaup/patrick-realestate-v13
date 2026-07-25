@@ -192,11 +192,39 @@ h1 em, h2 em, h3 em, .headline em { font-style: italic; }
 
 
 /* ───────────────────────────────────────────────────────────────────────────
-   FIX 6 · HORIZONTAL OVERFLOW
-   Symptom: /properties scrolled sideways; the Contact button in the nav was
-   clipped at the right edge.
+   FIX 6 · HORIZONTAL OVERFLOW CLIPPED THE "CONTACT" BUTTON
+   Symptom: /properties scrolled sideways and the primary Contact CTA in the
+   nav was cut off by the right edge of the window.
+   Cause: the liquid-background canvas was sized `width:100vw`. `100vw`
+   includes the vertical scrollbar, so on any page with a scrollbar the canvas
+   is ~15-17px wider than the content box — the document overflows and drags
+   the fixed nav sideways with it.
+   Fix: size the canvas to the containing block (it is already `inset:0`), and
+   pin the nav to the viewport so document width can never displace it.
    ─────────────────────────────────────────────────────────────────────────── */
-html, body { max-width: 100%; overflow-x: hidden; }
+html, body { max-width: 100%; overflow-x: clip; }
+#paint {
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+}
+/* Nav pinned to the viewport, with its inset expressed as padding so the
+   right-hand CTA can never be pushed outside the visible area. */
+.nav {
+  left: 0 !important;
+  right: 0 !important;
+  padding-inline: clamp(20px, 4vw, 56px);
+  box-sizing: border-box;
+  max-width: 100%;
+}
+.nav::before, .nav::after { left: 0; right: 0; }
+/* Below the desktop breakpoint the link row is hidden and the burger takes
+   over, so only guard the range where all nine items must fit. */
+@media (min-width: 901px) and (max-width: 1320px) {
+  .nav-links { gap: clamp(10px, 1.1vw, 16px); font-size: 10px; }
+  .nav .lockup .role { display: none; }
+}
 
 
 /* ───────────────────────────────────────────────────────────────────────────
