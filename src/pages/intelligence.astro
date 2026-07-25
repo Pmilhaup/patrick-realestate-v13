@@ -448,7 +448,11 @@ function computeXRange() {
 
 const KPIS = [
   { id:'median_price',   label:'Median Price',         help:'Median closed-sale price.',                          metric:'median_sale_price',          fmt:'money',  invert:false },
-  { id:'units_sold',     label:'Closed Sales',          help:'Number of closed transactions.',                     metric:'closed_sales',               fmt:'int',    invert:false },
+  /* Closed sales is a flow, not a level: individual days are frequently zero
+     (weekends, recording lag), so a point read or a median-of-days reports
+     "0". Summed across a trailing 30-day window it is both correct and the
+     conventional MLS presentation. */
+  { id:'units_sold',     label:'Closed Sales · 30d',    help:'Closed transactions, trailing 30 days.',             metric:'closed_sales',               fmt:'int',    invert:false, agg:'sum30' },
   { id:'dom',            label:'Days on Market',        help:'Median days on market for closed sales.',            metric:'median_dom',                 fmt:'int',    invert:true  },
   { id:'sp_lp',          label:'SP / OLP',              help:'Sale price as % of original list price.',            metric:'median_sp_lp_ratio',         fmt:'pct',    invert:false },
   { id:'new_listings',   label:'New Listings',          help:'Newly listed properties.',                           metric:'new_listings',               fmt:'int',    invert:false },
@@ -608,6 +612,19 @@ function robustNearDaysAgo(series, days, win) {
   const med = medianOf(slice.map(p => p.value));
   if (med == null) return null;
   return { date: anchor.date, value: med, n: slice.length };
+}
+/* Flow metrics (counts of events) must be summed over a window, never
+   averaged across days — a median of daily closings is legitimately 0. */
+function windowSum(series, span, offset) {
+  const v = validPoints(series);
+  if (!v.length) return null;
+  const end = v.length - (offset || 0);
+  const start = Math.max(0, end - span);
+  if (end <= start) return null;
+  const slice = v.slice(start, end);
+  return { date: slice[slice.length-1].date,
+           value: slice.reduce((s,p) => s + p.value, 0),
+           n: slice.length };
 }
 function latestOf(series) { return series.length ? series[series.length-1] : null; }
 function findNearDaysAgo(series, days) {
@@ -772,8 +789,11 @@ function renderKpis() {
     const series = (STATE.data?.[k.metric]) || [];
     /* Trailing-window medians rather than the raw newest point — see the
        PARTIAL-PERIOD GUARD note above. */
-    const last = robustLatest(series, 7) || latestOf(series);
-    const prior30 = robustNearDaysAgo(series, 30, 7);
+    const isSum = k.agg === 'sum30';
+    const last = isSum ? (windowSum(series, 30, 0) || latestOf(series))
+                       : (robustLatest(series, 7) || latestOf(series));
+    const prior30 = isSum ? windowSum(series, 30, 30)
+                          : robustNearDaysAgo(series, 30, 7);
     const delta = prior30 ? pctChange(last?.value, prior30.value) : null;
     const v = last?.value;
     const formatted = (FMT[k.fmt] || FMT.int)(v);
