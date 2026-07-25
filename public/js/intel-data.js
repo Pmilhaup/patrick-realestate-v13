@@ -148,3 +148,55 @@ function findNearDaysAgo(series, days) {
 }
 
 function pctChange(now, prev) { if (now==null||prev==null||prev===0) return null; return ((now-prev)/prev)*100; }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   PARTIAL-PERIOD GUARD (2026-07-25)
+   The newest daily snapshot is normally an incomplete period — one morning's
+   closings. Read as "today's value" it produced published nonsense such as
+   "Median Price −89.0% vs 30d" and "Closed Sales 2". Represent "current" as
+   the median of the trailing complete window, and sum flow metrics (event
+   counts, which are legitimately zero on individual days) across a window.
+   ───────────────────────────────────────────────────────────────────────── */
+function medianOf(nums) {
+  const s = nums.filter(n => n != null && isFinite(n)).slice().sort((a,b) => a-b);
+  if (!s.length) return null;
+  const m = s.length >> 1;
+  return s.length % 2 ? s[m] : (s[m-1] + s[m]) / 2;
+}
+function validPoints(series) {
+  return (series || []).filter(p => p && p.value != null && isFinite(p.value));
+}
+function robustLatest(series, win) {
+  const v = validPoints(series);
+  if (!v.length) return null;
+  const tail = v.slice(-(win || 7));
+  const med = medianOf(tail.map(p => p.value));
+  if (med == null) return null;
+  return { d: v[v.length-1].d, value: med, n: tail.length };
+}
+function robustNearDaysAgo(series, days, win) {
+  const v = validPoints(series);
+  if (!v.length) return null;
+  const anchor = findNearDaysAgo(v, days);
+  if (!anchor) return null;
+  const i = v.indexOf(anchor);
+  if (i < 0) return { d: anchor.d, value: anchor.value, n: 1 };
+  const half = Math.floor((win || 7) / 2);
+  const slice = v.slice(Math.max(0, i - half), Math.min(v.length, i + half + 1));
+  const med = medianOf(slice.map(p => p.value));
+  if (med == null) return null;
+  return { d: anchor.d, value: med, n: slice.length };
+}
+function windowSum(series, span, offset) {
+  const v = validPoints(series);
+  if (!v.length) return null;
+  const end = v.length - (offset || 0);
+  const start = Math.max(0, end - span);
+  if (end <= start) return null;
+  const slice = v.slice(start, end);
+  return { d: slice[slice.length-1].d,
+           value: slice.reduce((s,p) => s + p.value, 0),
+           n: slice.length };
+}
+/* Flow metrics must be summed over a window, never read at a point. */
+const FLOW_METRICS = { closed_sales: 1, new_listings: 1 };

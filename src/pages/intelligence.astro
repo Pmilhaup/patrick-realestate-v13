@@ -1,1078 +1,384 @@
 ---
+// INTELLIGENCE — one page, three acts (08_TECHNICAL_ARCHITECTURE §4).
+// Approved and promoted to the canonical "/intelligence" route 2026-07-25.
+// The previous eleven-KPI chapter page is preserved at src/_superseded-2026-07/.
+// Act 1: The Map · Act 2: One chart, selectable datasets, 5 consumer KPIs
+// Act 3: Momentum verdict + briefing signup
 import Chapter from '../layouts/Chapter.astro';
-const lds = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://patrick.realestate/"}, {"@type": "ListItem", "position": 2, "name": "Intelligence", "item": "https://patrick.realestate/intelligence"}]}];
+const lds = [{
+  "@context":"https://schema.org","@type":"Dataset",
+  "name":"North Shore Market Intelligence",
+  "description":"Daily-reconciled MLS market metrics for the seven North Shore villages: median sale price, days on market, sale-to-list, absorption, months of supply and contract velocity.",
+  "url":"https://patrick.realestate/intelligence",
+  "creator":{"@type":"RealEstateAgent","name":"Patrick Milhaupt","@id":"https://patrick.realestate/#agent"},
+  "spatialCoverage":"North Shore, Chicago, IL",
+  "isAccessibleForFree":true
+}];
 ---
 <Chapter
   title="Intelligence — Patrick Milhaupt"
-  description="A live market intelligence dashboard for the North Shore. Median price, days on market, sale-to-list, absorption, months of supply — refreshed daily from the MLS, scoped by village and price band, reconciled against a five-year Infosparks baseline."
-  path="/intelligence" current="/intelligence" palette="0.30"
-  jsonLd={lds.length>=1 ? lds[0] : null}
-  rail={[{"id": "ch-00", "num": "00", "label": "Opening"}, {"id": "ch-01", "num": "01", "label": "The Headline"}, {"id": "ch-02", "num": "02", "label": "Momentum"}, {"id": "ch-03", "num": "03", "label": "Eleven KPIs"}, {"id": "ch-04", "num": "04", "label": "Method"}]}
-  stdScripts={false} orchestrator={false}
+  description="The North Shore market in one page: live map, one chart with every dataset, and a momentum read per village — reconciled daily from the MLS."
+  path="/intelligence" current="/intelligence" palette="0.55"
+  jsonLd={lds[0]}
+  rail={[{id:'act-1',num:'01',label:'Map'},{id:'act-2',num:'02',label:'Chart'},{id:'act-3',num:'03',label:'Verdict'}]}
+  stdScripts={true} orchestrator={true}
 >
+  <link slot="head" rel="stylesheet" href="/brand/brand-core.css">
   <script slot="head" src="https://cdn.plot.ly/plotly-2.35.2.min.js" defer is:inline></script>
   <script slot="head" src="/brand/charts/plotly-brand.js" defer is:inline></script>
+  <script slot="head" src="/js/intel-data.js" defer is:inline></script>
   <style slot="head" is:global>
-.dashboard-mount { margin-top: 48px; display: flex; flex-direction: column; gap: 36px; width: 100%; }
-.dashboard-mount .control-bar {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 18px;
-  padding: 18px 22px; background: rgba(10,24,56,0.62);
-  border: 1px solid rgba(197,165,114,0.18); border-radius: 14px;
-  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-}
-.dashboard-mount .village-select { display: flex; flex-wrap: wrap; gap: 8px; flex: 1 1 auto; }
-.dashboard-mount .village-chip {
-  font-family: var(--font-sans); font-size: 11.5px; font-weight: 500; letter-spacing: 0.6px;
-  padding: 8px 14px; border-radius: 999px;
-  border: 1px solid rgba(197,165,114,0.25);
-  background: rgba(5,14,38,0.35); color: var(--ink-2, #C6CDDA);
-  cursor: pointer; transition: all .22s ease;
-}
-.dashboard-mount .village-chip:hover { color: var(--gold-lit, #E0BC7E); border-color: var(--gold-lit, #E0BC7E); }
-.dashboard-mount .village-chip.active {
-  background: linear-gradient(135deg, rgba(197,165,114,0.22), rgba(224,188,126,0.10));
-  border-color: var(--gold-lit, #E0BC7E); color: #FFF6E0;
-  box-shadow: 0 0 0 1px rgba(224,188,126,0.32) inset;
-}
-.dashboard-mount .scope-toggle {
-  display: inline-flex; padding: 4px; gap: 4px;
-  background: rgba(5,14,38,0.5); border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 999px;
-}
-.dashboard-mount .scope-btn {
-  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 1.2px; text-transform: uppercase;
-  padding: 7px 14px; border-radius: 999px;
-  background: transparent; color: var(--ink-3, #8896AD);
-  border: 0; cursor: pointer; transition: all .22s ease;
-}
-.dashboard-mount .scope-btn.active {
-  background: rgba(240,214,138,0.06);
-  color: var(--gold-lit, #E0BC7E);
-  box-shadow: inset 0 0 0 1px rgba(240,214,138,0.55);
-}
-.dashboard-mount .range-toggle {
-  display: inline-flex; padding: 4px; gap: 4px;
-  background: rgba(5,14,38,0.5); border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 999px;
-}
-.dashboard-mount .range-btn {
-  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 1.2px; text-transform: uppercase;
-  padding: 7px 12px; border-radius: 999px;
-  background: transparent; color: var(--ink-3, #8896AD);
-  border: 0; cursor: pointer; transition: all .22s ease;
-}
-.dashboard-mount .range-btn.active {
-  background: rgba(240,214,138,0.06);
-  color: var(--gold-lit, #E0BC7E);
-  box-shadow: inset 0 0 0 1px rgba(240,214,138,0.55);
-}
-.dashboard-mount .status-pill {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 1px;
-  color: var(--ink-3, #8896AD); text-transform: uppercase;
-  padding: 7px 14px; border-radius: 999px;
-  background: rgba(5,14,38,0.5); border: 1px solid rgba(255,255,255,0.06);
-}
-.dashboard-mount .status-pill .dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--indigo-base, #4A4AF6);
-  box-shadow: 0 0 8px var(--indigo-base, #4A4AF6);
-}
-.dashboard-mount .status-pill.error .dot { background: #ff6b6b; box-shadow: 0 0 8px #ff6b6b; }
-.dashboard-mount .status-pill.loading .dot { background: #fbbf24; box-shadow: 0 0 8px #fbbf24; animation: pulseDot 1.4s ease-in-out infinite; }
-@keyframes pulseDot { 0%,100% { opacity: 0.4; transform: scale(0.85); } 50% { opacity: 1; transform: scale(1.1); } }
+  .act { padding: 110px 0 70px; }
+  .act .inner { width: min(1120px, calc(100% - 48px)); margin: 0 auto; }
+  .act-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: .25em;
+    text-transform: uppercase; color: var(--gold-400); display: block; margin-bottom: 18px; }
+  .act h1, .act h2 { font-family: var(--font-serif); font-weight: 300; color: var(--ink-1);
+    letter-spacing: -0.02em; line-height: 1.1; margin: 0 0 16px; font-size: clamp(32px, 4.4vw, 56px); }
+  .act h1 em, .act h2 em { font-style: italic; color: var(--gold-200); }
+  .act .lede { font-family: var(--font-sans); font-weight: 300; font-size: 16px; line-height: 1.65;
+    color: var(--ink-3); max-width: 620px; }
+  .pill-live { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono);
+    font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3);
+    border: 1px solid rgba(194,162,101,.25); border-radius: 999px; padding: 8px 16px; margin-top: 18px; }
+  .pill-live .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold-300); }
+  .pill-live.stale .dot { background: #D97706; }
+  .pill-live.err .dot { background: #BE1E44; }
 
-.headline-chart {
-  background: rgba(7,18,41,0.55);
-  border: 1px solid rgba(197,165,114,0.18);
-  border-radius: 14px; padding: 8px; min-height: 520px;
-}
-.headline-chart-mount { width: 100%; min-height: 500px; }
+  .map-frame { margin-top: 34px; border: 1px solid rgba(194,162,101,.25); border-radius: 12px; overflow: hidden; }
+  .map-frame iframe { display: block; width: 100%; height: min(72vh, 640px); border: 0; }
+  .act-note { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .08em;
+    color: var(--ink-4); margin-top: 12px; }
 
-.dashboard-mount .section-title {
-  font-family: var(--font-serif); font-size: clamp(20px, 2vw, 28px); font-weight: 400;
-  letter-spacing: -0.01em; color: #F0E6D2;
-}
-.dashboard-mount .section-title em {
-  font-style: italic;
-  background: linear-gradient(120deg, #C5A572 0%, #E0BC7E 35%, #F0D68A 50%, #E0BC7E 65%, #C5A572 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
+  .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 30px 0 16px; }
+  .chipset { display: flex; flex-wrap: wrap; gap: 7px; }
+  .chip { font-family: var(--font-sans); font-size: 12px; font-weight: 500; letter-spacing: .04em;
+    padding: 8px 14px; border-radius: 999px; border: 1px solid rgba(194,162,101,.28);
+    background: transparent; color: var(--ink-2); cursor: pointer;
+    transition: color var(--t-fast) var(--ease-inout), border-color var(--t-fast) var(--ease-inout), background var(--t-fast) var(--ease-inout); }
+  .chip:hover { color: var(--gold-200); border-color: var(--gold-400); }
+  .chip.on { background: rgba(194,162,101,.14); border-color: var(--gold-300); color: var(--gold-100); }
+  .chip:focus-visible { outline: 1.5px solid var(--gold-400); outline-offset: 2px; }
+  .seg { display: inline-flex; padding: 4px; gap: 4px; background: var(--navy-1);
+    border: 1px solid rgba(255,255,255,.06); border-radius: 999px; }
+  .seg button { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase;
+    padding: 7px 13px; border-radius: 999px; background: transparent; color: var(--ink-4); border: 0; cursor: pointer; }
+  .seg button.on { background: rgba(194,162,101,.12); color: var(--gold-200);
+    box-shadow: inset 0 0 0 1px rgba(194,162,101,.45); }
 
-.dashboard-mount .momentum-grid,
-.dashboard-mount .kpi-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;
-}
-.dashboard-mount .mom-card, .dashboard-mount .kpi-card {
-  padding: 22px; background: rgba(10,24,56,0.55);
-  border: 1px solid rgba(197,165,114,0.16); border-radius: 14px;
-  display: flex; flex-direction: column; gap: 10px;
-  opacity: 0; transform: translateY(20px);
-  transition: opacity .8s ease, transform .8s ease, border-color .3s ease;
-}
-.dashboard-mount .mom-card.vis, .dashboard-mount .kpi-card.vis { opacity: 1; transform: translateY(0); }
-.dashboard-mount .kpi-card { cursor: pointer; }
-.dashboard-mount .kpi-card:hover { border-color: var(--gold-lit, #E0BC7E); }
-.dashboard-mount .mom-head, .dashboard-mount .kpi-head {
-  display: flex; justify-content: space-between; align-items: baseline;
-  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 1.4px;
-  text-transform: uppercase; color: var(--ink-3, #8896AD);
-}
-.dashboard-mount .mom-tier { color: var(--gold-lit, #E0BC7E); }
-.dashboard-mount .mom-title {
-  font-family: var(--font-serif); font-size: 22px; font-weight: 400;
-  color: #FFF6E0; letter-spacing: -0.01em;
-}
-.dashboard-mount .mom-score-row { display: flex; align-items: baseline; gap: 10px; }
-.dashboard-mount .mom-score {
-  font-family: var(--font-mono); font-size: 32px; font-weight: 600; color: var(--gold-lit, #E0BC7E);
-}
-.dashboard-mount .mom-score-meta {
-  font-family: var(--font-mono); font-size: 10.5px;
-  letter-spacing: 1.2px; text-transform: uppercase; color: var(--ink-3, #8896AD);
-}
-.dashboard-mount .mom-bar {
-  position: relative; height: 4px;
-  background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden;
-}
-.dashboard-mount .mom-bar-zero {
-  position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px;
-  background: rgba(197,165,114,0.6);
-}
-.dashboard-mount .mom-bar-fill {
-  position: absolute; top: 0; bottom: 0;
-  background: linear-gradient(90deg, #C5A572, #E0BC7E);
-}
-.dashboard-mount .mom-sparkline, .dashboard-mount .kpi-spark { width: 100%; height: 48px; }
-.dashboard-mount .mom-narr {
-  font-family: var(--font-sans); font-size: 12.5px; line-height: 1.55;
-  color: var(--ink-2, #C6CDDA);
-}
-.dashboard-mount .kpi-help { font-size: 12px; cursor: help; color: rgba(255,255,255,0.4); }
-.dashboard-mount .kpi-hero { display: flex; align-items: baseline; gap: 12px; }
-.dashboard-mount .kpi-value {
-  font-family: var(--font-mono); font-size: 30px; font-weight: 600;
-  color: #FFF6E0; letter-spacing: -0.5px;
-}
-.dashboard-mount .kpi-delta {
-  font-family: var(--font-mono); font-size: 11px;
-  letter-spacing: 0.4px; padding: 3px 8px; border-radius: 999px;
-}
-.dashboard-mount .kpi-delta.up   { background: rgba(115,199,120,0.14); color: #73C778; }
-.dashboard-mount .kpi-delta.down { background: rgba(255,107,122,0.16); color: #FF6B7A; }
-.dashboard-mount .kpi-delta.flat { background: rgba(255,255,255,0.06); color: var(--ink-3, #8896AD); }
-.dashboard-mount .kpi-sub {
-  font-family: var(--font-sans); font-size: 11.5px; line-height: 1.5; color: var(--ink-3, #8896AD);
-}
-.dashboard-mount .kpi-foot {
-  display: flex; justify-content: space-between;
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px;
-  text-transform: uppercase; color: var(--ink-3, #8896AD); opacity: 0.7;
-}
-.dashboard-mount .kpi-foot .expand { color: var(--gold-lit, #E0BC7E); }
-#kpiVillageLabel { color: var(--gold-lit, #E0BC7E); }
+  .chart-shell { background: var(--navy-1); border: 1px solid rgba(194,162,101,.2);
+    border-radius: 12px; padding: 10px; min-height: 480px; }
+  #bigchart { width: 100%; min-height: 460px; }
+  .foot-note2 { font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-4);
+    letter-spacing: .04em; line-height: 1.7; margin-top: 12px; max-width: 720px; }
 
-.chart-drawer {
-  position: fixed; inset: 0; background: rgba(3,8,20,0.72);
-  display: none; z-index: 9999;
-  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  align-items: center; justify-content: center; padding: 24px;
-}
-.chart-drawer.open { display: flex; }
-.chart-drawer .drawer-inner {
-  width: min(1100px, 100%); max-height: 88vh;
-  background: linear-gradient(180deg, #0A1838 0%, #050E26 100%);
-  border: 1px solid rgba(197,165,114,0.25); border-radius: 18px;
-  padding: 28px; display: flex; flex-direction: column; gap: 18px;
-  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
-}
-.chart-drawer .drawer-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; }
-.chart-drawer .drawer-title-block { display: flex; flex-direction: column; gap: 4px; }
-.chart-drawer .drawer-title {
-  font-family: var(--font-serif); font-size: 26px; font-weight: 400; color: #FFF6E0;
-}
-.chart-drawer .drawer-title em {
-  font-style: italic;
-  background: linear-gradient(120deg,#C5A572,#E0BC7E,#F0D68A,#E0BC7E,#C5A572);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-.chart-drawer .drawer-meta {
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 1.2px;
-  text-transform: uppercase; color: var(--ink-3, #8896AD);
-}
-.chart-drawer .drawer-close {
-  background: none; border: 1px solid rgba(255,255,255,0.15);
-  width: 36px; height: 36px; border-radius: 50%;
-  color: var(--ink-2, #C6CDDA); cursor: pointer;
-  font-size: 18px; line-height: 1;
-}
-.chart-drawer .drawer-close:hover { color: var(--gold-lit, #E0BC7E); border-color: var(--gold-lit, #E0BC7E); }
-.chart-drawer .drawer-body {
-  flex: 1; min-height: 380px; height: 60vh;
-  position: relative; padding: 12px;
-  background: rgba(7,18,41,0.5); border-radius: 12px;
-}
-.chart-drawer #bigChart { width: 100%; height: 100%; }
-.chart-drawer .overlay-row { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 6px; }
-.chart-drawer .overlay-toggle {
-  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 1px;
-  text-transform: uppercase; padding: 6px 12px; border-radius: 999px;
-  background: rgba(5,14,38,0.5); border: 1px solid rgba(255,255,255,0.08);
-  color: var(--ink-3, #8896AD); cursor: pointer;
-}
-.chart-drawer .overlay-toggle.active {
-  color: var(--gold-lit, #E0BC7E); border-color: var(--gold-lit, #E0BC7E);
-  background: rgba(197,165,114,0.10);
-}
-@media (max-width: 900px) {
-  .dashboard-mount .control-bar { gap: 12px; padding: 14px; }
-  .chart-drawer .drawer-inner { padding: 18px; }
-  .headline-chart { min-height: 380px; }
-  .headline-chart-mount { min-height: 360px; }
-}
-</style>
+  .kpi-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-top: 18px; }
+  .kcard { background: var(--navy-1); border: 1px solid rgba(194,162,101,.18); border-radius: 10px;
+    padding: 16px 18px; cursor: pointer; text-align: left;
+    transition: border-color var(--t-fast) var(--ease-inout); }
+  .kcard:hover, .kcard.on { border-color: var(--gold-400); }
+  .kcard .l { font-family: var(--font-mono); font-size: 10px; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--ink-4); display: block; }
+  .kcard .v { font-family: var(--font-mono); font-weight: 500; font-size: 24px; color: var(--ink-1);
+    display: block; margin-top: 8px; font-variant-numeric: tabular-nums; }
+  .kcard .dl { font-family: var(--font-sans); font-size: 11px; margin-top: 6px; display: block; color: var(--ink-4); }
+  .kcard .dl.up { color: #6FBF9A; } .kcard .dl.down { color: #D98686; }
+  details.adv { margin-top: 16px; }
+  details.adv summary { font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--ink-4); cursor: pointer; list-style: none; }
+  details.adv summary:hover { color: var(--gold-300); }
+  details.adv summary::before { content: "+ "; color: var(--gold-400); }
+  details.adv[open] summary::before { content: "− "; }
+  details.adv .chipset { margin-top: 12px; }
 
+  .mom-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; margin-top: 30px; }
+  .mcard { background: var(--navy-1); border: 1px solid rgba(194,162,101,.18); border-radius: 12px; padding: 20px 22px; }
+  .mcard .head { display: flex; justify-content: space-between; font-family: var(--font-mono);
+    font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-4); }
+  .mcard .head .tier { color: var(--gold-300); }
+  .mcard .vn { font-family: var(--font-serif); font-size: 21px; color: var(--ink-1); margin-top: 8px; }
+  .mcard .score { font-family: var(--font-mono); font-size: 26px; font-weight: 500; color: var(--gold-200); margin-top: 6px; }
+  .mcard .narr { font-family: var(--font-sans); font-size: 12.5px; line-height: 1.55; color: var(--ink-3); margin-top: 10px; }
 
-  <section class="chapter" id="ch-00" data-chapter="0" data-palette="0.10">
-    <div class="inner" style="text-align:center; align-items:center;">
-      <div class="ch-head fade-up" style="justify-content:center;">
-        <span class="hashmark"><i></i></span>
-        <div class="meta" style="border:0; padding:0;">
-          <span class="eyebrow">Intelligence &middot; North Shore</span>
-        </div>
-      </div>
-      <h1 class="headline" data-headline="">
-        The North Shore market,<br><em>reconciled</em> daily.
-      </h1>
-      <p class="body fade-up" style="margin: 0 auto; text-align:center;">
-        Every signal that moves a list price &mdash; median sale, days on market, sale-to-list, absorption, months of supply, pending velocity &mdash; pulled from the MLS each morning, scoped by village and price band, reconciled against a <strong>five-year Infosparks baseline</strong>. The same dashboard I read before every listing call.
-      </p>
-      <div class="cta-row fade-up" style="justify-content:center;">
-        <a class="btn" href="#ch-01">Open the dashboard &darr;</a>
-      </div>
-    </div>
-  </section>
+  .signup { margin-top: 60px; background: var(--navy-1); border: 1px solid rgba(194,162,101,.25);
+    border-radius: 12px; padding: 30px; display: flex; flex-wrap: wrap; gap: 18px; align-items: center; justify-content: space-between; }
+  .signup .t { font-family: var(--font-serif); font-size: 22px; color: var(--ink-1); }
+  .signup .s { font-family: var(--font-sans); font-size: 13px; color: var(--ink-3); margin-top: 4px; }
+  .signup form { display: flex; gap: 10px; flex-wrap: wrap; }
+  .signup input { font-family: var(--font-sans); font-size: 14px; padding: 12px 16px; min-width: 240px;
+    background: var(--navy-0); border: 1px solid rgba(255,255,255,.1); border-radius: 6px; color: var(--ink-1); }
+  .signup input:focus { outline: none; border-color: var(--gold-400); }
+  .signup button { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    background: var(--gold-400); color: #10182B; font-weight: 600; border: 0; border-radius: 6px;
+    padding: 12px 22px; cursor: pointer; }
+  .signup button:hover { background: var(--gold-300); }
+  .signup .st { font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-4); width: 100%; }
+  </style>
 
-  <section class="chapter" id="ch-01" data-chapter="1" data-palette="0.30">
-    <div class="inner" style="max-width: 1280px;">
-      <div class="ch-head fade-up">
-        <span class="num">01</span>
-        <div class="meta">
-          <span class="eyebrow">Chapter One</span>
-          <span class="sub">Supply &amp; Demand &middot; Live</span>
-        </div>
-      </div>
-      <h2 class="headline" data-headline="">
-        Supply on the field.<br><em>Demand</em> on the signal lines.
-      </h2>
-      <p class="body fade-up">
-        Three translucent supply layers (active inventory, new listings, under contract) plotted against two bright demand signals (months of supply, contract velocity). The supply-demand chart every advisor in this corridor watches &mdash; reconciled live, every morning.
-      </p>
-
-      <div class="dashboard-mount fade-up">
-        <div class="control-bar">
-          <div class="village-select" id="villageSelect" role="tablist" aria-label="Village"></div>
-          <div class="scope-toggle" role="tablist" aria-label="Price scope">
-            <button class="scope-btn active" data-scope="all"    aria-selected="true">All SF</button>
-            <button class="scope-btn"        data-scope="luxury" aria-selected="false">$2M+ Luxury</button>
-          </div>
-          <div class="range-toggle" role="tablist" aria-label="Time range">
-            <button class="range-btn"        data-range="1"   aria-selected="false">1Y</button>
-            <button class="range-btn"        data-range="3"   aria-selected="false">3Y</button>
-            <button class="range-btn"        data-range="5"   aria-selected="false">5Y</button>
-            <button class="range-btn"        data-range="10"  aria-selected="false">10Y</button>
-            <button class="range-btn active" data-range="all" aria-selected="true">All</button>
-          </div>
-          <div class="status-pill loading" id="statusPill"><span class="dot"></span><span id="statusText">Connecting&hellip;</span></div>
-          <div class="status-pill" id="heroDateBadge">Updated &mdash;</div>
-        </div>
-        <div class="headline-chart">
-          <div class="headline-chart-mount" id="headlineChart"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="chapter" id="ch-02" data-chapter="2" data-palette="0.50">
-    <div class="inner" style="max-width: 1280px;">
-      <div class="ch-head fade-up">
-        <span class="num">02</span>
-        <div class="meta">
-          <span class="eyebrow">Chapter Two</span>
-          <span class="sub">Composite Momentum</span>
-        </div>
-      </div>
-      <h2 class="headline" data-headline="">
-        Five villages.<br><em>One</em> composite score.
-      </h2>
-      <p class="body fade-up">
-        Each village graded on a composite of five signals across the last twenty-eight days: price momentum, inventory pressure, contract velocity, days-on-market drift, and absorption. Above zero, a tailwind for sellers. Below zero, a window for buyers.
-      </p>
-      <div class="dashboard-mount fade-up">
-        <div class="momentum-grid" id="momentumGrid"></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="chapter" id="ch-03" data-chapter="3" data-palette="0.70">
-    <div class="inner" style="max-width: 1280px;">
-      <div class="ch-head fade-up">
-        <span class="num">03</span>
-        <div class="meta">
-          <span class="eyebrow">Chapter Three</span>
-          <span class="sub">Eleven KPIs &middot; <span id="kpiVillageLabel">&mdash;</span></span>
-        </div>
-      </div>
-      <h2 class="headline" data-headline="">
-        Eleven <em>KPIs</em>.<br>Five years of context.
-      </h2>
-      <p class="body fade-up">
-        Every metric reviewed on a listing call. Click any card to open the full five-year chart with moving averages and the Infosparks &rarr; MLS reconciliation marker. Hover the &#9432; for the formal definition.
-      </p>
-      <div class="dashboard-mount fade-up">
-        <div class="kpi-grid" id="kpiGrid"></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="chapter" id="ch-04" data-chapter="4" data-palette="0.90">
+  <!-- ═══ ACT 1 · THE MAP — orientation first ═══ -->
+  <section class="chapter act" id="act-1" data-chapter="0" data-palette="0.40">
     <div class="inner">
-      <div class="ch-head fade-up">
-        <span class="num">04</span>
-        <div class="meta">
-          <span class="eyebrow">Chapter Four</span>
-          <span class="sub">Method</span>
-        </div>
+      <span class="act-eyebrow fade-up">Intelligence &middot; Act I</span>
+      <h1 class="headline" data-headline="">Where is the market <em>moving</em>?</h1>
+      <p class="lede fade-up">Every closed sale on the corridor, plotted live. Bubble size is transaction activity; color is momentum.</p>
+      <div class="pill-live fade-up" id="livePill"><span class="dot"></span><span id="liveTxt">Connecting&hellip;</span></div>
+      <div class="map-frame fade-up">
+        <iframe src="/market-map" title="Live North Shore market map" loading="lazy"></iframe>
       </div>
-      <h2 class="headline" data-headline="">
-        Two sources.<br><em>One</em> reconciled timeline.
-      </h2>
-      <p class="body fade-up">
-        Pre-March 2026 the historical baseline comes from <strong>Infosparks</strong> (the MRED long-run reference series). From March 2026 forward, the dashboard reads directly from the live <strong>MLS</strong> &mdash; a daily snapshot piped through the MLS Database backend and reconciled against the Infosparks tail. The vertical gold dashed line on every five-year chart marks the handoff. Volatility before the marker is monthly; after, it's daily.
-      </p>
-      <div class="kpi-grid">
-        <div class="kpi"><span class="l">Baseline source</span><span class="v" style="font-size: 22px;">Infosparks</span><span class="d">Through 2026-02</span></div>
-        <div class="kpi pop"><span class="l">Live source</span><span class="v" style="font-size: 22px;">MLS Daily</span><span class="d up">From 2026-03</span></div>
-        <div class="kpi"><span class="l">Refresh cadence</span><span class="v" style="font-size: 22px;">Daily</span><span class="d">Every morning</span></div>
-        <div class="kpi"><span class="l">Reconciliation</span><span class="v" style="font-size: 22px;">Monthly rollup</span><span class="d">SQL audit</span></div>
-      </div>
-      <div class="cta-row fade-up" style="margin-top: 32px;">
-        <a class="btn" href="/contact">Walk through your number &rarr;</a>
-        <a class="btn btn-outline" href="/#ch-00">Back to the story</a>
-      </div>
+      <p class="act-note fade-up">Updated daily from MLS &amp; Infosparks &middot; open full-screen at <a href="/market-map" style="color:var(--gold-300);">/market-map</a></p>
     </div>
   </section>
 
-  <section class="chapter" id="ch-05" data-chapter="5" data-palette="0.45">
+  <!-- ═══ ACT 2 · ONE CHART, EVERY DATASET ═══ -->
+  <section class="chapter act" id="act-2" data-chapter="1" data-palette="0.60">
     <div class="inner">
-      <div class="ch-head fade-up">
-        <span class="num">05</span>
-        <div class="meta">
-          <span class="eyebrow">Chapter Five</span>
-          <span class="sub">The Map</span>
+      <span class="act-eyebrow fade-up">Intelligence &middot; Act II</span>
+      <h2 class="headline" data-headline="">One chart. Every <em>signal</em>.</h2>
+      <p class="lede fade-up">Pick the dataset, the village, and the window. Reconciled each morning against a five-year Infosparks baseline.</p>
+
+      <div class="controls fade-up">
+        <div class="chipset" id="villageChips" role="tablist" aria-label="Village"></div>
+        <div class="seg" id="scopeSeg">
+          <button data-scope="all" class="on">All SF</button>
+          <button data-scope="luxury">$2M+ Luxury</button>
+        </div>
+        <div class="seg" id="rangeSeg">
+          <button data-range="1">1Y</button>
+          <button data-range="3" class="on">3Y</button>
+          <button data-range="5">5Y</button>
+          <button data-range="99">All</button>
         </div>
       </div>
-      <h2 class="headline" data-headline="">
-        The market, <em>as a living</em> map.
-      </h2>
-      <p class="body fade-up">
-        Seven villages, one living picture. Bubble size shows transaction activity; color shows momentum. Toggle median price and months of supply &mdash; updated daily from MLS &amp; Infosparks.
-      </p>
-      <div class="fade-up" style="margin-top:28px;border:1px solid var(--hairline-gold,rgba(240,214,138,.22));border-radius:14px;overflow:hidden;box-shadow:0 24px 72px rgba(0,0,0,.55);background:#030814;">
-        <iframe src="/market-map" title="Live North Shore market map" loading="lazy"
-          style="display:block;width:100%;height:min(78vh,720px);border:0;"></iframe>
+
+      <div class="kpi-strip fade-up" id="kpiStrip"></div>
+
+      <details class="adv fade-up">
+        <summary>Advanced datasets</summary>
+        <div class="chipset" id="advChips"></div>
+      </details>
+
+      <div class="chart-shell fade-up" style="margin-top:18px;">
+        <div id="bigchart"></div>
       </div>
-      <div class="cta-row fade-up" style="margin-top:24px;">
-        <a class="btn" href="/market-map" target="_blank" rel="noopener">Open the full map &rarr;</a>
+      <p class="foot-note2 fade-up">
+        &ldquo;North Shore&rdquo; medians are medians of the village medians &middot; $/SqFt and ratio metrics reflect the subset of
+        comps reporting the underlying fields &middot; Luxury scope begins where its data begins &mdash; ranges without data are not shown.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══ ACT 3 · THE VERDICT ═══ -->
+  <section class="chapter act" id="act-3" data-chapter="2" data-palette="0.80">
+    <div class="inner">
+      <span class="act-eyebrow fade-up">Intelligence &middot; Act III</span>
+      <h2 class="headline" data-headline="">Is it your <em>window</em>?</h2>
+      <p class="lede fade-up">A momentum read per village — supply, velocity, and pricing pressure resolved into one signal.</p>
+      <div class="mom-grid fade-up" id="momGrid"></div>
+
+      <div class="signup fade-up">
+        <div>
+          <div class="t">Get this briefing monthly.</div>
+          <div class="s">One email when the numbers move. No listings spam, ever.</div>
+        </div>
+        <form id="briefForm" novalidate>
+          <input type="email" id="briefEmail" placeholder="your@email.com" required maxlength="200" aria-label="Email for monthly briefing">
+          <button type="submit">Subscribe</button>
+          <span class="st" id="briefStatus"></span>
+        </form>
       </div>
     </div>
   </section>
 
+  <script slot="scripts" is:inline>
+  document.addEventListener('DOMContentLoaded', function () {
+    /* intel-data.js provides: SUPA, VILLAGES, KPIS, FMT, supaFetch, supaRpc,
+       loadVillageSeries, aggregateNorthShore, indexByMetric, rollingMean,
+       linearInterpolate, latestOf, findNearDaysAgo, pctChange */
+    if (typeof loadVillageSeries === 'undefined') return;
 
-  <Fragment slot="scripts">
+    var CONSUMER = ['median_price','units_sold','dom','sp_lp','months_supply'];
+    var S = { village: 'North Shore', scope: 'all', range: 3,
+              metric: 'median_price', data: null };
+    var CACHE = {};
 
-
-
-
-<div class="chart-drawer" id="chartDrawer" role="dialog" aria-modal="true" aria-hidden="true">
-  <div class="drawer-inner">
-    <div class="drawer-head">
-      <div class="drawer-title-block">
-        <div class="drawer-title" id="drawerTitle">&mdash;</div>
-        <div class="drawer-meta"  id="drawerMeta">&mdash;</div>
-      </div>
-      <button class="drawer-close" id="drawerClose" aria-label="Close chart">&times;</button>
-    </div>
-    <div class="drawer-body"><div id="bigChart"></div></div>
-    <div class="overlay-row">
-      <button class="overlay-toggle active" data-ov="raw">Daily / Monthly</button>
-      <button class="overlay-toggle active" data-ov="ma30">30-day avg</button>
-      <button class="overlay-toggle"        data-ov="ma7">7-day avg</button>
-      <button class="overlay-toggle"        data-ov="ma90">90-day avg</button>
-      <button class="overlay-toggle"        data-ov="ma180">180-day avg</button>
-      <button class="overlay-toggle"        data-ov="ma365">12-month avg</button>
-      <button class="overlay-toggle active" data-ov="marker">Infosparks &rarr; MLS</button>
-    </div>
-  </div>
-</div>
-
-<script is:inline src="/lib/three.min.js"></script>
-<script is:inline src="/lib/lenis.min.js"></script>
-<script is:inline src="/lib/gsap.min.js"></script>
-<script is:inline src="/lib/ScrollTrigger.min.js"></script>
-<script is:inline src="/brand/liquid-bg.js"></script>
-
-<script is:inline>
-const SUPA = {
-  URL: 'https://itupjrknklzvmmqicuyc.supabase.co',
-  KEY: 'sb_publishable_fQnZLJnaC-dAHBuGBHJgjQ_RUHCe_7S'
-};
-const CUTOFF_DATE = '2026-03-01';
-const VILLAGES = ['North Shore','Glencoe','Highland Park','Kenilworth','Lake Bluff','Lake Forest','Wilmette','Winnetka'];
-
-const STATE = {
-  village: 'North Shore', scope: 'all', range: 'all', data: {},
-  overlays: { raw: true, ma7: false, ma30: true, ma90: false, ma180: false, ma365: false, marker: true }
-};
-
-/* Compute Plotly x-axis range based on STATE.range. 'all' = autoscale (undefined). */
-function computeXRange() {
-  if (STATE.range === 'all') return undefined;
-  const yrs = parseInt(STATE.range, 10);
-  if (!yrs || isNaN(yrs)) return undefined;
-  const end = new Date();
-  const start = new Date(end.getFullYear() - yrs, end.getMonth(), end.getDate());
-  const iso = d => d.toISOString().slice(0,10);
-  return [iso(start), iso(end)];
-}
-
-const KPIS = [
-  { id:'median_price',   label:'Median Price',         help:'Median closed-sale price.',                          metric:'median_sale_price',          fmt:'money',  invert:false },
-  /* Closed sales is a flow, not a level: individual days are frequently zero
-     (weekends, recording lag), so a point read or a median-of-days reports
-     "0". Summed across a trailing 30-day window it is both correct and the
-     conventional MLS presentation. */
-  { id:'units_sold',     label:'Closed Sales · 30d',    help:'Closed transactions, trailing 30 days.',             metric:'closed_sales',               fmt:'int',    invert:false, agg:'sum30' },
-  { id:'dom',            label:'Days on Market',        help:'Median days on market for closed sales.',            metric:'median_dom',                 fmt:'int',    invert:true  },
-  { id:'sp_lp',          label:'SP / OLP',              help:'Sale price as % of original list price.',            metric:'median_sp_lp_ratio',         fmt:'pct',    invert:false },
-  { id:'new_listings',   label:'New Listings',          help:'Newly listed properties.',                           metric:'new_listings',               fmt:'int',    invert:false },
-  { id:'inventory_ratio',label:'Inventory Ratio',       help:'Active inventory / new listings.',                   metric:'inventory_to_new_ratio',     fmt:'dec1',   invert:false },
-  { id:'absorption',     label:'Absorption Rate',       help:'Closed ÷ Active. >25% favors sellers.',              metric:'absorption_rate',            fmt:'pct01',  invert:false },
-  { id:'months_supply',  label:'Months of Supply',      help:'Active inventory at current pace.',                  metric:'months_supply',              fmt:'dec1',   invert:true  },
-  { id:'ppsf_reduc',     label:'$ / SqFt',              help:'Median sale price per finished sqft.',               metric:'median_price_per_sqft',      fmt:'money0', invert:false },
-  { id:'pending',        label:'Pending Sales',         help:'Under contract count.',                              metric:'under_contract',             fmt:'int',    invert:false },
-  { id:'r7_contracts',   label:'7-day Contract Pace',   help:'Pending velocity, last 7 days.',                     metric:'pending_last_7_days',        fmt:'int',    invert:false }
-];
-
-const FMT = {
-  money:  v => v==null?'—':'$'+Number(v).toLocaleString(undefined,{maximumFractionDigits:0}),
-  money0: v => v==null?'—':'$'+Number(v).toLocaleString(undefined,{maximumFractionDigits:0}),
-  int:    v => v==null?'—':Number(v).toLocaleString(undefined,{maximumFractionDigits:0}),
-  pct:    v => v==null?'—':Number(v).toFixed(1)+'%',
-  pct01:  v => v==null?'—':(Number(v)*100).toFixed(1)+'%',
-  ratio:  v => v==null?'—':Number(v).toFixed(2)+'×',
-  dec1:   v => v==null?'—':Number(v).toFixed(1)
-};
-
-async function supaFetch(path, params={}) {
-  const url = new URL(SUPA.URL + '/rest/v1/' + path);
-  Object.entries(params).forEach(([k,v]) => url.searchParams.append(k,v));
-  const r = await fetch(url, { headers: { apikey: SUPA.KEY, Authorization: 'Bearer ' + SUPA.KEY }});
-  if (!r.ok) throw new Error('supabase '+r.status);
-  return r.json();
-}
-async function supaRpc(name, body={}) {
-  const r = await fetch(SUPA.URL + '/rest/v1/rpc/' + name, {
-    method: 'POST',
-    headers: { apikey: SUPA.KEY, Authorization: 'Bearer ' + SUPA.KEY, 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
-  if (!r.ok) throw new Error('supabase rpc '+r.status);
-  return r.json();
-}
-
-async function loadVillageSeries(village, scope) {
-  if (village === 'North Shore') {
-    return supaFetch('mv_market_intelligence', {
-      select: 'village,scope,d,source,metric,value',
-      'village': 'in.(' + VILLAGES.filter(v=>v!=='North Shore').map(v=>`"${v}"`).join(',') + ')',
-      'scope': 'in.(all,luxury)',
-      order: 'd.asc', limit: 250000
+    /* ── controls ── */
+    var vc = document.getElementById('villageChips');
+    VILLAGES.forEach(function (v) {
+      var b = document.createElement('button');
+      b.className = 'chip' + (v === S.village ? ' on' : '');
+      b.textContent = v; b.setAttribute('role','tab');
+      b.addEventListener('click', function () { S.village = v; refresh(); });
+      vc.appendChild(b);
     });
-  }
-  return supaFetch('mv_market_intelligence', {
-    select: 'village,scope,d,source,metric,value',
-    village: `eq.${village}`, 'scope': 'in.(all,luxury)',
-    order: 'd.asc', limit: 250000
-  });
-}
-function aggregateNorthShore(rows, scopeFilter) {
-  const SUMS = new Set(['closed_sales','new_listings','under_contract','active_inventory','pending_last_7_days']);
-  const buckets = {};
-  for (const r of rows) {
-    if (r.source === 'mls_daily' && r.scope !== scopeFilter) continue;
-    const key = r.d + '|' + r.metric + '|' + r.source;
-    if (!buckets[key]) buckets[key] = [];
-    buckets[key].push(Number(r.value));
-  }
-  const out = [];
-  for (const key in buckets) {
-    const [d, metric, source] = key.split('|');
-    const arr = buckets[key].filter(v => !isNaN(v));
-    if (!arr.length) continue;
-    const v = SUMS.has(metric) ? arr.reduce((a,b)=>a+b,0) : (arr.sort((a,b)=>a-b)[Math.floor(arr.length/2)]);
-    out.push({ d, source, metric, value: v });
-  }
-  return out;
-}
-function indexByMetric(rows, scopeFilter) {
-  const data = {};
-  for (const r of rows) {
-    if (r.source === 'mls_daily' && r.scope !== scopeFilter) continue;
-    if (r.source === 'infosparks' && r.scope !== 'all') continue;
-    if (!data[r.metric]) data[r.metric] = [];
-    data[r.metric].push({ d: r.d, source: r.source, value: Number(r.value) });
-  }
-  for (const m in data) data[m].sort((a,b)=>a.d.localeCompare(b.d));
-  return data;
-}
-function rollingMean(series, days) {
-  const out = []; let sum = 0; const q = []; const ms = days * 86400000;
-  for (let i = 0; i < series.length; i++) {
-    const t = new Date(series[i].d+'T00:00:00Z').getTime();
-    q.push({ t, v: series[i].value }); sum += series[i].value;
-    while (q.length && t - q[0].t > ms) { sum -= q[0].v; q.shift(); }
-    out.push({ d: series[i].d, value: sum / q.length });
-  }
-  return out;
-}
-function linearInterpolate(series) {
-  if (!series.length) return [];
-  const sorted = [...series].filter(p=>p.value!=null && !isNaN(p.value)).sort((a,b)=>a.d.localeCompare(b.d));
-  if (sorted.length < 2) return sorted;
-  const out = [];
-  for (let i = 0; i < sorted.length-1; i++) {
-    out.push(sorted[i]);
-    const t0 = new Date(sorted[i].d+'T00:00:00Z').getTime();
-    const t1 = new Date(sorted[i+1].d+'T00:00:00Z').getTime();
-    const gap = Math.round((t1-t0)/86400000);
-    if (gap > 1 && gap < 60) {
-      for (let j = 1; j < gap; j++) {
-        const t = new Date(t0 + j*86400000);
-        const f = j/gap;
-        const v = sorted[i].value + (sorted[i+1].value - sorted[i].value)*f;
-        out.push({ d: t.toISOString().slice(0,10), value: v });
-      }
-    }
-  }
-  out.push(sorted[sorted.length-1]);
-  return out;
-}
-function pctChange(now, prev) { if (now==null||prev==null||prev===0) return null; return ((now-prev)/prev)*100; }
-
-/* ─────────────────────────────────────────────────────────────────────────
-   PARTIAL-PERIOD GUARD (added 2026-07-24)
-   The newest daily snapshot is almost always an incomplete period — a single
-   morning's closings. Reading it as "today's value" produced headline
-   nonsense on the flagship page: Median Price showed "−89.0% vs 30d" and
-   Closed Sales showed "2", because both were derived from one partial day.
-   On a practice that sells reconciliation, a visibly wrong number is the
-   most expensive defect on the site.
-   Fix: represent "current" as the median of the trailing complete window
-   (up to 7 valid observations) and compare against the same window centred
-   30 days earlier. Robust to partial days and single-sale outliers, and
-   still strictly a live MLS read.
-   ───────────────────────────────────────────────────────────────────────── */
-function medianOf(nums) {
-  const s = nums.filter(n => n != null && isFinite(n)).slice().sort((a,b) => a-b);
-  if (!s.length) return null;
-  const m = s.length >> 1;
-  return s.length % 2 ? s[m] : (s[m-1] + s[m]) / 2;
-}
-function validPoints(series) {
-  return (series || []).filter(p => p && p.value != null && isFinite(p.value));
-}
-function robustLatest(series, win) {
-  const v = validPoints(series);
-  if (!v.length) return null;
-  const tail = v.slice(-(win || 7));
-  const med = medianOf(tail.map(p => p.value));
-  if (med == null) return null;
-  return { date: v[v.length-1].date, value: med, n: tail.length };
-}
-function robustNearDaysAgo(series, days, win) {
-  const v = validPoints(series);
-  if (!v.length) return null;
-  const anchor = findNearDaysAgo(v, days);
-  if (!anchor) return null;
-  const i = v.indexOf(anchor);
-  if (i < 0) return { date: anchor.date, value: anchor.value, n: 1 };
-  const half = Math.floor((win || 7) / 2);
-  const slice = v.slice(Math.max(0, i - half), Math.min(v.length, i + half + 1));
-  const med = medianOf(slice.map(p => p.value));
-  if (med == null) return null;
-  return { date: anchor.date, value: med, n: slice.length };
-}
-/* Flow metrics (counts of events) must be summed over a window, never
-   averaged across days — a median of daily closings is legitimately 0. */
-function windowSum(series, span, offset) {
-  const v = validPoints(series);
-  if (!v.length) return null;
-  const end = v.length - (offset || 0);
-  const start = Math.max(0, end - span);
-  if (end <= start) return null;
-  const slice = v.slice(start, end);
-  return { date: slice[slice.length-1].date,
-           value: slice.reduce((s,p) => s + p.value, 0),
-           n: slice.length };
-}
-function latestOf(series) { return series.length ? series[series.length-1] : null; }
-function findNearDaysAgo(series, days) {
-  if (!series.length) return null;
-  const last = new Date(series[series.length-1].d+'T00:00:00Z').getTime();
-  const target = last - days*86400000;
-  let best=null, bd=Infinity;
-  for (const p of series) {
-    const t = new Date(p.d+'T00:00:00Z').getTime();
-    const d = Math.abs(t-target);
-    if (d < bd) { bd=d; best=p; }
-  }
-  return best;
-}
-
-function renderVillageChips() {
-  const wrap = document.getElementById('villageSelect');
-  wrap.innerHTML = '';
-  VILLAGES.forEach(v => {
-    const b = document.createElement('button');
-    b.className = 'village-chip' + (v === STATE.village ? ' active' : '');
-    b.textContent = v;
-    b.setAttribute('role','tab');
-    b.setAttribute('aria-selected', v === STATE.village ? 'true':'false');
-    b.addEventListener('click', () => { STATE.village = v; refresh(); });
-    wrap.appendChild(b);
-  });
-}
-function setStatus(kind, msg) {
-  const pill = document.getElementById('statusPill');
-  pill.classList.remove('loading','error');
-  if (kind === 'loading') pill.classList.add('loading');
-  if (kind === 'error')   pill.classList.add('error');
-  document.getElementById('statusText').textContent = msg || '';
-}
-
-/* ─── Headline chart (Plotly via BrandCharts) ─── */
-function renderHeadlineChart() {
-  if (typeof Plotly === 'undefined' || !window.BrandCharts) return;
-  const C = window.BrandCharts;
-  const el = document.getElementById('headlineChart');
-  if (!el) return;
-
-  const need = ['active_inventory','new_listings','under_contract','months_supply','pending_last_7_days'];
-  const series = {};
-  need.forEach(m => { series[m] = (STATE.data[m] || []).filter(p=>p.value!=null); });
-
-  const x = (s) => s.map(p => p.d);
-  const y = (s) => s.map(p => p.value);
-
-  const traces = [
-    C.area('Homes For Sale',  x(series.active_inventory),  y(series.active_inventory),  'neutral'),
-    C.area('New Listings',    x(series.new_listings),      y(series.new_listings),      'blue'),
-    C.area('Under Contract',  x(series.under_contract),    y(series.under_contract),    'teal'),
-    C.line('Months Supply',   x(series.months_supply),     y(series.months_supply),     'yellow', { axis: 'right' }),
-    C.line('7-day Contract Pace', x(series.pending_last_7_days), y(series.pending_last_7_days), 'pink', { axis: 'right' })
-  ];
-
-  const layout = C.layout({
-    title: `${STATE.village} · Supply & Demand<br><sub style="font-size:13px;font-weight:400;color:#9FB0CC">${STATE.scope === 'luxury' ? '$2M+ Luxury' : 'All single-family'} · live MLS & Infosparks reconciled</sub>`,
-    x:  { range: computeXRange() },
-    y:  { title: 'Supply (count)' },
-    y2: { title: 'Demand' },
-    watermark: { src: 'brand/assets/logos/wordmark-white-xl.png', opacity: 0.04 },
-    margin: { l: 64, r: 64, t: 100, b: 80 }
-  });
-
-  Plotly.react(el, traces, layout, C.config);
-}
-
-async function loadMomentum(scope) {
-  try {
-    const res = await supaRpc('get_smart_momentum', { scope_filter: scope });
-    renderMomentum(res || []);
-  } catch(e) { console.warn('momentum rpc failed', e); }
-}
-function renderMomentum(data) {
-  const grid = document.getElementById('momentumGrid');
-  grid.innerHTML = '';
-  if (!data.length) {
-    grid.innerHTML = '<div class="mom-card vis"><div class="mom-title">No momentum data yet</div></div>';
-    return;
-  }
-  data.slice(0,5).forEach((m,i) => {
-    const score = m.composite_score != null ? Number(m.composite_score) : null;
-    const fillPct = score != null ? Math.max(0, Math.min(100, 50 + score/2)) : 50;
-    const card = document.createElement('div');
-    card.className = 'mom-card';
-    card.style.transitionDelay = (i*60)+'ms';
-    card.innerHTML = `
-      <div class="mom-head"><span class="mom-tier">${(m.tier||'').toUpperCase()}</span><span>${m.scope||''}</span></div>
-      <div class="mom-title">${m.village || 'North Shore'}</div>
-      <div class="mom-score-row">
-        <div class="mom-score">${score==null?'—':(score>0?'+':'')+score.toFixed(1)}</div>
-        <div class="mom-score-meta">${m.confidence || '—'} confidence</div>
-      </div>
-      <div class="mom-bar"><div class="mom-bar-zero"></div><div class="mom-bar-fill" style="left:${score==null?50:Math.min(fillPct,50)}%;width:${Math.abs(fillPct-50)}%"></div></div>
-      <canvas class="mom-sparkline" id="sp_mom_${i}"></canvas>
-      <div class="mom-narr">${m.narrative || ''}</div>
-    `;
-    grid.appendChild(card);
-    setTimeout(()=>{
-      const canvas = card.querySelector('canvas');
-      const spark = m.sparkline_28d || [];
-      renderMiniSpark(canvas, spark.map((v,idx)=>({x:idx,y:Number(v)})), true);
-      card.classList.add('vis');
-    }, 40);
-  });
-}
-function renderMiniSpark(canvas, points, bipolar) {
-  if (!canvas || !points.length) return;
-  const ctx = canvas.getContext('2d');
-  const dpr = window.devicePixelRatio || 1;
-  const W = canvas.clientWidth, H = canvas.clientHeight;
-  canvas.width = W*dpr; canvas.height = H*dpr;
-  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
-  const ys = points.map(p=>p.y);
-  const minY = bipolar ? -100 : Math.min(...ys), maxY = bipolar ? 100 : Math.max(...ys);
-  const padY = (maxY-minY)*0.1 || 1;
-  const y0 = minY-padY, y1 = maxY+padY;
-  const xs = points.map(p=>p.x);
-  const minX = Math.min(...xs), maxX = Math.max(...xs);
-  const toX = x => 4 + (x-minX)/(maxX-minX||1)*(W-8);
-  const toY = y => (H-4) - (y-y0)/(y1-y0||1)*(H-8);
-  if (bipolar) {
-    ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(0,toY(0)); ctx.lineTo(W,toY(0)); ctx.stroke();
-  }
-  const grad = ctx.createLinearGradient(0,0,0,H);
-  grad.addColorStop(0,'rgba(197,165,114,0.32)');
-  grad.addColorStop(1,'rgba(197,165,114,0)');
-  const pts = points.map(p => [toX(p.x), toY(p.y)]);
-  /* Smooth fill (midpoint quadratic Bezier) */
-  ctx.beginPath();
-  ctx.moveTo(pts[0][0], toY(0));
-  ctx.lineTo(pts[0][0], pts[0][1]);
-  for (let i = 1; i < pts.length - 1; i++) {
-    const xc = (pts[i][0] + pts[i+1][0]) / 2;
-    const yc = (pts[i][1] + pts[i+1][1]) / 2;
-    ctx.quadraticCurveTo(pts[i][0], pts[i][1], xc, yc);
-  }
-  const last = pts[pts.length-1];
-  ctx.lineTo(last[0], last[1]);
-  ctx.lineTo(last[0], toY(0));
-  ctx.closePath(); ctx.fillStyle = grad; ctx.fill();
-  /* Smooth stroke */
-  ctx.beginPath(); ctx.strokeStyle = '#E0BC7E'; ctx.lineWidth = 1.5;
-  ctx.moveTo(pts[0][0], pts[0][1]);
-  for (let i = 1; i < pts.length - 1; i++) {
-    const xc = (pts[i][0] + pts[i+1][0]) / 2;
-    const yc = (pts[i][1] + pts[i+1][1]) / 2;
-    ctx.quadraticCurveTo(pts[i][0], pts[i][1], xc, yc);
-  }
-  ctx.lineTo(last[0], last[1]);
-  ctx.stroke();
-}
-
-function renderKpis() {
-  const grid = document.getElementById('kpiGrid');
-  grid.innerHTML = '';
-  KPIS.forEach((k,i) => {
-    const series = (STATE.data?.[k.metric]) || [];
-    /* Trailing-window medians rather than the raw newest point — see the
-       PARTIAL-PERIOD GUARD note above. */
-    const isSum = k.agg === 'sum30';
-    const last = isSum ? (windowSum(series, 30, 0) || latestOf(series))
-                       : (robustLatest(series, 7) || latestOf(series));
-    const prior30 = isSum ? windowSum(series, 30, 30)
-                          : robustNearDaysAgo(series, 30, 7);
-    const delta = prior30 ? pctChange(last?.value, prior30.value) : null;
-    const v = last?.value;
-    const formatted = (FMT[k.fmt] || FMT.int)(v);
-    let deltaCls = 'flat', deltaTxt = '—';
-    /* Suppress physically implausible swings instead of publishing them: a
-       >60% month-over-month move in any of these metrics is a data artefact,
-       not a market event, and printing it destroys trust in the whole page. */
-    if (delta != null && !isNaN(delta) && Math.abs(delta) <= 60) {
-      const favorable = k.invert ? (delta < 0) : (delta > 0);
-      deltaCls = Math.abs(delta) < 0.5 ? 'flat' : (favorable ? 'up' : 'down');
-      deltaTxt = (delta > 0 ? '+' : '') + delta.toFixed(1) + '% vs 30d';
-    }
-    const card = document.createElement('div');
-    card.className = 'kpi-card';
-    card.style.transitionDelay = (i*45)+'ms';
-    card.setAttribute('role','button');
-    card.setAttribute('tabindex','0');
-    card.innerHTML = `
-      <div class="kpi-head">
-        <div>${k.label}</div>
-        <div class="kpi-help" title="${k.help}">&#9432;</div>
-      </div>
-      <div class="kpi-hero">
-        <div class="kpi-value">${formatted}</div>
-        <div class="kpi-delta ${deltaCls}">${deltaTxt}</div>
-      </div>
-      <div class="kpi-sub">${k.help}</div>
-      <canvas class="kpi-spark" id="sp_kpi_${k.id}"></canvas>
-      <div class="kpi-foot">
-        <span>${series.length ? series.length+' data points' : 'no data'}</span>
-        <span class="expand">Open chart &rarr;</span>
-      </div>
-    `;
-    card.addEventListener('click', ()=>openDrawer(k));
-    card.addEventListener('keydown', e=>{ if (e.key==='Enter'||e.key===' ') { e.preventDefault(); openDrawer(k); } });
-    grid.appendChild(card);
-    setTimeout(()=>{
-      const canvas = card.querySelector('canvas');
-      const recent = series.slice(-90);
-      const sparkPoints = recent.map((s,idx)=>({x:idx,y:s.value}));
-      renderMiniSpark(canvas, sparkPoints, false);
-      card.classList.add('vis');
-    }, 20);
-  });
-  document.getElementById('kpiVillageLabel').textContent = STATE.village + ' — ' + (STATE.scope==='luxury' ? '$2M+ Luxury' : 'All SF');
-}
-
-let CURRENT_DRAWER_KPI = null;
-function openDrawer(k) {
-  const drawer = document.getElementById('chartDrawer');
-  drawer.classList.add('open');
-  drawer.setAttribute('aria-hidden','false');
-  document.getElementById('drawerTitle').innerHTML = `${k.label} <em>${STATE.village}</em>`;
-  document.getElementById('drawerMeta').textContent = `${STATE.scope==='luxury'?'Luxury ($2M+) · ':'All SF · '}${k.help}`;
-  renderBigChart(k);
-}
-function closeDrawer() {
-  const drawer = document.getElementById('chartDrawer');
-  drawer.classList.remove('open');
-  drawer.setAttribute('aria-hidden','true');
-  const el = document.getElementById('bigChart');
-  if (el && typeof Plotly !== 'undefined') Plotly.purge(el);
-  CURRENT_DRAWER_KPI = null;
-}
-document.getElementById('drawerClose').addEventListener('click', closeDrawer);
-document.getElementById('chartDrawer').addEventListener('click', e=>{ if (e.target.id==='chartDrawer') closeDrawer(); });
-document.addEventListener('keydown', e=>{ if (e.key==='Escape') closeDrawer(); });
-
-function renderBigChart(k) {
-  CURRENT_DRAWER_KPI = k;
-  if (typeof Plotly === 'undefined' || !window.BrandCharts) return;
-  const C = window.BrandCharts;
-  const el = document.getElementById('bigChart');
-  const raw = STATE.data[k.metric] || [];
-  const dense = linearInterpolate(raw);
-  const x = dense.map(p => p.d);
-  const y = dense.map(p => p.value);
-
-  const traces = [];
-  if (STATE.overlays.raw) {
-    traces.push(C.area('Daily / Monthly', x, y, 'gold', { width: 1.5 }));
-  }
-  const ovs = [
-    { key:'ma7',   days:7,   tone:'teal',    label:'7-day avg' },
-    { key:'ma30',  days:30,  tone:'yellow',  label:'30-day avg' },
-    { key:'ma90',  days:90,  tone:'indigo',  label:'90-day avg' },
-    { key:'ma180', days:180, tone:'pink',    label:'180-day avg' },
-    { key:'ma365', days:365, tone:'blue',    label:'12-month avg' }
-  ];
-  ovs.forEach(o => {
-    if (!STATE.overlays[o.key]) return;
-    const ma = rollingMean(dense.filter(p=>p.value!=null), o.days);
-    traces.push(C.line(o.label, ma.map(p=>p.d), ma.map(p=>p.value), o.tone, { axis: 'left', width: o.key==='ma365' ? 2.5 : 2 }));
-  });
-
-  const tickformat = (k.fmt === 'money' || k.fmt === 'money0') ? '$,.0f'
-                   : k.fmt === 'pct' ? '.1f'
-                   : k.fmt === 'pct01' ? '.1%'
-                   : k.fmt === 'dec1' ? '.1f'
-                   : ',d';
-
-  const layout = C.layout({
-    title: `${k.label} · ${STATE.village}<br><sub style="font-size:12px;font-weight:400;color:#9FB0CC">${STATE.scope==='luxury'?'$2M+ Luxury':'All single-family'}</sub>`,
-    y: { title: '', tickformat },
-    watermark: { src: 'brand/assets/logos/wordmark-white-xl.png', opacity: 0.04 },
-    margin: { l: 72, r: 32, t: 84, b: 64 },
-    showlegend: true
-  });
-  if (STATE.overlays.marker) {
-    layout.shapes = [{
-      type: 'line', xref: 'x', yref: 'paper',
-      x0: CUTOFF_DATE, x1: CUTOFF_DATE, y0: 0, y1: 1,
-      line: { color: 'rgba(197,165,114,0.55)', width: 1, dash: 'dash' }
-    }];
-    layout.annotations = [{
-      x: CUTOFF_DATE, xref: 'x', y: 1, yref: 'paper', yanchor: 'top',
-      text: ' Infosparks → MLS daily', showarrow: false,
-      font: { family: 'JetBrains Mono', size: 10, color: 'rgba(224,188,126,0.95)' },
-      xshift: 6
-    }];
-  }
-  Plotly.react(el, traces, layout, C.config);
-}
-
-document.querySelectorAll('.overlay-toggle').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const ov = btn.dataset.ov;
-    STATE.overlays[ov] = !STATE.overlays[ov];
-    btn.classList.toggle('active');
-    if (CURRENT_DRAWER_KPI) renderBigChart(CURRENT_DRAWER_KPI);
-  });
-});
-
-async function refresh() {
-  setStatus('loading','Loading data…');
-  try {
-    const rows = await loadVillageSeries(STATE.village, STATE.scope);
-    if (STATE.village === 'North Shore') {
-      const agg = aggregateNorthShore(rows, STATE.scope);
-      STATE.data = {};
-      for (const r of agg) {
-        if (!STATE.data[r.metric]) STATE.data[r.metric] = [];
-        STATE.data[r.metric].push({ d:r.d, source:r.source, value:r.value });
-      }
-      for (const m in STATE.data) STATE.data[m].sort((a,b)=>a.d.localeCompare(b.d));
-    } else {
-      STATE.data = indexByMetric(rows, STATE.scope);
-    }
-    renderHeadlineChart();
-    renderKpis();
-    loadMomentum(STATE.scope);
-    document.querySelectorAll('.village-chip').forEach(c => {
-      c.classList.toggle('active', c.textContent === STATE.village);
-      c.setAttribute('aria-selected', c.textContent === STATE.village ? 'true':'false');
+    document.querySelectorAll('#scopeSeg button').forEach(function (b) {
+      b.addEventListener('click', function () { S.scope = b.dataset.scope; refresh(); });
     });
-    document.querySelectorAll('.scope-btn').forEach(b => {
-      b.classList.toggle('active', b.dataset.scope === STATE.scope);
-      b.setAttribute('aria-selected', b.dataset.scope === STATE.scope ? 'true':'false');
-    });
-    // Honest freshness: badge reflects the newest DATA date, not the visitor's clock.
-    let newest = null;
-    for (const m in STATE.data) {
-      const arr = STATE.data[m];
-      if (arr.length) { const d = arr[arr.length-1].d; if (!newest || d > newest) newest = d; }
-    }
-    const badge = document.getElementById('heroDateBadge');
-    if (newest) {
-      const nd = new Date(newest + 'T12:00:00');
-      const ageDays = Math.floor((Date.now() - nd.getTime()) / 86400000);
-      badge.textContent = 'Data as of ' + nd.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
-      if (ageDays <= 2) { setStatus('ok', 'Live'); }
-      else { setStatus('loading', 'Last reconciled ' + ageDays + ' days ago'); }
-    } else {
-      badge.textContent = 'Data date unavailable';
-      setStatus('error', 'Data unavailable');
-    }
-  } catch(e) {
-    console.error(e);
-    setStatus('error','Data unavailable');
-  }
-}
-document.querySelectorAll('.scope-btn').forEach(b => {
-  b.addEventListener('click', () => { STATE.scope = b.dataset.scope; refresh(); });
-});
-document.querySelectorAll('.range-btn').forEach(b => {
-  b.addEventListener('click', () => {
-    STATE.range = b.dataset.range;
-    document.querySelectorAll('.range-btn').forEach(bb => {
-      const on = bb.dataset.range === STATE.range;
-      bb.classList.toggle('active', on);
-      bb.setAttribute('aria-selected', on ? 'true' : 'false');
-    });
-    renderHeadlineChart();
-  });
-});
-
-renderVillageChips();
-document.addEventListener('DOMContentLoaded', () => refresh());
-</script>
-
-<script is:inline>
-(() => {
-  document.querySelectorAll('[data-headline]').forEach(h => {
-    const walk = (node) => {
-      Array.from(node.childNodes).forEach(child => {
-        if (child.nodeType === Node.TEXT_NODE) {
-          const text = child.nodeValue;
-          if (!text.trim()) return;
-          const frag = document.createDocumentFragment();
-          text.split(/(\s+)/).forEach(part => {
-            if (!part) return;
-            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); }
-            else {
-              const w = document.createElement('span'); w.className = 'w';
-              const inner = document.createElement('span'); inner.textContent = part;
-              w.appendChild(inner); frag.appendChild(w);
-            }
-          });
-          node.replaceChild(frag, child);
-        } else if (child.nodeType === Node.ELEMENT_NODE) {
-          if (child.tagName === 'BR') return;
-          walk(child);
-        }
+    document.querySelectorAll('#rangeSeg button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        S.range = Number(b.dataset.range);
+        document.querySelectorAll('#rangeSeg button').forEach(function (x) { x.classList.toggle('on', x === b); });
+        draw();
       });
-    };
-    walk(h);
-  });
-  if (typeof Lenis === 'undefined' || typeof gsap === 'undefined') return;
-  const lenis = new Lenis({
-    duration: 1.4, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    smoothWheel: true, smoothTouch: false, wheelMultiplier: 1, lerp: 0.08
-  });
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      const href = a.getAttribute('href'); if (!href || href === '#') return;
-      const target = document.querySelector(href); if (!target) return;
-      e.preventDefault(); lenis.scrollTo(target, { offset: 0, duration: 1.6 });
     });
-  });
-  gsap.registerPlugin(ScrollTrigger);
-  lenis.on('scroll', ScrollTrigger.update);
-  gsap.ticker.add(time => lenis.raf(time * 1000));
-  gsap.ticker.lagSmoothing(0);
-  if (window.__paintUniforms) {
-    ScrollTrigger.create({
-      trigger: 'main', start: 'top top', end: 'bottom bottom',
-      onUpdate: self => { window.__paintUniforms.uScroll.value = self.progress; }
+    var adv = document.getElementById('advChips');
+    KPIS.filter(function (k) { return CONSUMER.indexOf(k.id) === -1; }).forEach(function (k) {
+      var b = document.createElement('button');
+      b.className = 'chip'; b.textContent = k.label;
+      b.addEventListener('click', function () { S.metric = k.metric; syncChips(); draw(); });
+      adv.appendChild(b);
     });
-  }
-  const chapters = gsap.utils.toArray('.chapter');
-  chapters.forEach((ch, i) => {
-    const headline = ch.querySelector('[data-headline]');
-    const words = headline ? headline.querySelectorAll('.w > span') : [];
-    const fades = ch.querySelectorAll('.fade-up');
-    const kpis = ch.querySelectorAll('.kpi');
-    const palette = parseFloat(ch.dataset.palette || '0');
-    const tl = gsap.timeline({
-      scrollTrigger: { trigger: ch, start: 'top 70%', end: 'top 10%', toggleActions: 'play none none reverse' }
-    });
-    if (window.__paintUniforms) {
-      tl.to(window.__paintUniforms.uPaletteMix, { value: palette, duration: 1.6, ease: 'power2.out' }, 0);
+
+    function kpiById(id) { return KPIS.filter(function (k) { return k.id === id; })[0]; }
+    function kpiByMetric(m) { return KPIS.filter(function (k) { return k.metric === m; })[0]; }
+
+    function setPill(kind, msg) {
+      var p = document.getElementById('livePill');
+      p.className = 'pill-live' + (kind ? ' ' + kind : '');
+      document.getElementById('liveTxt').textContent = msg;
     }
-    if (fades.length) tl.to(fades, { opacity:1, y:0, duration:1.0, stagger:0.10, ease:'power3.out' }, 0.05);
-    if (words.length) tl.to(words, { y:0, duration:1.1, stagger:0.045, ease:'power3.out' }, 0.15);
-    if (kpis.length)  tl.to(kpis,  { opacity:1, y:0, duration:0.9, stagger:0.10, ease:'power3.out' }, 0.5);
-    if (i === 0) { requestAnimationFrame(() => tl.play(0)); }
-  });
-  const dots = document.querySelectorAll('.rail .dot');
-  chapters.forEach((ch, i) => {
-    ScrollTrigger.create({
-      trigger: ch, start: 'top 50%', end: 'bottom 50%',
-      onToggle: self => { if (self.isActive) dots.forEach(d => d.classList.toggle('active', +d.dataset.rail === i)); }
+
+    /* ── data ── */
+    function load(village, scope) {
+      var key = village + '|' + scope;
+      if (CACHE[key]) return Promise.resolve(CACHE[key]);
+      return loadVillageSeries(village, scope).then(function (rows) {
+        var data = (village === 'North Shore')
+          ? (function () {
+              var agg = aggregateNorthShore(rows, scope), d = {};
+              agg.forEach(function (r) { (d[r.metric] = d[r.metric] || []).push({ d: r.d, source: r.source, value: r.value }); });
+              Object.keys(d).forEach(function (m) { d[m].sort(function (a, b) { return a.d.localeCompare(b.d); }); });
+              return d;
+            })()
+          : indexByMetric(rows, scope);
+        CACHE[key] = data;
+        return data;
+      });
+    }
+
+    function refresh() {
+      document.querySelectorAll('#villageChips .chip').forEach(function (c) { c.classList.toggle('on', c.textContent === S.village); });
+      document.querySelectorAll('#scopeSeg button').forEach(function (b) { b.classList.toggle('on', b.dataset.scope === S.scope); });
+      load(S.village, S.scope).then(function (data) {
+        S.data = data;
+        var newest = null;
+        Object.keys(data).forEach(function (m) {
+          var a = data[m]; if (a.length && (!newest || a[a.length - 1].d > newest)) newest = a[a.length - 1].d;
+        });
+        if (newest) {
+          var age = Math.floor((Date.now() - new Date(newest + 'T12:00:00').getTime()) / 86400000);
+          setPill(age <= 2 ? '' : 'stale',
+            'Data as of ' + new Date(newest + 'T12:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) +
+            (age > 2 ? ' · reconciled ' + age + ' days ago' : ' · live'));
+        } else { setPill('err', 'Data unavailable'); }
+        strip(); draw();
+      }).catch(function () { setPill('err', 'Data unavailable'); });
+    }
+
+    /* ── KPI strip ── */
+    function strip() {
+      var el = document.getElementById('kpiStrip'); el.innerHTML = '';
+      CONSUMER.forEach(function (id) {
+        var k = kpiById(id); if (!k) return;
+        var series = S.data[k.metric] || [];
+        /* Flow metrics (event counts) are summed across a trailing 30-day
+           window; level metrics use the trailing-window median. Both avoid
+           reading an incomplete newest snapshot as a finished period — the
+           bug that published "Median Price −89.0%" and "Closed Sales 2". */
+        var isFlow = !!FLOW_METRICS[k.metric];
+        var last  = isFlow ? windowSum(series, 30, 0)  : robustLatest(series, 7);
+        var prior = isFlow ? windowSum(series, 30, 30) : robustNearDaysAgo(series, 30, 7);
+        var delta = prior && last ? pctChange(last.value, prior.value) : null;
+        var card = document.createElement('button');
+        card.className = 'kcard' + (S.metric === k.metric ? ' on' : '');
+        var cls = 'dl', txt = '—';
+        /* A >60% month-over-month move in any of these is a data artefact,
+           not a market event. Suppress rather than publish it. */
+        if (delta != null && !isNaN(delta) && Math.abs(delta) <= 60) {
+          var fav = k.invert ? delta < 0 : delta > 0;
+          cls += Math.abs(delta) < 0.5 ? '' : (fav ? ' up' : ' down');
+          txt = (delta > 0 ? '+' : '') + delta.toFixed(1) + '% vs 30d';
+        }
+        var lbl = isFlow ? k.label + ' · 30d' : k.label;
+        card.innerHTML = '<span class="l">' + lbl + '</span>' +
+          '<span class="v">' + (last ? (FMT[k.fmt] || FMT.int)(last.value) : '—') + '</span>' +
+          '<span class="' + cls + '">' + txt + '</span>';
+        card.addEventListener('click', function () { S.metric = k.metric; syncChips(); draw(); });
+        el.appendChild(card);
+      });
+    }
+    function syncChips() {
+      document.querySelectorAll('#kpiStrip .kcard').forEach(function (c, i) {
+        var k = kpiById(CONSUMER[i]); c.classList.toggle('on', k && k.metric === S.metric);
+      });
+    }
+
+    /* ── the one chart ── */
+    function draw() {
+      if (typeof Plotly === 'undefined' || !window.BrandCharts || !S.data) return;
+      var C = window.BrandCharts;
+      var k = kpiByMetric(S.metric) || kpiById('median_price');
+      var raw = S.data[k.metric] || [];
+      var cutoff = new Date(); cutoff.setFullYear(cutoff.getFullYear() - S.range);
+      var cut = cutoff.toISOString().slice(0, 10);
+      var series = S.range >= 99 ? raw : raw.filter(function (p) { return p.d >= cut; });
+      var dense = linearInterpolate(series);
+      // Raw daily readings are noisy (sparse-day medians spike) — show them faint;
+      // the 90-day trend carries the story in gold.
+      var raw_t = C.line(k.label + ' (daily)', dense.map(function (p) { return p.d; }), dense.map(function (p) { return p.value; }), 'blue', { axis: 'left', width: 1 });
+      raw_t.opacity = 0.28;
+      var ma = rollingMean(dense.filter(function (p) { return p.value != null; }), 90);
+      var ma_t = C.line('90-day trend', ma.map(function (p) { return p.d; }), ma.map(function (p) { return p.value; }), 'gold', { axis: 'left', width: 2.6 });
+      var traces = [raw_t, ma_t];
+      var tickformat = (k.fmt === 'money' || k.fmt === 'money0') ? '$,.0f'
+        : k.fmt === 'pct' ? '.1f' : k.fmt === 'pct01' ? '.1%' : k.fmt === 'dec1' ? '.1f' : ',d';
+      Plotly.react(document.getElementById('bigchart'), traces, C.layout({
+        title: k.label + ' · ' + S.village +
+          '<br><sub style="font-size:12px;color:#93A0B8">' + (S.scope === 'luxury' ? '$2M+ Luxury' : 'All single-family') + '</sub>',
+        y: { title: '', tickformat: tickformat },
+        margin: { l: 70, r: 28, t: 80, b: 56 }, showlegend: true
+      }), C.config);
+    }
+
+    /* ── momentum ── */
+    supaRpc('get_smart_momentum', { scope_filter: 'all' }).then(function (rows) {
+      var g = document.getElementById('momGrid');
+      (rows || []).forEach(function (m) {
+        var d = document.createElement('div'); d.className = 'mcard';
+        d.innerHTML = '<div class="head"><span>Momentum</span><span class="tier">' + (m.tier || '') + '</span></div>' +
+          '<div class="vn">' + m.village + '</div>' +
+          /* The RPC returns composite_score; reading m.score printed "—" for
+             every village. Signed, one decimal — matches the momentum scale. */
+          '<div class="score">' + (m.composite_score != null
+              ? (Number(m.composite_score) > 0 ? '+' : '') + Number(m.composite_score).toFixed(1)
+              : '—') + '</div>' +
+          '<div class="narr">' + (m.narrative || '') + '</div>';
+        g.appendChild(d);
+      });
+      if (!rows || !rows.length) g.innerHTML = '<p class="lede">Momentum signals are recalculating — see the map above for the live picture.</p>';
+    }).catch(function () {
+      document.getElementById('momGrid').innerHTML = '<p class="lede">Momentum signals are recalculating — see the map above for the live picture.</p>';
     });
+
+    /* ── briefing signup → leads (source: briefing) ── */
+    var bf = document.getElementById('briefForm');
+    bf.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var em = document.getElementById('briefEmail');
+      if (!bf.reportValidity()) return;
+      var st = document.getElementById('briefStatus');
+      st.textContent = 'Subscribing…';
+      fetch(SUPA.URL + '/rest/v1/leads', {
+        method: 'POST',
+        headers: { apikey: SUPA.KEY, Authorization: 'Bearer ' + SUPA.KEY,
+          'Content-Type': 'application/json', Prefer: 'return=minimal' },
+        body: JSON.stringify({ source: 'briefing', email: em.value.trim(),
+          message: 'Monthly briefing signup', page: location.pathname })
+      }).then(function (r) {
+        if (!r.ok) throw new Error(r.status);
+        bf.reset(); st.textContent = 'Subscribed. First briefing arrives with the next monthly close.';
+      }).catch(function () { st.textContent = 'Something went wrong — email pmilhaupt@jamesonsir.com and I’ll add you.'; });
+    });
+
+    refresh();
   });
-  function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-  requestAnimationFrame(raf);
-})();
-</script>
-
-
-  </Fragment>
+  </script>
 </Chapter>

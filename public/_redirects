@@ -1,0 +1,8 @@
+# Cloudflare Pages redirects
+# The v2 prototypes were publicly reachable while under review. On approval
+# (2026-07-25) they became the canonical "/" and "/intelligence" routes, so the
+# preview URLs are permanently redirected rather than left to 404.
+/home-v2            /              301
+/home-v2/           /              301
+/intelligence-v2    /intelligence  301
+/intelligence-v2/   /intelligence  301
