@@ -16,7 +16,7 @@
      TYPE — FAMILY STACKS  (three families, strict roles)
      ───────────────────────────────────────── */
   --font-serif: 'Cormorant Garamond', 'Garamond', 'Times New Roman', serif;
-  --font-sans:  'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --font-sans:  'Public Sans', 'Inter', 'Helvetica Neue', Arial, sans-serif;
   --font-mono:  'JetBrains Mono', 'SF Mono', Menlo, monospace;
 
   /* Public role aliases — composition prefers these */
