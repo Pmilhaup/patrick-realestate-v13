@@ -14,3 +14,6 @@
 
 /listings/1330-w-whitmore/neighborhood*
   X-Robots-Tag: noindex
+
+/bg-lab*
+  X-Robots-Tag: noindex
