@@ -321,6 +321,21 @@ const lds = [{
       });
     }
 
+    /* Rolling MEDIAN over a trailing day-window — a single sparse-day spike
+       cannot move it, unlike a rolling mean. Same contract as rollingMean. */
+    function rollingMedian(series, days) {
+      var out = [], ms = days * 86400000, q = [];
+      for (var i = 0; i < series.length; i++) {
+        var t = new Date(series[i].d + 'T00:00:00Z').getTime();
+        q.push({ t: t, v: series[i].value });
+        while (q.length && t - q[0].t > ms) q.shift();
+        var a = q.map(function (x) { return x.v; }).sort(function (x, y) { return x - y; });
+        var m = a.length % 2 ? a[(a.length - 1) / 2] : (a[a.length / 2 - 1] + a[a.length / 2]) / 2;
+        out.push({ d: series[i].d, value: m });
+      }
+      return out;
+    }
+
     /* ── the one chart ── */
     function draw() {
       if (typeof Plotly === 'undefined' || !window.BrandCharts || !S.data) return;
@@ -333,9 +348,13 @@ const lds = [{
       var dense = linearInterpolate(series);
       // Raw daily readings are noisy (sparse-day medians spike) — show them faint;
       // the 90-day trend carries the story in gold.
-      var raw_t = C.line(k.label + ' (daily)', dense.map(function (p) { return p.d; }), dense.map(function (p) { return p.value; }), 'blue', { axis: 'left', width: 1 });
-      raw_t.opacity = 0.28;
-      var ma = rollingMean(dense.filter(function (p) { return p.value != null; }), 90);
+      var clean = dense.filter(function (p) { return p.value != null; });
+      /* Daily readings are sparse-day medians and read as noise; the 30-day
+         rolling series is the honest daily-resolution line. */
+      var r30 = rollingMean(rollingMedian(clean, 30), 14);  // median kills spikes, short mean removes the steps
+      var raw_t = C.line(k.label + ' · 30-day rolling', r30.map(function (p) { return p.d; }), r30.map(function (p) { return p.value; }), 'blue', { axis: 'left', width: 1.6 });
+      raw_t.opacity = 0.5;
+      var ma = rollingMean(r30, 90);
       var ma_t = C.line('90-day trend', ma.map(function (p) { return p.d; }), ma.map(function (p) { return p.value; }), 'gold', { axis: 'left', width: 2.6 });
       ma_t.fill = 'tozeroy'; ma_t.fillcolor = 'rgba(194,162,101,0.10)';
       /* Lock the y-range to the trend's envelope: sparse-day spikes in the faint

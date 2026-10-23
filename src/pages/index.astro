@@ -119,9 +119,9 @@ const lds = [{
   <section class="chapter mv" id="mv0" data-chapter="0" data-palette="0.25">
     <div class="inner">
       <span class="mv-eyebrow fade-up">Patrick Milhaupt &middot; Jameson Sotheby's International Realty</span>
-      <h1 class="headline" data-headline="">Institutional discipline,<br>applied to homes of <em>consequence</em>.</h1>
+      <h1 class="headline" data-headline="">The North Shore,<br><em>measured</em> nightly.</h1>
       <p class="lede fade-up" style="margin: 0 auto; text-align: center;">
-        The North Shore market, read daily. Homes introduced carefully.
+        A single-advisor practice built on the market read daily, direct sourcing of homes that are not for sale, and discretion as a working method.
       </p>
       {/* Scroll cue removed 2026-07-25: it drifted out of its section and
           overlapped Movement 01 on scroll, and the next section's own header
@@ -141,7 +141,7 @@ const lds = [{
         <div class="kpi2"><span class="l">Months of Supply</span><span class="v" id="k-supply">—</span><span class="d">Corridor median &middot; under 4 favors sellers</span></div>
       </div>
       <div class="spark-wrap fade-up">
-        <span class="l">Corridor median &middot; trailing weeks</span>
+        <span class="l">Corridor median &middot; 30-day rolling</span>
         <svg id="spark" viewBox="0 0 600 64" preserveAspectRatio="none" aria-label="Corridor median price trend sparkline"></svg>
       </div>
       <div class="fade-up">
@@ -283,6 +283,9 @@ const lds = [{
         var pts = dates.map(function(d) {
           return median(byDate[d].map(function(r){ return Number(r.trailing30_median_price); }).filter(Boolean));
         }).filter(function(v){ return v != null; });
+        /* 30-day rolling mean — the daily corridor median flips as villages
+           enter/leave the window; the rolling line is the honest read. */
+        pts = pts.map(function(_, i, a) { var w = a.slice(Math.max(0, i - 29), i + 1); return w.reduce(function(s, v){ return s + v; }, 0) / w.length; });
         if (pts.length > 2) {
           var mn = Math.min.apply(null, pts), mx = Math.max.apply(null, pts), rg = (mx - mn) || 1;
           var W = 600, H = 64, P = 6;
