@@ -26,6 +26,7 @@ const lds = [{
   <link slot="head" rel="stylesheet" href="/brand/brand-core.css">
   <script slot="head" src="https://cdn.plot.ly/plotly-2.35.2.min.js" defer is:inline></script>
   <script slot="head" src="/brand/charts/plotly-brand.js" defer is:inline></script>
+  <script slot="head" src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js" defer is:inline></script>
   <script slot="head" src="/js/intel-data.js" defer is:inline></script>
   <style slot="head" is:global>
   .act { padding: 110px 0 70px; }
@@ -68,6 +69,11 @@ const lds = [{
   .chart-shell { background: var(--navy-1); border: 1px solid rgba(194,162,101,.2);
     border-radius: 12px; padding: 10px; min-height: 480px; }
   #bigchart { width: 100%; min-height: 460px; }
+  #lwchart { width: 100%; height: 340px; }
+  .chart-shell.terminal { min-height: 0; padding-bottom: 10px; }
+  .lw-head { display:flex; justify-content:space-between; align-items:baseline; gap:14px; flex-wrap:wrap; padding: 4px 6px 12px; }
+  .lw-title { font-family: var(--font-serif, "Cormorant Garamond", serif); font-size: 20px; color: #fff; }
+  .lw-sub { font-family: var(--font-mono, "JetBrains Mono", monospace); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #6C7A96; }
   .foot-note2 { font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-4);
     letter-spacing: .04em; line-height: 1.7; margin-top: 12px; max-width: 720px; }
 
@@ -156,6 +162,10 @@ const lds = [{
         <div class="chipset" id="advChips"></div>
       </details>
 
+      <div class="chart-shell terminal fade-up" style="margin-top:18px;">
+        <div class="lw-head"><span class="lw-title" id="lwTitle">Median Price · North Shore</span><span class="lw-sub">Monthly median → trailing-7 current · crosshair, pan &amp; zoom</span></div>
+        <div id="lwchart"></div>
+      </div>
       <div class="chart-shell fade-up" style="margin-top:18px;">
         <div id="bigchart"></div>
       </div>
@@ -327,15 +337,61 @@ const lds = [{
       raw_t.opacity = 0.28;
       var ma = rollingMean(dense.filter(function (p) { return p.value != null; }), 90);
       var ma_t = C.line('90-day trend', ma.map(function (p) { return p.d; }), ma.map(function (p) { return p.value; }), 'gold', { axis: 'left', width: 2.6 });
+      ma_t.fill = 'tozeroy'; ma_t.fillcolor = 'rgba(194,162,101,0.10)';
+      /* Lock the y-range to the trend's envelope: sparse-day spikes in the faint
+         daily series fall off-chart instead of stretching the axis flat. */
+      var yrange;
+      var tv = ma.map(function (p) { return p.value; }).filter(function (v) { return v != null && !isNaN(v); });
+      if (tv.length) { var lo = Math.min.apply(null, tv), hi = Math.max.apply(null, tv), pad = Math.max((hi - lo) * 0.45, Math.abs(hi) * 0.10); yrange = [lo - pad, hi + pad]; }
       var traces = [raw_t, ma_t];
+      drawTerminal(k, raw, series);
       var tickformat = (k.fmt === 'money' || k.fmt === 'money0') ? '$,.0f'
         : k.fmt === 'pct' ? '.1f' : k.fmt === 'pct01' ? '.1%' : k.fmt === 'dec1' ? '.1f' : ',d';
       Plotly.react(document.getElementById('bigchart'), traces, C.layout({
         title: k.label + ' · ' + S.village +
           '<br><sub style="font-size:12px;color:#93A0B8">' + (S.scope === 'luxury' ? '$2M+ Luxury' : 'All single-family') + '</sub>',
-        y: { title: '', tickformat: tickformat },
+        y: { title: '', tickformat: tickformat, range: yrange },
         margin: { l: 70, r: 28, t: 80, b: 56 }, showlegend: true
       }), C.config);
+    }
+
+    /* ── terminal chart (TradingView Lightweight Charts) ──
+       Monthly medians of the selected dataset, then the robust trailing-7
+       current reading as the final point. Calm by construction. */
+    var LW = null;
+    function drawTerminal(k, raw, series) {
+      if (typeof LightweightCharts === 'undefined') return;
+      var el = document.getElementById('lwchart'); if (!el) return;
+      var fmt = FMT[k.fmt] || FMT.int;
+      var buckets = {};
+      series.forEach(function (p) { if (p.value == null || isNaN(p.value)) return; var m = p.d.slice(0, 7); (buckets[m] = buckets[m] || []).push(Number(p.value)); });
+      var data = Object.keys(buckets).sort().map(function (m) {
+        var a = buckets[m].slice().sort(function (x, y) { return x - y; });
+        return { time: m + '-01', value: a[Math.floor(a.length / 2)] };
+      });
+      var cur = robustLatest(raw, 7);
+      if (cur && data.length) {
+        var lastM = data[data.length - 1].time.slice(0, 7);
+        if (cur.d.slice(0, 7) === lastM) data[data.length - 1] = { time: cur.d, value: cur.value };
+        else if (cur.d > data[data.length - 1].time) data.push({ time: cur.d, value: cur.value });
+      }
+      if (!LW) {
+        LW = { chart: LightweightCharts.createChart(el, {
+          layout: { background: { type: 'solid', color: 'transparent' }, textColor: '#6C7A96', fontFamily: "'JetBrains Mono', monospace", fontSize: 10 },
+          grid: { vertLines: { color: 'rgba(234,217,174,0.05)' }, horzLines: { color: 'rgba(234,217,174,0.05)' } },
+          rightPriceScale: { borderColor: 'rgba(234,217,174,0.12)' },
+          timeScale: { borderColor: 'rgba(234,217,174,0.12)', timeVisible: false },
+          crosshair: { mode: 0,
+            vertLine: { color: 'rgba(234,217,174,0.35)', width: 1, style: 2, labelBackgroundColor: '#122246' },
+            horzLine: { color: 'rgba(234,217,174,0.35)', width: 1, style: 2, labelBackgroundColor: '#122246' } },
+          handleScroll: true, handleScale: true, autoSize: true }) };
+        LW.series = LW.chart.addAreaSeries({ lineColor: '#C2A265', topColor: 'rgba(194,162,101,0.48)', bottomColor: 'rgba(194,162,101,0.02)', lineWidth: 2.5, lastValueVisible: true, priceLineVisible: false,
+          crosshairMarkerBorderColor: '#EAD9AE', crosshairMarkerBackgroundColor: '#C2A265' });
+      }
+      LW.series.applyOptions({ priceFormat: { type: 'custom', formatter: function (v) { return fmt(v); } } });
+      LW.series.setData(data);
+      LW.chart.timeScale().fitContent();
+      var t = document.getElementById('lwTitle'); if (t) t.textContent = k.label + ' · ' + S.village;
     }
 
     /* ── momentum ── */

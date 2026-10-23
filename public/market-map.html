@@ -164,11 +164,12 @@ const map = new maplibregl.Map({
   container: 'map',
   style: {
     version: 8,
+    glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
     sources: { carto: { type:'raster',
-      tiles:['https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png','https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png'],
-      tileSize:256, attribution:'© OpenStreetMap, © CARTO · Market data: MRED MLS' } },
+      tiles:['https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}'],
+      tileSize:256, attribution:'Basemap © Esri · Market data: MRED MLS' } },
     layers: [{ id:'bg', type:'background', paint:{'background-color':'#030814'} },
-             { id:'carto', type:'raster', source:'carto', paint:{'raster-opacity':0.82,'raster-saturation':-0.15} }]
+             { id:'carto', type:'raster', source:'carto', paint:{'raster-opacity':0.78,'raster-saturation':-0.35,'raster-hue-rotate':200,'raster-brightness-max':0.85} }]
   },
   center: [-87.79, 42.165], zoom: 11.1, pitch: 38, bearing: -12, attributionControl:false
 });
