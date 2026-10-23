@@ -24,6 +24,7 @@ const lds = [{
   rail={[]}
 >
   <link slot="head" rel="stylesheet" href="/brand/brand-core.css">
+  <script slot="head" src="https://cdn.jsdelivr.net/npm/apexcharts@3.54.1/dist/apexcharts.min.js" defer is:inline></script>
   <style slot="head" is:global>
   /* ── home-v2: movement styles on brand-core tokens ── */
   .mv { min-height: 92vh; display: flex; align-items: center; padding: 96px 0; }
@@ -63,7 +64,11 @@ const lds = [{
   .spark-wrap { margin-top: 18px; background: var(--navy-1); border: 1px solid rgba(194,162,101,.16);
     border-radius: 10px; padding: 18px 22px 10px; }
   .spark-wrap .l { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-4); }
-  #spark { width: 100%; height: 64px; display: block; margin-top: 8px; }
+  #spark { width: 100%; min-height: 120px; margin-top: 4px; }
+  .spark-ctl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
+  .spark-ctl .sep { flex: 1; }
+  .spark-ctl .chip { font-size: 11px; padding: 6px 11px; background: rgba(255,255,255,.03); border: 1px solid rgba(194,162,101,.25); color: #D6DDE8; border-radius: 999px; cursor: pointer; }
+  .spark-ctl .chip.on { background: rgba(194,162,101,.16); border-color: #D9BE85; color: #F2E7C9; }
   .asof { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .12em; color: var(--ink-4);
     text-transform: uppercase; margin-top: 16px; display: inline-block; }
   .asof b { color: var(--gold-300); font-weight: 500; }
@@ -141,8 +146,9 @@ const lds = [{
         <div class="kpi2"><span class="l">Months of Supply</span><span class="v" id="k-supply">—</span><span class="d">Corridor median &middot; under 4 favors sellers</span></div>
       </div>
       <div class="spark-wrap fade-up">
-        <span class="l">Corridor median &middot; 30-day rolling</span>
-        <svg id="spark" viewBox="0 0 600 64" preserveAspectRatio="none" aria-label="Corridor median price trend sparkline"></svg>
+        <span class="l" id="sparkLabel">Corridor median &middot; 30-day rolling</span>
+        <div class="spark-ctl" id="sparkChips" aria-label="Filter the trend"></div>
+        <div id="spark" aria-label="Median price trend"></div>
       </div>
       <div class="fade-up">
         <span class="asof" id="asof">Data as of —</span>
@@ -252,7 +258,7 @@ const lds = [{
   (function () {
     var URL = 'https://itupjrknklzvmmqicuyc.supabase.co/rest/v1/daily_snapshots' +
       '?select=village,snapshot_date,trailing30_median_price,trailing30_closed_sales,months_supply' +
-      '&order=snapshot_date.desc&limit=280';
+      '&order=snapshot_date.desc&limit=2800';
     var KEY = 'sb_publishable_fQnZLJnaC-dAHBuGBHJgjQ_RUHCe_7S';
     function median(a) { if (!a.length) return null; a = a.slice().sort(function(x,y){return x-y;});
       var m = Math.floor(a.length/2); return a.length % 2 ? a[m] : (a[m-1]+a[m])/2; }
@@ -279,26 +285,50 @@ const lds = [{
         var asof = document.getElementById('asof');
         asof.innerHTML = 'Data as of <b>' + nd.toLocaleDateString(undefined, { weekday:'short', month:'short', day:'numeric' }) + '</b>' +
           (age > 2 ? ' &middot; last reconciled ' + age + ' days ago' : ' &middot; reconciled daily from the MLS');
-        /* sparkline of corridor median per day */
-        var pts = dates.map(function(d) {
-          return median(byDate[d].map(function(r){ return Number(r.trailing30_median_price); }).filter(Boolean));
-        }).filter(function(v){ return v != null; });
-        /* 30-day rolling mean — the daily corridor median flips as villages
-           enter/leave the window; the rolling line is the honest read. */
-        pts = pts.map(function(_, i, a) { var w = a.slice(Math.max(0, i - 29), i + 1); return w.reduce(function(s, v){ return s + v; }, 0) / w.length; });
-        if (pts.length > 2) {
-          var mn = Math.min.apply(null, pts), mx = Math.max.apply(null, pts), rg = (mx - mn) || 1;
-          var W = 600, H = 64, P = 6;
-          var poly = pts.map(function(v, i) {
-            var x = P + i * (W - 2*P) / (pts.length - 1);
-            var y = H - P - (v - mn) * (H - 2*P) / rg;
-            return x.toFixed(1) + ',' + y.toFixed(1);
-          }).join(' ');
-          var svg = document.getElementById('spark');
-          svg.innerHTML =
-            '<polyline points="' + poly + '" fill="none" stroke="#C2A265" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>' +
-            '<circle r="3" fill="#EAD9AE" cx="' + poly.split(' ').pop().split(',')[0] + '" cy="' + poly.split(' ').pop().split(',')[1] + '"/>';
+        /* ── trend · ApexCharts · filterable by village and window ── */
+        var VIL = ['Corridor','Lake Forest','Lake Bluff','Highland Park','Glencoe','Winnetka','Kenilworth','Wilmette'];
+        var SV = { v: 'Corridor', days: 180 }, AP = null;
+        function seriesFor() {
+          var ds = dates.slice(-SV.days);
+          var pts = ds.map(function(d) {
+            var rs = byDate[d].filter(function(r){ return SV.v === 'Corridor' || r.village === SV.v; });
+            var vals = rs.map(function(r){ return Number(r.trailing30_median_price); }).filter(Boolean);
+            return vals.length ? [new Date(d + 'T12:00:00').getTime(), median(vals)] : null;
+          }).filter(Boolean);
+          /* 30-day rolling mean over the daily corridor median — the honest read */
+          return pts.map(function(_, i, a) { var w = a.slice(Math.max(0, i - 29), i + 1); return [a[i][0], Math.round(w.reduce(function(s, p){ return s + p[1]; }, 0) / w.length)]; });
         }
+        function renderSpark() {
+          var data = seriesFor();
+          document.getElementById('sparkLabel').innerHTML = (SV.v === 'Corridor' ? 'Corridor median' : SV.v + ' median') + ' &middot; 30-day rolling &middot; ' + SV.days + ' days';
+          if (typeof ApexCharts === 'undefined') return;
+          if (!AP) {
+            AP = new ApexCharts(document.getElementById('spark'), {
+              chart: { type: 'area', height: 120, sparkline: { enabled: true }, animations: { enabled: true, easing: 'easeinout', speed: 700, dynamicAnimation: { speed: 500 } }, fontFamily: 'JetBrains Mono, monospace' },
+              series: [{ name: 'Median', data: data }],
+              stroke: { curve: 'smooth', width: 2.2, colors: ['#EAD9AE'] },
+              fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.45, opacityTo: 0.02, stops: [0, 100], colorStops: [{ offset: 0, color: '#C2A265', opacity: 0.5 }, { offset: 100, color: '#C2A265', opacity: 0.02 }] } },
+              markers: { size: 0, hover: { size: 5, sizeOffset: 2 }, colors: ['#EAD9AE'], strokeColors: '#0B1730' },
+              xaxis: { type: 'datetime' },
+              tooltip: { theme: 'dark', x: { format: 'dd MMM yy' }, y: { formatter: fmtM, title: { formatter: function(){ return ''; } } }, marker: { show: false } },
+              colors: ['#EAD9AE']
+            });
+            AP.render();
+          } else { AP.updateSeries([{ name: 'Median', data: data }], true); }
+        }
+        var sc = document.getElementById('sparkChips');
+        VIL.forEach(function(v) {
+          var b = document.createElement('button'); b.className = 'chip' + (v === SV.v ? ' on' : ''); b.textContent = v;
+          b.addEventListener('click', function() { SV.v = v; sc.querySelectorAll('.chip[data-k="v"]').forEach(function(c){ c.classList.toggle('on', c === b); }); renderSpark(); });
+          b.setAttribute('data-k', 'v'); sc.appendChild(b);
+        });
+        var sep = document.createElement('span'); sep.className = 'sep'; sc.appendChild(sep);
+        [[90, '90d'], [180, '6mo'], [365, '1y']].forEach(function(r) {
+          var b = document.createElement('button'); b.className = 'chip' + (r[0] === SV.days ? ' on' : ''); b.textContent = r[1]; b.setAttribute('data-k', 'r');
+          b.addEventListener('click', function() { SV.days = r[0]; sc.querySelectorAll('.chip[data-k="r"]').forEach(function(c){ c.classList.toggle('on', c === b); }); renderSpark(); });
+          sc.appendChild(b);
+        });
+        renderSpark();
       })
       .catch(function() {
         document.getElementById('asof').textContent = 'Live data unavailable — the full briefing is on the Intelligence page.';

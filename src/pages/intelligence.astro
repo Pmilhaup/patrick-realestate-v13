@@ -24,8 +24,7 @@ const lds = [{
   stdScripts={true} orchestrator={true}
 >
   <link slot="head" rel="stylesheet" href="/brand/brand-core.css">
-  <script slot="head" src="https://cdn.plot.ly/plotly-2.35.2.min.js" defer is:inline></script>
-  <script slot="head" src="/brand/charts/plotly-brand.js" defer is:inline></script>
+  <script slot="head" src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js" defer is:inline></script>
   <script slot="head" src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js" defer is:inline></script>
   <script slot="head" src="/js/intel-data.js" defer is:inline></script>
   <style slot="head" is:global>
@@ -68,7 +67,10 @@ const lds = [{
 
   .chart-shell { background: var(--navy-1); border: 1px solid rgba(194,162,101,.2);
     border-radius: 12px; padding: 10px; min-height: 480px; }
-  #bigchart { width: 100%; min-height: 460px; }
+  #bigchart { width: 100%; height: 480px; }
+  #momChart { width: 100%; height: 300px; }
+  .chart-shell.momentum { min-height: 0; margin-top: 18px; padding: 14px 6px 4px; }
+  .cmp { margin-left: auto; }
   #lwchart { width: 100%; height: 340px; }
   .chart-shell.terminal { min-height: 0; padding-bottom: 10px; }
   .lw-head { display:flex; justify-content:space-between; align-items:baseline; gap:14px; flex-wrap:wrap; padding: 4px 6px 12px; }
@@ -152,7 +154,8 @@ const lds = [{
           <button data-range="3" class="on">3Y</button>
           <button data-range="5">5Y</button>
           <button data-range="99">All</button>
-        </div>
+      </div>
+        <button class="chip cmp" id="cmpToggle" aria-pressed="false">Compare all villages</button>
       </div>
 
       <div class="kpi-strip fade-up" id="kpiStrip"></div>
@@ -163,7 +166,7 @@ const lds = [{
       </details>
 
       <div class="chart-shell terminal fade-up" style="margin-top:18px;">
-        <div class="lw-head"><span class="lw-title" id="lwTitle">Median Price · North Shore</span><span class="lw-sub">Monthly median → trailing-7 current · crosshair, pan &amp; zoom</span></div>
+        <div class="lw-head"><span class="lw-title" id="lwTitle">Median Price · North Shore</span><span class="lw-sub">30-day rolling · weekly samples · crosshair, pan &amp; zoom</span></div>
         <div id="lwchart"></div>
       </div>
       <div class="chart-shell fade-up" style="margin-top:18px;">
@@ -182,6 +185,8 @@ const lds = [{
       <span class="act-eyebrow fade-up">Intelligence &middot; Act III</span>
       <h2 class="headline" data-headline="">Is it your <em>window</em>?</h2>
       <p class="lede fade-up">A momentum read per village — supply, velocity, and pricing pressure resolved into one signal.</p>
+      <div class="controls fade-up" style="margin-top:22px;"><div class="chipset" id="tierChips" role="tablist" aria-label="Momentum tier"></div></div>
+      <div class="chart-shell momentum fade-up"><div id="momChart"></div></div>
       <div class="mom-grid fade-up" id="momGrid"></div>
 
       <div class="signup fade-up">
@@ -220,7 +225,7 @@ const lds = [{
       vc.appendChild(b);
     });
     document.querySelectorAll('#scopeSeg button').forEach(function (b) {
-      b.addEventListener('click', function () { S.scope = b.dataset.scope; refresh(); });
+      b.addEventListener('click', function () { S.scope = b.dataset.scope; S.cmpData = null; if (S.compare) { S.compare = false; var c = document.getElementById('cmpToggle'); c.classList.remove('on'); c.setAttribute('aria-pressed','false'); } refresh(); });
     });
     document.querySelectorAll('#rangeSeg button').forEach(function (b) {
       b.addEventListener('click', function () {
@@ -336,43 +341,97 @@ const lds = [{
       return out;
     }
 
-    /* ── the one chart ── */
-    function draw() {
-      if (typeof Plotly === 'undefined' || !window.BrandCharts || !S.data) return;
-      var C = window.BrandCharts;
-      var k = kpiByMetric(S.metric) || kpiById('median_price');
-      var raw = S.data[k.metric] || [];
-      var cutoff = new Date(); cutoff.setFullYear(cutoff.getFullYear() - S.range);
-      var cut = cutoff.toISOString().slice(0, 10);
-      var series = S.range >= 99 ? raw : raw.filter(function (p) { return p.d >= cut; });
-      var dense = linearInterpolate(series);
-      // Raw daily readings are noisy (sparse-day medians spike) — show them faint;
-      // the 90-day trend carries the story in gold.
-      var clean = dense.filter(function (p) { return p.value != null; });
-      /* Daily readings are sparse-day medians and read as noise; the 30-day
-         rolling series is the honest daily-resolution line. */
-      var r30 = rollingMean(rollingMedian(clean, 30), 14);  // median kills spikes, short mean removes the steps
-      var raw_t = C.line(k.label + ' · 30-day rolling', r30.map(function (p) { return p.d; }), r30.map(function (p) { return p.value; }), 'blue', { axis: 'left', width: 1.6 });
-      raw_t.opacity = 0.5;
-      var ma = rollingMean(r30, 90);
-      var ma_t = C.line('90-day trend', ma.map(function (p) { return p.d; }), ma.map(function (p) { return p.value; }), 'gold', { axis: 'left', width: 2.6 });
-      ma_t.fill = 'tozeroy'; ma_t.fillcolor = 'rgba(194,162,101,0.10)';
-      /* Lock the y-range to the trend's envelope: sparse-day spikes in the faint
-         daily series fall off-chart instead of stretching the axis flat. */
-      var yrange;
-      var tv = ma.map(function (p) { return p.value; }).filter(function (v) { return v != null && !isNaN(v); });
-      if (tv.length) { var lo = Math.min.apply(null, tv), hi = Math.max.apply(null, tv), pad = Math.max((hi - lo) * 0.45, Math.abs(hi) * 0.10); yrange = [lo - pad, hi + pad]; }
-      var traces = [raw_t, ma_t];
-      drawTerminal(k, raw, series);
-      var tickformat = (k.fmt === 'money' || k.fmt === 'money0') ? '$,.0f'
-        : k.fmt === 'pct' ? '.1f' : k.fmt === 'pct01' ? '.1%' : k.fmt === 'dec1' ? '.1f' : ',d';
-      Plotly.react(document.getElementById('bigchart'), traces, C.layout({
-        title: k.label + ' · ' + S.village +
-          '<br><sub style="font-size:12px;color:#93A0B8">' + (S.scope === 'luxury' ? '$2M+ Luxury' : 'All single-family') + '</sub>',
-        y: { title: '', tickformat: tickformat, range: yrange },
-        margin: { l: 70, r: 28, t: 80, b: 56 }, showlegend: true
-      }), C.config);
+    /* ── the one chart · Apache ECharts ── */
+    var EC = null, VPAL = ['#EAD9AE','#8CA3C6','#5FB3A8','#C98A7A','#9A8CF5','#D9BE85','#6C8CB8'];
+    function cutFor() {
+      var r = Number(S.range); if (!isFinite(r) || r >= 99) return '1900-01-01';
+      var c = new Date(); var y = c.getFullYear() - r, m = c.getMonth() + 1, d = c.getDate();
+      return y + '-' + (m < 10 ? '0' : '') + m + '-' + (d < 10 ? '0' : '') + d;
     }
+    function seriesFor(data, k) {
+      var raw = data[k.metric] || [], cut = cutFor();
+      var series = S.range >= 99 ? raw : raw.filter(function (p) { return p.d >= cut; });
+      var dense = linearInterpolate(series.filter(function (p) { return p && p.d && p.value != null && !isNaN(p.value); })).filter(function (p) { return p.value != null; });
+      /* Rolling MEDIAN resists sparse-day spikes (one $9M closing must not move a
+         30-day read); a light 7-day mean afterwards gives the line its curve. */
+      return { raw: raw, r30: rollingMean(rollingMedian(dense, 30), 7), r90: rollingMean(rollingMedian(dense, 90), 7) };
+    }
+    function rollingMedian(series, days) {
+      var out = [], ms = days * 86400000, q = [];
+      for (var i = 0; i < series.length; i++) {
+        var t = new Date(series[i].d + 'T00:00:00Z').getTime();
+        q.push({ t: t, v: series[i].value });
+        while (q.length && t - q[0].t > ms) q.shift();
+        var a = q.map(function (x) { return x.v; }).sort(function (x, y) { return x - y; });
+        var m = a.length % 2 ? a[(a.length - 1) / 2] : (a[a.length / 2 - 1] + a[a.length / 2]) / 2;
+        out.push({ d: series[i].d, value: m });
+      }
+      return out;
+    }
+    function pts(a) { return a.map(function (p) { return [p.d, Math.round(p.value * 100) / 100]; }); }
+    function draw() {
+      if (typeof echarts === 'undefined' || !S.data) return;
+      var k = kpiByMetric(S.metric) || kpiById('median_price');
+      var fmt = FMT[k.fmt] || FMT.int;
+      var el = document.getElementById('bigchart');
+      if (!EC) { EC = echarts.init(el, null, { renderer: 'canvas' }); window.addEventListener('resize', function () { EC.resize(); }); }
+      var series = [], sub;
+      if (S.compare && S.cmpData) {
+        VILLAGES.filter(function (v) { return v !== 'North Shore'; }).forEach(function (v, i) {
+          var d = S.cmpData[v]; if (!d) return;
+          var sv; try { sv = seriesFor(d, k).r30; } catch (e) { return; } if (!sv.length) return;
+          series.push({ name: v, type: 'line', smooth: 0.35, showSymbol: false, sampling: 'lttb',
+            lineStyle: { width: 1.9, color: VPAL[i] }, itemStyle: { color: VPAL[i] }, emphasis: { focus: 'series', lineStyle: { width: 3 } },
+            data: pts(sv) });
+        });
+        sub = 'Seven villages · 30-day rolling · ' + (S.scope === 'luxury' ? '$2M+ Luxury' : 'All single-family');
+      } else {
+        var sf = seriesFor(S.data, k);
+        series = [
+          { name: '90-day trend', type: 'line', smooth: 0.4, showSymbol: false, sampling: 'lttb', z: 1,
+            lineStyle: { width: 1.3, color: 'rgba(139,139,250,0.75)', type: [6, 5] }, itemStyle: { color: '#8B8BFA' }, data: pts(sf.r90) },
+          { name: '30-day rolling', type: 'line', smooth: 0.4, showSymbol: false, sampling: 'lttb', z: 2,
+            lineStyle: { width: 2.6, color: '#EAD9AE' }, itemStyle: { color: '#EAD9AE' },
+            areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(194,162,101,0.42)' }, { offset: 1, color: 'rgba(194,162,101,0.0)' }]) },
+            endLabel: { show: true, formatter: function (p) { return fmt(p.value[1]); }, color: '#EAD9AE', fontFamily: 'JetBrains Mono', fontSize: 11, offset: [6, 0] },
+            data: pts(sf.r30) }
+        ];
+        sub = S.village + ' · ' + (S.scope === 'luxury' ? '$2M+ Luxury' : 'All single-family');
+        drawTerminal(k, sf.raw, sf.r30);
+      }
+      EC.setOption({
+        backgroundColor: 'transparent', animationDuration: 900, animationDurationUpdate: 600, animationEasing: 'cubicOut',
+        title: { text: k.label, subtext: sub, left: 'center', top: 6,
+          textStyle: { fontFamily: 'Cormorant Garamond, serif', fontSize: 24, fontWeight: 500, color: '#FFFFFF' },
+          subtextStyle: { fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: '#93A0B8' } },
+        legend: { top: 58, icon: 'roundRect', itemWidth: 16, itemHeight: 3, textStyle: { color: '#93A0B8', fontFamily: 'Public Sans, sans-serif', fontSize: 12 }, inactiveColor: '#3A4660' },
+        grid: { left: 14, right: 86, top: 96, bottom: 86, containLabel: true },
+        tooltip: { trigger: 'axis', backgroundColor: 'rgba(7,18,41,0.94)', borderColor: 'rgba(240,214,138,0.30)',
+          textStyle: { color: '#FFFFFF', fontFamily: 'JetBrains Mono, monospace', fontSize: 12 },
+          axisPointer: { type: 'cross', crossStyle: { color: 'rgba(234,217,174,0.35)' }, label: { backgroundColor: '#122246', fontFamily: 'JetBrains Mono, monospace', fontSize: 10 } },
+          valueFormatter: function (v) { return fmt(v); } },
+        xAxis: { type: 'time', axisLine: { lineStyle: { color: 'rgba(234,217,174,0.15)' } }, axisTick: { show: false },
+          axisLabel: { color: '#6C7A96', fontFamily: 'JetBrains Mono, monospace', fontSize: 10 }, splitLine: { show: false } },
+        yAxis: { type: 'value', scale: true, axisLabel: { color: '#6C7A96', fontFamily: 'JetBrains Mono, monospace', fontSize: 10, formatter: function (v) { return fmt(v); } },
+          splitLine: { lineStyle: { color: 'rgba(234,217,174,0.06)' } }, axisLine: { show: false } },
+        dataZoom: [ { type: 'inside', zoomOnMouseWheel: 'ctrl', moveOnMouseMove: true },
+          { type: 'slider', height: 22, bottom: 20, borderColor: 'rgba(234,217,174,0.15)', backgroundColor: 'rgba(255,255,255,0.02)',
+            fillerColor: 'rgba(194,162,101,0.12)', handleStyle: { color: '#C2A265', borderColor: '#C2A265' }, moveHandleStyle: { color: '#C2A265' },
+            dataBackground: { lineStyle: { color: 'rgba(194,162,101,0.45)' }, areaStyle: { color: 'rgba(194,162,101,0.10)' } },
+            selectedDataBackground: { lineStyle: { color: '#EAD9AE' }, areaStyle: { color: 'rgba(234,217,174,0.18)' } },
+            textStyle: { color: '#6C7A96', fontFamily: 'JetBrains Mono, monospace', fontSize: 10 } } ],
+        series: series
+      }, true);
+    }
+    /* compare toggle — loads the other six villages on demand (cached per scope) */
+    document.getElementById('cmpToggle').addEventListener('click', function () {
+      var b = this; S.compare = !S.compare; b.classList.toggle('on', S.compare); b.setAttribute('aria-pressed', String(S.compare));
+      if (!S.compare) { draw(); return; }
+      b.textContent = 'Loading villages…';
+      Promise.all(VILLAGES.filter(function (v) { return v !== 'North Shore'; }).map(function (v) { return load(v, S.scope).then(function (d) { return [v, d]; }); }))
+        .then(function (pairs) { S.cmpData = {}; pairs.forEach(function (pr) { S.cmpData[pr[0]] = pr[1]; }); b.textContent = 'Compare all villages'; draw(); })
+        .catch(function () { b.textContent = 'Compare all villages'; S.compare = false; b.classList.remove('on'); draw(); });
+    });
 
     /* ── terminal chart (TradingView Lightweight Charts) ──
        Monthly medians of the selected dataset, then the robust trailing-7
@@ -413,22 +472,52 @@ const lds = [{
       var t = document.getElementById('lwTitle'); if (t) t.textContent = k.label + ' · ' + S.village;
     }
 
-    /* ── momentum ── */
-    supaRpc('get_smart_momentum', { scope_filter: 'all' }).then(function (rows) {
-      var g = document.getElementById('momGrid');
-      (rows || []).forEach(function (m) {
+    /* ── momentum · ECharts bar + tier filter + cards ── */
+    var MOM = [], TIER = 'ALL', MC = null;
+    var TIER_COLOR = { HEATING: '#F0D68A', FIRMING: '#8B8BFA', BALANCED: '#8FA0B8', SOFTENING: '#BE7A8A', COOLING: '#BE7A8A' };
+    function tierOf(m) { return String(m.tier || '').toUpperCase(); }
+    function renderMomentum() {
+      var g = document.getElementById('momGrid'); g.innerHTML = '';
+      var rows = MOM.filter(function (m) { return TIER === 'ALL' || tierOf(m) === TIER; })
+                    .sort(function (a, b) { return (b.composite_score || 0) - (a.composite_score || 0); });
+      rows.forEach(function (m) {
         var d = document.createElement('div'); d.className = 'mcard';
-        d.innerHTML = '<div class="head"><span>Momentum</span><span class="tier">' + (m.tier || '') + '</span></div>' +
+        d.innerHTML = '<div class="head"><span>Momentum</span><span class="tier" style="color:' + (TIER_COLOR[tierOf(m)] || '#D9BE85') + '">' + (m.tier || '') + '</span></div>' +
           '<div class="vn">' + m.village + '</div>' +
-          /* The RPC returns composite_score; reading m.score printed "—" for
-             every village. Signed, one decimal — matches the momentum scale. */
-          '<div class="score">' + (m.composite_score != null
-              ? (Number(m.composite_score) > 0 ? '+' : '') + Number(m.composite_score).toFixed(1)
-              : '—') + '</div>' +
-          '<div class="narr">' + (m.narrative || '') + '</div>';
+          '<div class="score">' + (m.composite_score != null ? (m.composite_score > 0 ? '+' : '') + Number(m.composite_score).toFixed(1) : '—') + '</div>' +
+          '<div class="narr">' + (m.narrative || m.summary || '') + '</div>';
         g.appendChild(d);
       });
-      if (!rows || !rows.length) g.innerHTML = '<p class="lede">Momentum signals are recalculating — see the map above for the live picture.</p>';
+      if (typeof echarts === 'undefined') return;
+      var el = document.getElementById('momChart');
+      if (!MC) { MC = echarts.init(el, null, { renderer: 'canvas' }); window.addEventListener('resize', function () { MC.resize(); }); }
+      var names = rows.map(function (m) { return m.village; }).reverse();
+      MC.setOption({
+        backgroundColor: 'transparent', animationDuration: 800, animationEasing: 'cubicOut',
+        grid: { left: 110, right: 70, top: 10, bottom: 30 },
+        xAxis: { type: 'value', axisLabel: { color: '#6C7A96', fontFamily: 'JetBrains Mono, monospace', fontSize: 10 }, splitLine: { lineStyle: { color: 'rgba(234,217,174,0.06)' } }, axisLine: { show: false } },
+        yAxis: { type: 'category', data: names, axisTick: { show: false }, axisLine: { show: false }, axisLabel: { color: '#D6DDE8', fontFamily: 'Cormorant Garamond, serif', fontSize: 16 } },
+        tooltip: { trigger: 'item', backgroundColor: 'rgba(7,18,41,0.94)', borderColor: 'rgba(240,214,138,0.30)', textStyle: { color: '#fff', fontFamily: 'JetBrains Mono, monospace', fontSize: 12 },
+          formatter: function (p) { var m = rows[rows.length - 1 - p.dataIndex]; return m.village + '<br/>' + (m.tier || '') + ' · ' + (m.composite_score > 0 ? '+' : '') + Number(m.composite_score).toFixed(1); } },
+        series: [{ type: 'bar', barWidth: 14, showBackground: true, backgroundStyle: { color: 'rgba(255,255,255,0.03)', borderRadius: 4 },
+          data: rows.slice().reverse().map(function (m) { var c = TIER_COLOR[tierOf(m)] || '#D9BE85'; return { value: Number(m.composite_score || 0),
+            itemStyle: { borderRadius: [0, 4, 4, 0], color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{ offset: 0, color: c + '55' }, { offset: 1, color: c }]) } }; }),
+          label: { show: true, position: 'right', color: '#EAD9AE', fontFamily: 'JetBrains Mono, monospace', fontSize: 11, formatter: function (p) { return (p.value > 0 ? '+' : '') + Number(p.value).toFixed(1); } },
+          markLine: { silent: true, symbol: 'none', lineStyle: { color: 'rgba(234,217,174,0.25)', type: 'dashed' }, data: [{ xAxis: 0 }] } }]
+      }, true);
+    }
+    supaRpc('get_smart_momentum', { scope_filter: 'all' }).then(function (rows) {
+      MOM = rows || [];
+      var tc = document.getElementById('tierChips'); tc.innerHTML = '';
+      var tiers = ['ALL']; MOM.forEach(function (m) { var t = tierOf(m); if (t && tiers.indexOf(t) === -1) tiers.push(t); });
+      tiers.forEach(function (t) {
+        var b = document.createElement('button'); b.className = 'chip' + (t === TIER ? ' on' : ''); b.setAttribute('role', 'tab');
+        b.textContent = t === 'ALL' ? 'All villages' : t.charAt(0) + t.slice(1).toLowerCase();
+        b.addEventListener('click', function () { TIER = t; tc.querySelectorAll('.chip').forEach(function (c) { c.classList.toggle('on', c === b); }); renderMomentum(); });
+        tc.appendChild(b);
+      });
+      if (!MOM.length) { document.getElementById('momGrid').innerHTML = '<p class="lede">Momentum signals are recalculating — see the map above for the live picture.</p>'; return; }
+      renderMomentum();
     }).catch(function () {
       document.getElementById('momGrid').innerHTML = '<p class="lede">Momentum signals are recalculating — see the map above for the live picture.</p>';
     });
