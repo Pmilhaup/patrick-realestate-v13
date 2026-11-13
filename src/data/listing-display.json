@@ -1,0 +1,225 @@
+{
+  "_about": "Presentation facts for the Properties page, keyed by the normalized street address used in tools/sync_listings.py. Which listings appear, and their status, comes from the sales pipeline workbook; this file only supplies display names, verified prices and dates, photos and copy. See tools/LISTINGS_SYNC.md.",
+  "listings": {
+    "999 LAKE": {
+      "pin": "active",
+      "address": "999 Lake Road",
+      "town": "Lake Forest",
+      "list_price": 12990000,
+      "specs": "16,000 SF · 3.6 acres",
+      "blurb": "Howard Van Doren Shaw, 1914 · 400′ lake frontage · the Garriques estate",
+      "photo": "lf-market-assets/999-lake-road.jpg"
+    },
+    "1040 S GREEN BAY": {
+      "public": true,
+      "address": "1040 S. Green Bay Road",
+      "town": "Lake Forest",
+      "list_price": 1290000,
+      "specs": "5BD · 3BA · 3,091 SF",
+      "blurb": "Listed October 16 · under contract in four days"
+    },
+    "28 ABERDEEN": {
+      "address": "28 Aberdeen Court",
+      "town": "Bannockburn",
+      "sold_price": 3375000,
+      "closed": "2026-10",
+      "side": "list",
+      "blurb": "Tarns of the Moor",
+      "photo": "lf-market-assets/28-aberdeen-court.jpg"
+    },
+    "1330 W WHITMORE": {
+      "address": "1330 W. Whitmore Court",
+      "town": "Lake Forest",
+      "sold_price": 3125000,
+      "closed": "2026-09-29",
+      "side": "list",
+      "blurb": "Stone manor on a private cul-de-sac · view the home →",
+      "photo": "lf-market-assets/1330-w-whitmore.jpg",
+      "href": "/listings/1330-w-whitmore"
+    },
+    "230 MAJESTIC OAK": {
+      "address": "230 Majestic Oak Court",
+      "town": "Lake Forest",
+      "sold_price": 2706055,
+      "closed": "2026-09-29",
+      "side": "buyer",
+      "blurb": "New construction",
+      "photo": "lf-market-assets/230-majestic-oak.jpg"
+    },
+    "925 ASHLAND": {
+      "address": "925 Ashland Avenue",
+      "town": "Wilmette",
+      "sold_price": 2860000,
+      "closed": "2026-06-08",
+      "side": "list",
+      "photo": "lf-market-assets/925-ashland.jpg"
+    },
+    "5 BARRIER BEACH": {
+      "address": "5 Barrier Beach Cove",
+      "town": "Hilton Head Island, SC",
+      "closed": "2026-05",
+      "side": "referral",
+      "blurb": "Out-of-state referral",
+      "photo": "lf-market-assets/5-barrier-beach-cove.jpg"
+    },
+    "1350 W WHITMORE": {
+      "address": "1350 W. Whitmore Court",
+      "town": "Lake Forest",
+      "closed": "2026-05",
+      "side": "list",
+      "blurb": "Homesite · the same cul-de-sac as 1330",
+      "photo": "lf-market-assets/1350-w-whitmore.jpg"
+    },
+    "530 OAK KNOLL": {
+      "address": "530 Oak Knoll Drive",
+      "town": "Lake Forest",
+      "sold_price": 1825000,
+      "closed": "2026-04-30",
+      "side": "list",
+      "photo": "lf-market-assets/530-oak-knoll.jpg"
+    },
+    "611 OAK KNOLL": {
+      "address": "611 Oak Knoll Drive",
+      "town": "Lake Forest",
+      "sold_price": 1950000,
+      "closed": "2025-08-21",
+      "side": "list",
+      "blurb": "Sold above the asking price",
+      "photo": "lf-market-assets/611-oak-knoll.jpg"
+    },
+    "1339 LAWRENCE": {
+      "address": "1339 Lawrence Avenue",
+      "town": "Lake Forest",
+      "sold_price": 1524000,
+      "closed": "2025-06-12",
+      "side": "list",
+      "photo": "lf-market-assets/1339-lawrence.jpg"
+    },
+    "4 HIGH TERRACE": {
+      "address": "4 High Terrace Lane",
+      "town": "Bannockburn",
+      "side": "both",
+      "photo": "lf-market-assets/notable-4-high-terrace.jpg"
+    },
+    "1360 ELM TREE": {
+      "address": "1360 Elm Tree Road",
+      "town": "Lake Forest",
+      "sold_price": 3050000,
+      "closed": "2024-12-05",
+      "side": "both",
+      "photo": "lf-market-assets/notable-1360-elm-tree.jpg"
+    },
+    "771 BARBERRY": {
+      "address": "771 Barberry Lane",
+      "town": "Lake Forest",
+      "sold_price": 2295000,
+      "closed": "2024-10-10",
+      "side": "buyer",
+      "photo": "lf-market-assets/notable-771-barberry.jpg"
+    },
+    "1002 WOODBINE": {
+      "address": "1002 Woodbine Place",
+      "town": "Lake Forest",
+      "sold_price": 2575000,
+      "closed": "2024-07-01",
+      "side": "list"
+    },
+    "85 MORRIS": {
+      "address": "85 Morris Lane",
+      "town": "Lake Forest",
+      "sold_price": 1935000,
+      "closed": "2024-06-28",
+      "side": "buyer"
+    },
+    "1320 ELM TREE": {
+      "address": "1320 Elm Tree Road",
+      "town": "Lake Forest",
+      "sold_price": 3100000,
+      "closed": "2024-06-11",
+      "side": "buyer",
+      "photo": "lf-market-assets/notable-1320-elm-tree.jpg"
+    },
+    "1057 WALDEN": {
+      "address": "1057 Walden Road",
+      "town": "Lake Forest",
+      "sold_price": 1660000,
+      "closed": "2024-04-19",
+      "side": "buyer"
+    },
+    "990 E ILLINOIS": {
+      "address": "990 E. Illinois Road",
+      "town": "Lake Forest",
+      "sold_price": 2449000,
+      "closed": "2024-01-26",
+      "side": "list",
+      "photo": "lf-market-assets/notable-990-e-illinois.jpg"
+    },
+    "417 E DEERPATH": {
+      "address": "417 E. Deerpath Road",
+      "town": "Lake Forest",
+      "side": "list"
+    },
+    "1000 E ILLINOIS": {
+      "address": "1000 E. Illinois Road",
+      "town": "Lake Forest",
+      "sold_price": 2950000,
+      "closed": "2023-07-24",
+      "side": "list",
+      "photo": "lf-market-assets/notable-1000-e-illinois.jpg"
+    },
+    "1300 KENNICOTT": {
+      "address": "1300 W. Kennicott Drive",
+      "town": "Lake Forest",
+      "sold_price": 2125000,
+      "closed": "2023-07-05",
+      "side": "list",
+      "photo": "lf-market-assets/notable-1300-kennicott.jpg"
+    },
+    "1047 AYNSLEY": {
+      "address": "1047 Aynsley Avenue",
+      "town": "Lake Forest",
+      "sold_price": 2350000,
+      "closed": "2022-10-28",
+      "side": "buyer"
+    },
+    "400 WASHINGTON": {
+      "address": "400 Washington Road",
+      "town": "Lake Forest",
+      "sold_price": 2100000,
+      "closed": "2022-05-27",
+      "side": "list",
+      "photo": "lf-market-assets/notable-400-washington.jpg"
+    },
+    "217 MORAINE": {
+      "address": "217 Moraine Road",
+      "town": "Highland Park",
+      "sold_price": 1740000,
+      "closed": "2021-12-27",
+      "side": "buyer"
+    },
+    "15 WOODLEY": {
+      "address": "15 Woodley Road",
+      "town": "Winnetka",
+      "sold_price": 2358490,
+      "closed": "2021-10-28",
+      "side": "list",
+      "photo": "lf-market-assets/notable-15-woodley.jpg"
+    },
+    "143 CARY": {
+      "address": "143 Cary Avenue",
+      "town": "Highland Park",
+      "sold_price": 3000000,
+      "closed": "2020-12-07",
+      "side": "list",
+      "photo": "lf-market-assets/notable-143-cary.jpg"
+    },
+    "525 CRABTREE": {
+      "address": "525 Crabtree Lane",
+      "town": "Lake Forest",
+      "sold_price": 2500000,
+      "closed": "2020-09-10",
+      "side": "list",
+      "photo": "lf-market-assets/notable-525-crabtree.jpg"
+    }
+  }
+}
