@@ -59,6 +59,15 @@ The star field, the luminous waves, GSAP, Lenis, ScrollTrigger, three.js (Proper
 
 **Page transitions.** Chrome sometimes skips the cross-page photographic transition (observed in headless test runs, more often while large images are decoding). The page then simply appears. The layout suppresses the resulting unhandled-rejection message.
 
+**Performance and accessibility pass (commits `1ccf647`, `3e54a16`).**
+
+- Intelligence: the embedded market map is `<iframe data-src="/market-map">`; `site.js` sets `src` when the frame is within 300 px of the viewport. Loading it with the page cost about 20 s of main-thread time on a simulated phone.
+- Motion chart: moving marks sit on their own canvas layer (`zlevel: 1`), pixel ratio is capped at 1.5, and it autoplays once only on a wide screen with a fine pointer. On phones and under reduced motion it opens on the latest month and plays on request.
+- Legacy pages (`body.is-legacy`): `--ink-4`, `--ink-5` and `--fg-fade` are lifted to `#8492AD` (5.6:1 on navy). The older style sheets set them at 4.1:1.
+- Masthead link and property tiles carry visible text as their accessible name; no `aria-label` overrides on links.
+
+Measured on the deployed preview, Lighthouse mobile: Home LCP 1.6 s (performance 99); `/sold/28-aberdeen-court` 1.5 s (100); Properties 2.2 s (99); Intelligence 1.7 s, blocking time 1.2 s (75). Accessibility 100 on all four. Intelligence's remaining blocking time is ECharts parse plus the page's own older dashboard script.
+
 ## Still-image treatments
 
 - Home hero: now film (see above).
