@@ -1020,6 +1020,8 @@ body.is-legacy .pinch-in, body.is-legacy .prop, body.is-legacy .rv-legacy, body.
   opacity: 1 !important; transform: none !important;
 }
 body.is-legacy .rail { display: none !important; }
+/* The village guides carry a chart shell that nothing fills in this build; do not show an empty frame. */
+.market-blend:has(#blendedMarket:empty) { display: none; }
 body.is-legacy .chapter .lede { font-size: inherit; line-height: inherit; color: inherit; max-width: none; font-weight: inherit; margin: revert; }
 .reach .v { font-size: clamp(17px, 1.45vw, 22px); }
 body.is-legacy .chapter .headline { font-size: clamp(31px, 3.7vw, 54px); line-height: 1.08; }
