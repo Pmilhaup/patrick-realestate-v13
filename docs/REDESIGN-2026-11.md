@@ -114,3 +114,34 @@ The rank line now reads "The top N percent" down to the top third and "Above the
 - 999 Lake Road hero: one still (`Front_01`), a single slow push-in. Replace with a straight axial approach up the drive, ending on the portico.
 
 To swap in film: put a `<video muted playsinline loop poster>` inside `.hero-media` beside the `<picture>`, then extend the `[data-hero]` controller in `site.js` (it currently toggles `is-moving` / `is-held` for the CSS motion) to call `video.play()` and `video.pause()` in the same three places: start, the control, and the off-screen observer. If `play()` is rejected because autoplay is blocked, leave the poster in place and set the control to "Play motion". Blocked autoplay has not been tested because there is no film to block.
+
+## Fifth pass (18 November 2026)
+
+**Accuracy tiers on the valuation tool.** Two optional answers now sharpen the range, each with its own blind test (`tools/sql/valuation_tiers.sql`, baked by `tools/build_valuation.py` with checksums):
+
+| Evidence | Typical miss, seven villages | Within 10% | Tested on |
+|---|---|---|---|
+| Records only | 15.1% | 34% | 817 sales |
+| + last year's tax bill | 12.7% | 40% | 817 |
+| + purchase price and year | 10.8% | 46% | 446 with a prior sale |
+| + both | 10.1% | 50% | 446 |
+
+With both, Lake Forest is 9.0%, Highland Park 9.2%, Glencoe 9.3%, Winnetka 10.3%, Lake Bluff 10.9%, Wilmette 12.0%. Rules in `src/scripts/value.js`: the tax bill is used only where it improved that village's own test (not Kenilworth, 18 sales), never for new construction (land-only bills), and only inside the 2nd to 98th percentile of bills the model saw. The purchase is used when it is 2008 or later and at least two years old; it is set aside when it lands more than 2.5x or less than 0.4x from the model (the house has changed). Purchase tiers draw their range from the pooled test, because no village has enough repeat sales in a year. What remains is condition, which no form can see.
+
+**The CMA step.** The report now ends by offering the full CMA by email, and the request form follows the report directly. Address, name, email and phone are all required. The request carries the report's figures and a machine-readable block (`{v=...;sf=...;tax=...;paid=...;bought=...}`) inside `leads.message`.
+
+**Delivery is a switch, not a promise.** `src/data/features.json` has `instantCma: false`. While false, the page says the CMA is sent to the visitor's email and that Patrick prepares it within the business day, which is what happens today: the request lands in `leads`. Set it to true only when the sender below is live; the page then says "generated and sent to your email within minutes". Do not merge with it true before that.
+
+Design for the sender (not built, not deployed):
+1. A database webhook on `leads` inserts with `source = 'valuation'` calls an edge function with a shared secret. Browsers never call the function, so comparable-sale data is not exposed to the public internet.
+2. The function reads the request block, declines lakefront and out-of-range houses to a "prepared by hand" reply, selects comparables from `v_cma_comp_pool` by the CMA v2 method, and renders the Paper Edition report.
+3. It emails the owner through the existing transactional mail service from Patrick's address, copies Patrick, and writes the outcome to `leads.status`. The mail key is a function secret that Patrick sets; it is never in this repository.
+4. Illinois requires a broker price opinion or CMA to be in writing with seven items (225 ILCS 454/10-45): purpose, the interest valued, method, assumptions and limits, any interest of the broker, the broker's name, license number and signature, and the statutory not-an-appraisal statement. The template carries all seven.
+5. Limits: one report per address per day, a cap per email, and a daily total.
+
+**Library.** Three documents are hosted under `/library/` (noindex): the 2026 Mid-Year Luxury Outlook (44 pages, 19 MB; compressed from 255 MB with `tools/compress_pdf.py`), the 2026 listing presentation (52 pages, 7 MB) and The Selling Process (2 pages). Pages 2 and 3 of the custom Outlook edition were removed: page 2 was the unfilled local-market template and page 3 an empty photo frame. Not hosted: the Buyer Guide (logo placeholders, a lender's advertisement, 2022 figures), the Closing Cost Breakdown (states commission percentages), the Blue Standard modules (agent training). The Heritage form now collects requests for the year-end report and 2027 outlook.
+
+**Film.** Heritage carries the brand's history film (95 seconds, click to play, with sound; 14 MB, poster first, nothing downloaded until asked). The Lake Forest guide opens on a muted 12-second loop of Forest Park Beach cut from Patrick's own drone footage, with a pause control; it does not play under reduced-motion or data-saver settings. `[data-amb]` in `site.js` is reusable on any opening.
+
+**Story.** 143 Cary Avenue, Highland Park (sold 2020, $3,000,000), from the professional set in the new sold archive.
+

@@ -17,7 +17,7 @@ const lds = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "item
           <p class="label">Heritage &middot; Sotheby&rsquo;s</p>
           <h1 class="display" id="her-title">A standard,<br>not a <em>slogan</em>.</h1>
           <p class="lede">The auction house is older than the United States. The realty network is fifty years old. What stands behind the name is a way of working, and it is the same in Lake Forest as it is in Lake Como.</p>
-          <div class="actions"><a class="link-arrow" href="#ch-01">Read the history</a></div>
+          <div class="actions"><a class="link-arrow" href="#film">Watch the film</a> <a class="link-arrow" href="#ch-01">Read the history</a></div>
         </div>
         <aside class="reading-plate" aria-label="A short chronology">
           <h2>A short chronology</h2>
@@ -28,6 +28,22 @@ const lds = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "item
           </ol>
         </aside>
       </div>
+    </div>
+  </section>
+
+  <section class="sec" id="film" aria-labelledby="film-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">The film</p>
+        <h2 class="h2" id="film-title">Two hundred and eighty-two years, in ninety-five seconds.</h2>
+        <p class="lede">The brand&rsquo;s own account of where the name comes from: a London bookseller&rsquo;s first auction in 1744, and the founding of the realty company in 1976.</p>
+      </div>
+      <figure class="film">
+        <video controls playsinline preload="none" width="1280" height="720" poster="/media/heritage/sothebys-history-poster.jpg" aria-label="Sotheby&rsquo;s International Realty: the history of the name, 1744 to today">
+          <source src="/media/heritage/sothebys-history-720.mp4" type="video/mp4">
+        </video>
+        <figcaption>Film by Sotheby&rsquo;s International Realty &middot; 1 min 35 s &middot; with sound</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -44,22 +60,29 @@ const lds = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "item
             <p class="who">Sotheby&rsquo;s International Realty</p>
             <h3>2026 Mid-Year Luxury Outlook</h3>
             <p>The brand&rsquo;s mid-year report on the top of the market worldwide. Three essays: why demand has held, what an aging generation of owners wants from a house, and the cities that have kept their value. It is global by design, so I read it as the backdrop and bring the North Shore figures myself.</p>
-            <a class="go" href="https://www.luxuryoutlook.com/2026-mid-year-luxury-outlook-report/" target="_blank" rel="noopener">Read the report</a>
+            <a class="go" href="/library/2026-mid-year-luxury-outlook.pdf" target="_blank" rel="noopener">Read the report <span class="meta">PDF &middot; 44 pages &middot; 19 MB</span></a>
+            <a class="go go--quiet" href="https://www.luxuryoutlook.com/2026-mid-year-luxury-outlook-report/" target="_blank" rel="noopener">The brand&rsquo;s own page</a>
           </div>
           <div class="lib-ask">
-            <p class="who">My edition</p>
-            <p>I have an edition of the report under my name. Ask and I will send it with the current Lake Forest and Lake Bluff figures.</p>
-            <form class="lead" data-lead="luxury-outlook" data-property="2026 Mid-Year Luxury Outlook, my edition" novalidate>
-              <input type="hidden" name="property" value="2026 Mid-Year Luxury Outlook, my edition">
+            <p class="who">Next from this desk</p>
+            <p>A year-end report on Lake Forest and a 2027 outlook are in preparation. Leave a name and an email and I will send both when they are finished.</p>
+            <form class="lead" data-lead="year-end-report" data-property="Year-end report and 2027 outlook" novalidate>
+              <input type="hidden" name="property" value="Year-end report and 2027 outlook">
               <label>Name<input type="text" name="name" required maxlength="200" autocomplete="name"></label>
               <label>Email<input type="email" name="email" required maxlength="200" autocomplete="email"></label>
               <label class="hp" aria-hidden="true">Company<input type="text" name="company" tabindex="-1" autocomplete="off"></label>
               <div class="full lead-foot">
-                <button class="btn-gold" type="submit">Send me the report</button>
+                <button class="btn-gold" type="submit">Send them when ready</button>
                 <p class="lead-status" role="status">Delivered directly to Patrick</p>
               </div>
             </form>
           </div>
+        </li>
+        <li class="lib-wide">
+          <p class="who">Jameson Sotheby&rsquo;s International Realty</p>
+          <h3>The 2026 Listing Presentation</h3>
+          <p>The company half of every listing appointment, in full: how the brokerage prepares, prices, launches and reports on a sale, and the network behind it. The brand counts 26,000 sales associates in 1,100 offices across 86 countries and territories, and $182 billion in global sales volume in 2025.</p>
+          <a class="go" href="/library/jameson-sothebys-listing-presentation-2026.pdf" target="_blank" rel="noopener">Read the presentation <span class="meta">PDF &middot; 52 pages &middot; 7 MB</span></a>
         </li>
         <li>
           <p class="who">Jameson Sotheby&rsquo;s International Realty</p>
@@ -79,8 +102,14 @@ const lds = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "item
           <p>How search and display advertising find buyers for a listing, written for sellers: keywords, interest audiences and retargeting.</p>
           <a class="go" href="https://presentation.jamesonps.com/google-ad-overivew-client-facing/full-view.html" target="_blank" rel="noopener">Open the presentation</a>
         </li>
+        <li>
+          <p class="who">Jameson Sotheby&rsquo;s International Realty</p>
+          <h3>The Selling Process</h3>
+          <p>A sale on two pages, from the first conversation to the closing table: pricing, preparation, showings, the offer, attorney review, inspection, appraisal and the walk-through.</p>
+          <a class="go" href="/library/the-selling-process.pdf" target="_blank" rel="noopener">Open the chart <span class="meta">PDF &middot; 2 pages</span></a>
+        </li>
       </ol>
-      <p class="note">These links open the publishers&rsquo; own pages. Figures in them are the brand&rsquo;s and the brokerage&rsquo;s; every North Shore figure on this site comes from MLS records.</p>
+      <p class="note">Documents marked PDF are the publishers&rsquo; own, hosted here with permission; the other links open the publishers&rsquo; pages. Figures in them are the brand&rsquo;s and the brokerage&rsquo;s. Every North Shore figure on this site comes from MLS records.</p>
     </div>
   </section>
 

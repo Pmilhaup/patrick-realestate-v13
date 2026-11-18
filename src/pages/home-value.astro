@@ -2,15 +2,18 @@
 import Chapter from '../layouts/Chapter.astro';
 import val from '../../public/data/valuation.json';
 import c from '../data/contact.json';
+import features from '../data/features.json';
 const V = val.order.map((name) => ({ name, ...val.villages[name] }));
 const n = V.reduce((a, v) => a + v.n, 0), nTest = V.reduce((a, v) => a + v.test.n, 0);
+const A = val.tiers_all, pc = (x) => Math.round(x * 100), instant = features.instantCma === true;
+const noTax = V.filter((v) => v.tiers.test.t.mdape >= v.tiers.test.b.mdape);
 const asof = new Date(val.asof + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 const lds = { '@context': 'https://schema.org', '@type': 'WebPage', name: 'Home valuation for the North Shore', url: 'https://patrick.realestate/home-value',
   description: 'A price range, the best months to launch and what speed is worth, for homes in seven North Shore villages.' };
 ---
 <Chapter
   title="What is your home worth? · Patrick Milhaupt · North Shore"
-  description={`A one-minute valuation report for seven North Shore villages: a price range from a model tested on ${nTest} recent sales, the months that sell best, and what the first week is worth.`}
+  description={`A one-minute valuation report for seven North Shore villages: a price range from a model tested on ${nTest} recent sales, the months that sell best, what the first week is worth, and a full CMA sent to your email.`}
   path="/home-value" current="/home-value" legacy={false} page="value" valueBand={false} jsonLd={lds}
 >
   <section class="op vop" aria-labelledby="hv-title">
@@ -18,7 +21,7 @@ const lds = { '@context': 'https://schema.org', '@type': 'WebPage', name: 'Home 
       <div class="op-head">
         <p class="label">Home valuation</p>
         <h1 class="display" id="hv-title">When, how much, and <em>why</em>.</h1>
-        <p class="lede">Six facts about your house return three answers: a price range, the months that have sold best in your village, and what a fast sale has been worth. The model was tested blind on {nTest} sales from the past year, and its report card is on this page.</p>
+        <p class="lede">Six facts about your house return three answers: a price range, the months that have sold best in your village, and what a fast sale has been worth. Two more numbers, your tax bill and what you paid, cut the typical miss from {pc(A.b.mdape)} percent to about {pc(A.tr.mdape)}. The model was tested blind on {nTest} sales from the past year, and its report card is on this page.</p>
       </div>
 
       <form class="lead vtool" id="tool" aria-label="Your house">
@@ -50,6 +53,21 @@ const lds = { '@context': 'https://schema.org', '@type': 'WebPage', name: 'Home 
         <fieldset class="vtool-yn"><legend>On the lake?</legend>
           <label><input type="radio" name="lake" value="no" checked> No</label><label><input type="radio" name="lake" value="yes"> Yes</label>
         </fieldset>
+        <fieldset class="full vtool-more" id="sharpen">
+          <legend>Two numbers that sharpen it <span>Optional</span></legend>
+          <label>Last year&rsquo;s property tax bill, $
+            <input type="number" name="tax" inputmode="numeric" min="1000" max="400000" step="1" placeholder="24,000">
+            <small data-hint="tax">The full annual bill.</small>
+          </label>
+          <label>What you paid for the house, $
+            <input type="number" name="paid" inputmode="numeric" min="100000" max="20000000" step="1" placeholder="1,150,000">
+            <small>The recorded purchase price.</small>
+          </label>
+          <label>Year you bought
+            <input type="number" name="bought" inputmode="numeric" min="1950" max={val.asof.slice(0, 4)} step="1" placeholder="2014">
+            <small>With all three, the typical miss is about {pc(A.tr.mdape)} percent.</small>
+          </label>
+        </fieldset>
         <div class="full lead-foot">
           <button class="btn-gold" type="submit">Show my report</button>
           <p class="lead-status vtool-status" role="status">Nothing you enter leaves this page.</p>
@@ -60,53 +78,67 @@ const lds = { '@context': 'https://schema.org', '@type': 'WebPage', name: 'Home 
 
   <section class="sec vr" id="report" tabindex="-1" aria-labelledby="vr-title" hidden></section>
 
-  <section class="sec sec--surface" aria-labelledby="card-title">
-    <div class="wrap">
-      <div class="sec-head">
-        <p class="label">The report card</p>
-        <h2 class="h2" id="card-title">How wrong is the model?</h2>
-        <p class="lede">I fitted it on three years of sales, hid the most recent year, and asked it to price those {nTest} homes cold. This is what happened. No form can see a kitchen, so read it as a starting range and nothing more.</p>
-      </div>
-      <div class="vcard-scroll">
-        <table class="viz-table vcard">
-          <caption class="vh">Blind test of the valuation model, by village</caption>
-          <thead><tr><th scope="col">Village</th><th scope="col">Sales it learned from</th><th scope="col">Sales it was tested on</th><th scope="col">Typical miss</th><th scope="col">Within 10 percent</th><th scope="col">Within 20 percent</th></tr></thead>
-          <tbody>
-            {V.map((v) => (
-              <tr><th scope="row">{v.name}</th><td data-th="Learned from">{v.n}</td><td data-th="Tested on">{v.test.n}</td>
-                <td data-th="Typical miss"><b>{Math.round(v.test.mdape * 100)}%</b></td><td data-th="Within 10 percent">{Math.round(v.test.within10 * 100)}%</td><td data-th="Within 20 percent">{Math.round(v.test.within20 * 100)}%</td></tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <p class="note viz-cap"><b>How it works.</b> One regression per village on closed sales in the {val.train_months} months to {asof}: living area, lot, age, baths, new construction and recent renovation, with a time trend. Lakefront sales are left out. &ldquo;Typical miss&rdquo; is the median gap between the model's price and the real one in the blind test. The same statistical estimate is one of three I triangulate in a full CMA; the other two need the house itself. Source: MRED closed sales and listing histories.</p>
-    </div>
-  </section>
-
   <section class="sec" id="cma" aria-labelledby="cma-title">
     <div class="wrap inquiry">
       <div class="inquiry-aside rv">
         <p class="label">The full CMA</p>
-        <h2 class="h2" id="cma-title">Then let me price it <em>by hand</em>.</h2>
-        <p class="lede">A comparative market analysis of your house: the comparable sales and the listings that failed, three independent estimates, the launch month, and what each asking price is likely to cost or earn. I prepare it myself and walk you through it.</p>
+        <h2 class="h2" id="cma-title">Now the house <em>itself</em>.</h2>
+        <p class="lede">The range above comes from records. A comparative market analysis comes from your house: the comparable sales behind the range and the listings that failed, three independent estimates, the launch month, and what each asking price is likely to cost or earn.</p>
+        <ol class="cma-how">
+          <li><b>Enter the address, your email and your phone.</b> The figures from your report travel with the request.</li>
+          <li><b>{instant ? 'The CMA is generated and sent to your email within minutes.' : 'The CMA is sent to your email.'}</b> {instant ? 'It is built from the same sale records I use for every listing appointment.' : 'I prepare it from the same sale records I use for every listing appointment, within the business day.'}</li>
+          <li><b>I call to refine it.</b> Ten minutes on condition and recent work is what turns a good estimate into a price.</li>
+        </ol>
         <p><a href={`tel:${c.tel}`}>{c.phone}</a><br><a href={`mailto:${c.email}`}>{c.email}</a></p>
       </div>
-      <form class="lead rv" data-lead="valuation" novalidate>
+      <form class="lead rv" data-lead="valuation" data-ok={instant ? 'Received. Your CMA is being generated and will be in your inbox within minutes.' : 'Received. Your CMA will be sent to the email you entered, within the business day.'} novalidate>
         <input type="hidden" name="interest" value="valuation">
         <label class="full">Property address<input type="text" name="address" required maxlength="200" autocomplete="street-address"></label>
-        <label>Name<input type="text" name="name" required maxlength="200" autocomplete="name"></label>
+        <label class="full">Name<input type="text" name="name" required maxlength="200" autocomplete="name"></label>
         <label>Email<input type="email" name="email" required maxlength="200" autocomplete="email"></label>
-        <label class="full">Phone<input type="tel" name="phone" maxlength="50" autocomplete="tel"></label>
-        <label class="full">Anything I should know<textarea name="message" maxlength="4000" placeholder="Work you have done, your timing, what you would like to learn."></textarea></label>
+        <label>Phone<input type="tel" name="phone" required minlength="7" maxlength="50" autocomplete="tel" inputmode="tel"></label>
+        <label class="full"><span>Anything I should know <span class="opt">Optional</span></span><textarea name="message" maxlength="4000" placeholder="Work you have done, your timing, what you would like to learn."></textarea></label>
         <label class="hp" aria-hidden="true">Company<input type="text" name="company" tabindex="-1" autocomplete="off"></label>
         <div class="full lead-foot">
-          <button class="btn-gold" type="submit">Request the CMA</button>
-          <p class="lead-status" role="status">Delivered directly to Patrick</p>
+          <button class="btn-gold" type="submit">Send me the full CMA</button>
+          <p class="lead-status" role="status">{instant ? 'Sent to your email within minutes' : 'Sent to the email you enter'}</p>
         </div>
+        <p class="full note cma-consent">Email and phone are both required: the report goes to the email, and the call is how it gets refined. Sending this asks me to contact you about this request, and for nothing else.</p>
       </form>
     </div>
     <div class="wrap">
-      <p class="note attribution">The range on this page is an automated estimate from sale records. It is not an appraisal or a broker price opinion and should not be used for lending, insurance or tax purposes. Your report is calculated in your browser; it reaches me only if you send the request above, which carries the figures with it. Patrick Milhaupt, Global Advisor, Jameson Sotheby&rsquo;s International Realty. Equal Housing Opportunity.</p>
+      <p class="note attribution">The range on this page is an automated estimate from sale records. It is not an appraisal and should not be used for lending, insurance or tax purposes. Your report is calculated in your browser; it reaches me only if you send the request above, which carries the figures with it. Patrick Milhaupt, Global Advisor, Jameson Sotheby&rsquo;s International Realty. Equal Housing Opportunity.</p>
+    </div>
+  </section>
+
+  <section class="sec sec--surface" id="card" aria-labelledby="card-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">The report card</p>
+        <h2 class="h2" id="card-title">How wrong is the model?</h2>
+        <p class="lede">I fitted it on three years of sales, hid the most recent year, and asked it to price those homes cold, three ways: from the records alone, with the tax bill, and with the tax bill and the owner&rsquo;s purchase. Across the seven villages the typical miss falls from {pc(A.b.mdape)} percent to {pc(A.t.mdape)} to {pc(A.tr.mdape)}. No form can see a kitchen, so read any of them as a starting range.</p>
+      </div>
+      <div class="vcard-scroll">
+        <table class="viz-table vcard">
+          <caption class="vh">Blind test of the valuation model by village: typical miss with each level of evidence</caption>
+          <thead><tr><th scope="col">Village</th><th scope="col">Sales it learned from</th><th scope="col">Records only</th><th scope="col">With the tax bill</th><th scope="col">With the tax bill and the purchase</th></tr></thead>
+          <tbody>
+            {V.map((v) => (
+              <tr><th scope="row">{v.name}</th><td data-th="Learned from">{v.n}</td>
+                <td data-th="Records only"><b>{pc(v.test.mdape)}%</b><small>{v.test.n} sales tested &middot; {pc(v.test.within10)}% within ten</small></td>
+                <td data-th="With the tax bill"><b>{pc(v.tiers.test.t.mdape)}%</b><small>{v.tiers.test.n} tested &middot; {pc(v.tiers.test.t.within10)}% within ten</small></td>
+                <td data-th="Tax bill and purchase"><b>{pc(v.tiers.test.tr.mdape)}%</b><small>{v.tiers.test.n_prior} tested &middot; {pc(v.tiers.test.tr.within10)}% within ten</small></td></tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr><th scope="row">All seven</th><td data-th="Learned from">{n.toLocaleString('en-US')}</td>
+              <td data-th="Records only"><b>{pc(A.b.mdape)}%</b><small>{A.n} tested &middot; {pc(A.b.within10)}% within ten</small></td>
+              <td data-th="With the tax bill"><b>{pc(A.t.mdape)}%</b><small>{A.n} tested &middot; {pc(A.t.within10)}% within ten</small></td>
+              <td data-th="Tax bill and purchase"><b>{pc(A.tr.mdape)}%</b><small>{A.n_prior} tested &middot; {pc(A.tr.within10)}% within ten</small></td></tr>
+          </tfoot>
+        </table>
+      </div>
+      <p class="note viz-cap"><b>How it works.</b> One regression per village on closed sales in the {val.train_months} months to {asof}: living area, lot, age, baths, new construction and recent renovation, with a time trend. The tax bill joins the same regression; new construction is priced without it, because a new house carries a land-only bill. The purchase tier averages the model with what the owner paid, moved by the village&rsquo;s median price since, and is tested on the {A.n_prior} sales where the same address had sold at least two years earlier. Lakefront sales are left out. &ldquo;Typical miss&rdquo; is the median gap between the figure and the real price in the blind test; &ldquo;within ten&rdquo; is the share of tested sales that closed within ten percent of it. Small villages have few sales to test on, so their columns move more from year to year.{noTax.length > 0 && ` Where the tax bill did not improve a village's own test (${noTax.map((v) => `${v.name}, on ${v.tiers.test.n} sales`).join('; ')}), the tool leaves it out there.`} What remains after all three is the house itself, which is what the full CMA is for. Source: MRED closed sales and listing histories.</p>
     </div>
   </section>
 

@@ -1,0 +1,5 @@
+{
+  "_about": "Switches for things that depend on a service outside this repository. Wording on the site follows these, so the page never promises what is not running.",
+  "instantCma": false,
+  "_instantCma": "true only once the CMA sender is live (see docs/REDESIGN-2026-11.md, Fifth pass). false: a CMA request reaches Patrick and he sends the report. true: the page says the report is generated and emailed within minutes."
+}

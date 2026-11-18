@@ -17,3 +17,6 @@
 
 /bg-lab*
   X-Robots-Tag: noindex
+
+/library/*
+  X-Robots-Tag: noindex

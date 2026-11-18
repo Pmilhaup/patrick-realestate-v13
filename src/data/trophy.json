@@ -914,6 +914,120 @@
      "shape": "land"
     }
    ]
+  },
+  {
+   "key": "143 CARY",
+   "slug": "143-cary-avenue",
+   "folder": "sold/143-cary",
+   "hero": "01",
+   "heroAlt": "143 Cary Avenue from the motor court: a limestone house with a steep roof, arched dormers and tall chimneys, behind clipped boxwood and young trees.",
+   "summary": "A limestone house of 2003 on 1.33 acres in Highland Park, sold in 53 days.",
+   "sale": {
+    "list": 3200000,
+    "closed": "2020-12-07",
+    "dom": 53
+   },
+   "story": [
+    "A limestone house completed in 2003 on 1.33 acres on Cary Avenue in Highland Park: 9,492 square feet above grade, five bedrooms, a walled spa courtyard, a formal garden and a wine room.",
+    "It closed after 53 days on the market at 94 percent of the asking price. I represented the seller."
+   ],
+   "facts": [
+    [
+     "Built",
+     "2003"
+    ],
+    [
+     "Above grade",
+     "9,492 sq ft"
+    ],
+    [
+     "Lot",
+     "1.33 acres"
+    ],
+    [
+     "Bedrooms",
+     "5"
+    ],
+    [
+     "Baths",
+     "7 full, 2 half"
+    ]
+   ],
+   "factsSource": "Specifications are from the MLS listing record.",
+   "photos": [
+    {
+     "n": "17",
+     "cap": "The front of the house.",
+     "alt": "The front of the house: pale limestone, three arched dormers in a steep roof, and a doorway behind a low lattice wall",
+     "shape": "land"
+    },
+    {
+     "n": "12",
+     "cap": "The spa courtyard.",
+     "alt": "A raised stone spa edged in blue tile, below a wall of arched French doors",
+     "shape": "land"
+    },
+    {
+     "n": "20",
+     "cap": "The formal garden.",
+     "alt": "A paved garden with an oval of clipped boxwood between two wings of the house",
+     "shape": "land"
+    },
+    {
+     "n": "66",
+     "cap": "The entry hall.",
+     "alt": "The entry hall: panelled walls, a lantern, glazed doors to the garden and a staircase with a patterned runner",
+     "shape": "land"
+    },
+    {
+     "n": "42",
+     "cap": "The living room.",
+     "alt": "The living room: a marble fireplace, a glass table between sofas, and tall windows with grey silk curtains",
+     "shape": "land"
+    },
+    {
+     "n": "39",
+     "cap": "The dining room.",
+     "alt": "The dining room: a long table under an iron chandelier, with a tapestry over a stone fireplace",
+     "shape": "land"
+    },
+    {
+     "n": "31",
+     "cap": "The kitchen.",
+     "alt": "The kitchen: white cabinetry, a large granite island and glass pendant lights",
+     "shape": "land"
+    },
+    {
+     "n": "29",
+     "cap": "The garden room.",
+     "alt": "A stone-walled garden room with a slate floor and a glass table set with wicker chairs",
+     "shape": "land"
+    },
+    {
+     "n": "44",
+     "cap": "The library.",
+     "alt": "The library: dark panelled walls and bookshelves, a grey sofa and two pale armchairs",
+     "shape": "land"
+    },
+    {
+     "n": "49",
+     "cap": "The primary bedroom.",
+     "alt": "The primary bedroom: a vaulted ceiling with white trusses, a fireplace and a bed dressed in white",
+     "shape": "land"
+    },
+    {
+     "n": "64",
+     "cap": "The wine room.",
+     "alt": "A wine room lined floor to ceiling with wooden racks, seen through a glazed door",
+     "shape": "land"
+    },
+    {
+     "n": "09",
+     "cap": "The house from the back lawn.",
+     "alt": "The back of the house across the lawn, with a screened porch at the left",
+     "shape": "land"
+    }
+   ]
   }
  ]
 }

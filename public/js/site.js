@@ -114,6 +114,39 @@
     }
   });
 
+  /* ── Ambient footage behind an opening (muted, paused off screen, with a control) ── */
+  $$('[data-amb]').forEach(function (box) {
+    var film = $('video', box), ctl = $('.amb-ctl', box);
+    if (!film || reduce || saveData) return;
+    var key = 'motion:amb', paused = store.get(key) === 'paused', seen = false;
+    var label = function () {
+      if (!ctl) return;
+      ctl.hidden = false;
+      ctl.setAttribute('data-state', paused ? 'paused' : 'playing');
+      $('.t', ctl).textContent = paused ? 'Play motion' : 'Pause motion';
+    };
+    var play = function () {
+      if (paused || !seen) return;
+      if (!film.getAttribute('src')) {
+        film.src = film.getAttribute('data-src');
+        film.addEventListener('playing', function () { box.classList.add('is-on'); }, { once: true });
+      }
+      var p = film.play();
+      if (p && p.catch) p.catch(function () { paused = true; label(); });
+    };
+    var go = function () { if (doc.readyState === 'complete') play(); else window.addEventListener('load', play, { once: true }); };
+    label();
+    if (ctl) ctl.addEventListener('click', function () {
+      paused = !paused; store.set(key, paused ? 'paused' : 'playing'); label();
+      if (paused) film.pause(); else go();
+    });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) { seen = e.isIntersecting; if (seen) go(); else if (film.getAttribute('src')) film.pause(); });
+      }, { threshold: 0.05 }).observe(box);
+    } else { seen = true; go(); }
+  });
+
   /* ── Market data (one fetch, shared by the brief and the coast) ────── */
   var SB = 'https://itupjrknklzvmmqicuyc.supabase.co/rest/v1/';
   var KEY = 'sb_publishable_fQnZLJnaC-dAHBuGBHJgjQ_RUHCe_7S';
@@ -329,7 +362,7 @@
       }).then(function (r) {
         if (!r.ok) throw new Error(r.status);
         form.reset(); if (property && form.elements.property) form.elements.property.value = property;
-        done(true, 'Received. You’ll hear back within the business day.');
+        done(true, form.getAttribute('data-ok') || 'Received. You’ll hear back within the business day.');
       }).catch(function () { done(false, 'Something went wrong. Please call or email Patrick directly, using the details beside this form.'); });
     });
   });

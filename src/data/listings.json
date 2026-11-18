@@ -326,13 +326,14 @@
       "key": "143 CARY",
       "address": "143 Cary Avenue",
       "town": "Highland Park",
-      "photo": "lf-market-assets/notable-143-cary.jpg",
+      "photo": "media/sold/143-cary/hero-1280.webp",
       "status": "Closed",
       "price": 3000000,
       "side": "list",
       "side_label": "Listing representation",
       "year": 2020,
-      "closed": "2020-12-07"
+      "closed": "2020-12-07",
+      "href": "/sold/143-cary-avenue"
     },
     {
       "key": "525 CRABTREE",

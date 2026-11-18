@@ -223,7 +223,8 @@
       "sold_price": 3000000,
       "closed": "2020-12-07",
       "side": "list",
-      "photo": "lf-market-assets/notable-143-cary.jpg"
+      "photo": "media/sold/143-cary/hero-1280.webp",
+      "href": "/sold/143-cary-avenue"
     },
     "525 CRABTREE": {
       "address": "525 Crabtree Lane",
