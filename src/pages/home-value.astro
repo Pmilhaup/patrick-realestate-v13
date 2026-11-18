@@ -1,0 +1,118 @@
+---
+import Chapter from '../layouts/Chapter.astro';
+import val from '../../public/data/valuation.json';
+import c from '../data/contact.json';
+const V = val.order.map((name) => ({ name, ...val.villages[name] }));
+const n = V.reduce((a, v) => a + v.n, 0), nTest = V.reduce((a, v) => a + v.test.n, 0);
+const asof = new Date(val.asof + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+const lds = { '@context': 'https://schema.org', '@type': 'WebPage', name: 'Home valuation for the North Shore', url: 'https://patrick.realestate/home-value',
+  description: 'A price range, the best months to launch and what speed is worth, for homes in seven North Shore villages.' };
+---
+<Chapter
+  title="What is your home worth? · Patrick Milhaupt · North Shore"
+  description={`A one-minute valuation report for seven North Shore villages: a price range from a model tested on ${nTest} recent sales, the months that sell best, and what the first week is worth.`}
+  path="/home-value" current="/home-value" legacy={false} page="value" valueBand={false} jsonLd={lds}
+>
+  <section class="op vop" aria-labelledby="hv-title">
+    <div class="wrap">
+      <div class="op-head">
+        <p class="label">Home valuation</p>
+        <h1 class="display" id="hv-title">When, how much, and <em>why</em>.</h1>
+        <p class="lede">Six facts about your house return three answers: a price range, the months that have sold best in your village, and what a fast sale has been worth. The model was tested blind on {nTest} sales from the past year, and its report card is on this page.</p>
+      </div>
+
+      <form class="lead vtool" id="tool" aria-label="Your house">
+        <label>Village
+          <select name="village" required>
+            {V.map((v) => <option value={v.name} selected={v.name === 'Lake Forest'}>{v.name}</option>)}
+          </select>
+        </label>
+        <label>Living area, sq ft
+          <input type="number" name="sqft" inputmode="numeric" min="500" max="20000" step="1" required placeholder="3,500">
+          <small data-hint="sqft">Above grade.</small>
+        </label>
+        <label>Lot, acres
+          <input type="number" name="acres" inputmode="decimal" min="0.03" max="20" step="0.01" required placeholder="0.50">
+          <small data-hint="acres">A quarter acre is 10,890 sq ft.</small>
+        </label>
+        <label>Year built
+          <input type="number" name="year" inputmode="numeric" min="1840" max={val.asof.slice(0, 4)} step="1" required placeholder="1985">
+        </label>
+        <label>Full baths
+          <input type="number" name="full" inputmode="numeric" min="1" max="12" step="1" required placeholder="3">
+        </label>
+        <label>Half baths
+          <input type="number" name="half" inputmode="numeric" min="0" max="6" step="1" value="1" required>
+        </label>
+        <fieldset class="vtool-yn"><legend>Renovated in the past ten years?</legend>
+          <label><input type="radio" name="reno" value="no" checked> No</label><label><input type="radio" name="reno" value="yes"> Yes</label>
+        </fieldset>
+        <fieldset class="vtool-yn"><legend>On the lake?</legend>
+          <label><input type="radio" name="lake" value="no" checked> No</label><label><input type="radio" name="lake" value="yes"> Yes</label>
+        </fieldset>
+        <div class="full lead-foot">
+          <button class="btn-gold" type="submit">Show my report</button>
+          <p class="lead-status vtool-status" role="status">Nothing you enter leaves this page.</p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="sec vr" id="report" tabindex="-1" aria-labelledby="vr-title" hidden></section>
+
+  <section class="sec sec--surface" aria-labelledby="card-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">The report card</p>
+        <h2 class="h2" id="card-title">How wrong is the model?</h2>
+        <p class="lede">I fitted it on three years of sales, hid the most recent year, and asked it to price those {nTest} homes cold. This is what happened. No form can see a kitchen, so read it as a starting range and nothing more.</p>
+      </div>
+      <div class="vcard-scroll">
+        <table class="viz-table vcard">
+          <caption class="vh">Blind test of the valuation model, by village</caption>
+          <thead><tr><th scope="col">Village</th><th scope="col">Sales it learned from</th><th scope="col">Sales it was tested on</th><th scope="col">Typical miss</th><th scope="col">Within 10 percent</th><th scope="col">Within 20 percent</th></tr></thead>
+          <tbody>
+            {V.map((v) => (
+              <tr><th scope="row">{v.name}</th><td data-th="Learned from">{v.n}</td><td data-th="Tested on">{v.test.n}</td>
+                <td data-th="Typical miss"><b>{Math.round(v.test.mdape * 100)}%</b></td><td data-th="Within 10 percent">{Math.round(v.test.within10 * 100)}%</td><td data-th="Within 20 percent">{Math.round(v.test.within20 * 100)}%</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="note viz-cap"><b>How it works.</b> One regression per village on closed sales in the {val.train_months} months to {asof}: living area, lot, age, baths, new construction and recent renovation, with a time trend. Lakefront sales are left out. &ldquo;Typical miss&rdquo; is the median gap between the model's price and the real one in the blind test. The same statistical estimate is one of three I triangulate in a full CMA; the other two need the house itself. Source: MRED closed sales and listing histories.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="cma" aria-labelledby="cma-title">
+    <div class="wrap inquiry">
+      <div class="inquiry-aside rv">
+        <p class="label">The full CMA</p>
+        <h2 class="h2" id="cma-title">Then let me price it <em>by hand</em>.</h2>
+        <p class="lede">A comparative market analysis of your house: the comparable sales and the listings that failed, three independent estimates, the launch month, and what each asking price is likely to cost or earn. I prepare it myself and walk you through it.</p>
+        <p><a href={`tel:${c.tel}`}>{c.phone}</a><br><a href={`mailto:${c.email}`}>{c.email}</a></p>
+      </div>
+      <form class="lead rv" data-lead="valuation" novalidate>
+        <input type="hidden" name="interest" value="valuation">
+        <label class="full">Property address<input type="text" name="address" required maxlength="200" autocomplete="street-address"></label>
+        <label>Name<input type="text" name="name" required maxlength="200" autocomplete="name"></label>
+        <label>Email<input type="email" name="email" required maxlength="200" autocomplete="email"></label>
+        <label class="full">Phone<input type="tel" name="phone" maxlength="50" autocomplete="tel"></label>
+        <label class="full">Anything I should know<textarea name="message" maxlength="4000" placeholder="Work you have done, your timing, what you would like to learn."></textarea></label>
+        <label class="hp" aria-hidden="true">Company<input type="text" name="company" tabindex="-1" autocomplete="off"></label>
+        <div class="full lead-foot">
+          <button class="btn-gold" type="submit">Request the CMA</button>
+          <p class="lead-status" role="status">Delivered directly to Patrick</p>
+        </div>
+      </form>
+    </div>
+    <div class="wrap">
+      <p class="note attribution">The range on this page is an automated estimate from sale records. It is not an appraisal or a broker price opinion and should not be used for lending, insurance or tax purposes. Your report is calculated in your browser; it reaches me only if you send the request above, which carries the figures with it. Patrick Milhaupt, Global Advisor, Jameson Sotheby&rsquo;s International Realty. Equal Housing Opportunity.</p>
+    </div>
+  </section>
+
+  <script>
+    import { start } from '../scripts/value.js';
+    const form = document.getElementById('tool');
+    if (form) start(form);
+  </script>
+</Chapter>

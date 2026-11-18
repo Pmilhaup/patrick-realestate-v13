@@ -4,6 +4,7 @@
 // working content was preserved; fully redesigned pages pass legacy={false}.
 import Mast from '../components/Mast.astro';
 import Foot from '../components/Foot.astro';
+import ValueBand from '../components/ValueBand.astro';
 
 const {
   title, description, path, current = '',
@@ -12,6 +13,8 @@ const {
   legacy = true,
   page = '',            // body class, e.g. "home", "estate"
   hero = false,         // true when the page opens on full-bleed photography
+  valueBand = true,     // the valuation offer above the footer; off on the valuation page itself
+  valueVillage = '',    // village pages preselect their own village
 } = Astro.props;
 const canonical = 'https://patrick.realestate' + path;
 const lds = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
@@ -53,6 +56,7 @@ const lds = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 <Mast current={current} />
 <main id="main">
 <slot />
+{valueBand && <ValueBand village={valueVillage} />}
 </main>
 <Foot />
 <script is:inline>

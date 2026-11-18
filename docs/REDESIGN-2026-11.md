@@ -91,6 +91,23 @@ The rank line now reads "The top N percent" down to the top third and "Above the
 
 **Loading.** The chart engine is imported only after the page's `load` event, so it never competes with the hero image.
 
+## Fourth pass (17 Nov, night): home valuation, the Sotheby's library
+
+**Home valuation (`/home-value`).** Six inputs return a three-part report computed in the browser: how much, when, why. Nothing typed leaves the page unless the visitor sends the CMA request at the end (`data-lead="valuation"`, which carries the inputs and the model's range in the message).
+
+- *How much.* One log-linear regression per village on `v_cma_comp_pool`, 36 months: living area (with a squared term, which bends large homes the way the 6,000 sq ft rule does), lot, age and age squared, baths, new construction, renovated in the past ten years, and a time trend. Lakefront sales are excluded. The fit runs inside Postgres with a temporary solver function (`tools/sql/valuation_model.sql`); nothing persists in the database.
+- *The range is measured, not assumed.* A second model is fitted on the 36 months before the last 12 and asked to price the last 12. The quartiles of actual / predicted in that blind test set the range shown; the 10th and 90th percentiles set the wider span. Median miss by village: Winnetka 12%, Kenilworth 12% (20 test sales), Lake Forest 13%, Glencoe 14%, Highland Park 17%, Wilmette 18%, Lake Bluff 21%. The page prints this table.
+- *It declines.* Outside the 2nd to 98th percentile of what it was trained on (size, lot), outside the years or bath counts seen, or on the lake, it gives no number and routes to the CMA.
+- *When.* `v_listing_lifecycle`, public launches 2021 to 2025 with a resolved outcome, by launch month: share that sold, median days to contract, median sale / first asking, share at or above first asking.
+- *Why.* Closed sales launched since 2023 by days to contract: median sale / first asking and the share that took a price cut. Plus the count of sales near the estimate from `budget.json`, and the current month against the next strong month.
+- Tried and not used: a finished-basement flag and a pool flag (coefficients near zero or unstable) and a one-kilometre location adjustment (blind-test median miss 15.3% to 13.9% overall; worth doing once an address can be geocoded).
+- Data file: `public/data/valuation.json` (5 KB: coefficients, quantiles, monthly aggregates; no individual sale). Build: `tools/sql/valuation_model.sql`, `tools/sql/valuation_timing.sql`, `tools/build_valuation.py` with database checksums.
+- The report prints as dark ink on white (print style sheet scoped to `body.page-value`).
+
+**The offer, everywhere.** `ValueBand.astro` renders above the footer on every page except `/home-value` (layout prop `valueBand`; village guides pass `valueVillage`). It is a plain GET form, so it works without scripts; the tool reads `?v=` and `?sf=` and then clears them from the address bar. "Home value" is in the navigation; the full navigation now shows from 1240 px (was 1100) because it carries nine links. The home hero and Selling opening each gained a "What is my home worth?" action.
+
+**The library (`/heritage#library`).** Four publisher links in the order Patrick sends them to a seller: the 2026 Mid-Year Luxury Outlook (luxuryoutlook.com), The Importance of Exposure, Property Marketing Strategy, and the Google Ads overview (presentation.jamesonps.com). A two-field form requests Patrick's own edition of the Outlook (`data-lead="luxury-outlook"`). Two further links from the same set (the listing presentation and the Deliberate Storytelling overview) returned errors when checked and are not published. Selling has a "Two layers" section pointing to the library and the valuation.
+
 ## Still-image treatments
 
 - Home hero: now film (see above).

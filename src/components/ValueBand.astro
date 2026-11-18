@@ -1,0 +1,28 @@
+---
+// The valuation offer, shown above the footer on every page except the valuation page itself.
+// A plain GET form: with scripts off it still lands on /home-value with the village and size filled in.
+import val from '../../public/data/valuation.json';
+const { village = '' } = Astro.props;
+const n = Object.values(val.villages).reduce((a, v) => a + v.n, 0);
+---
+<section class="vband" aria-labelledby="vband-title">
+  <div class="wrap vband-in">
+    <div class="vband-copy">
+      <p class="label">Home valuation</p>
+      <h2 class="h2" id="vband-title">What is your home <em>worth</em>, and when should it sell?</h2>
+      <p class="lede">A price range, the months that have sold best, and what the first week is worth. One minute, built on {n.toLocaleString('en-US')} closed sales and every listing launched here since 2021.</p>
+    </div>
+    <form class="vband-form" action="/home-value" method="get">
+      <label>Village
+        <select name="v">
+          {val.order.map((v) => <option value={v} selected={v === (village || 'Lake Forest')}>{v}</option>)}
+        </select>
+      </label>
+      <label>Living area, sq ft
+        <input type="number" name="sf" inputmode="numeric" min="500" max="20000" step="1" placeholder="3,500">
+      </label>
+      <button class="btn-gold" type="submit">Start my report</button>
+      <p class="note">Free. No name or email needed to see it.</p>
+    </form>
+  </div>
+</section>
