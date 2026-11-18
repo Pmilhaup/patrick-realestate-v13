@@ -14,7 +14,7 @@
 :root {
   --navy-0: #060D1F; --navy-1: #0B1730; --navy-2: #122246; --navy-3: #1A3060; --void: #04070F;
   --gold-100: #F2E7C9; --gold-200: #EAD9AE; --gold-300: #D9BE85; --gold-400: #C2A265; --gold-500: #8C6B3F;
-  --ink-1: #FFFFFF; --ink-2: #D6DDE8; --ink-3: #93A0B8; --ink-4: #6C7A96;
+  --ink-1: #FFFFFF; --ink-2: #D6DDE8; --ink-3: #93A0B8; --ink-4: #8492AD;
   --serif: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
   --sans: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
@@ -1096,6 +1096,8 @@ body.is-legacy .pinch-in, body.is-legacy .prop, body.is-legacy .rv-legacy, body.
   opacity: 1 !important; transform: none !important;
 }
 body.is-legacy .rail { display: none !important; }
+body.is-legacy .chapter p a:not([class]) { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.label a, .sheet-head a { color: inherit; text-underline-offset: 3px; }
 /* The village guides carry a chart shell that nothing fills in this build; do not show an empty frame. */
 .market-blend:has(#blendedMarket:empty) { display: none; }
 body.is-legacy .chapter .lede { font-size: inherit; line-height: inherit; color: inherit; max-width: none; font-weight: inherit; margin: revert; }

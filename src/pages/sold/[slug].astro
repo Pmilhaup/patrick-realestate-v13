@@ -151,7 +151,7 @@ const lds = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemL
         <div class="sheet-head"><h2 class="h3" id="s-more">More trophy sales</h2><p class="label label--quiet"><a href="/properties">The full record</a></p></div>
         <div class="sheet">
           {more.map((x) => (
-            <a class="tile" href={storyHref(x)} aria-label={`${x.address}, ${x.town}. Closed ${x.year}. ${money(x.price)}.`}>
+            <a class="tile" href={storyHref(x)}>
               <img src={tilePic(x)} sizes="(max-width: 560px) 100vw, 30vw" width="800" height="600" loading="lazy" decoding="async" alt={`${x.address}, ${x.town}`}>
               <span class="tile-status">Closed {x.year}</span>
               <span class="tile-info" style="opacity:1;transform:none"><span class="a">{x.address}</span><span class="m">{x.town} &middot; <b>{money(x.price)}</b></span></span>

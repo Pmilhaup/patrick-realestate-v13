@@ -143,7 +143,8 @@ const lds = [{
       <p class="lede fade-up">Every closed sale on the corridor, plotted live. Bubble size is transaction activity; color is momentum.</p>
       <div class="pill-live fade-up" id="livePill"><span class="dot"></span><span id="liveTxt">Connecting&hellip;</span></div>
       <div class="map-frame fade-up">
-        <iframe src="/market-map" title="Live North Shore market map" loading="lazy"></iframe>
+        <iframe data-src="/market-map" title="Live North Shore market map"></iframe>
+        <noscript><a href="/market-map">Open the live market map</a></noscript>
       </div>
       <p class="act-note fade-up">Updated daily from MLS &amp; Infosparks &middot; open full-screen at <a href="/market-map" style="color:var(--gold-300);">/market-map</a></p>
     </div>

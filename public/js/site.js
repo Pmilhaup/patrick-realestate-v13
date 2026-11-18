@@ -243,6 +243,15 @@
     }).catch(function () {});
   });
 
+  /* ── Embedded frames load when they are about to be seen, not with the page ── */
+  (function () {
+    var frames = $$('iframe[data-src]'); if (!frames.length) return;
+    var load = function (f) { if (!f.src) f.src = f.getAttribute('data-src'); };
+    if (!('IntersectionObserver' in window)) return frames.forEach(load);
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { load(e.target); io.unobserve(e.target); } }); }, { rootMargin: '300px 0px' });
+    frames.forEach(function (f) { io.observe(f); });
+  })();
+
   /* ── Rail: a horizontal run of cards with previous and next ───────── */
   $$('[data-rail]').forEach(function (rail) {
     var track = $('.rail-track', rail), prev = $('[data-rail-prev]', rail), next = $('[data-rail-next]', rail);

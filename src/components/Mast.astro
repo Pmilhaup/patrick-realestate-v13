@@ -7,10 +7,10 @@ const links = [
 const { current = '' } = Astro.props;
 ---
 <header class="mast" data-mast>
-  <a class="mast-lockup" href="/" aria-label="Patrick Milhaupt, Global Advisor, Sotheby's International Realty. Home">
+  <a class="mast-lockup" href="/">
     <img src="/brand/assets/logos/wordmark-white-md.png" alt="Sotheby's International Realty" width="1024" height="354">
     <span class="mast-bar" aria-hidden="true"></span>
-    <span class="mast-name"><span>Patrick Milhaupt</span><small>Global Advisor</small></span>
+    <span class="mast-name"><span>Patrick Milhaupt</span><small>Global Advisor</small></span><span class="vh">. Home</span>
   </a>
   <nav class="mast-nav" aria-label="Primary">
     {links.map(([href, label]) => (

@@ -78,7 +78,7 @@ const lds = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemL
           const estate = l.href === '/listings/999-lake-road';
           const Tag = l.href ? 'a' : 'figure';
           return (
-            <Tag class="tile tile--half" href={l.href} tabindex={l.href ? undefined : '0'} aria-label={`${l.address}, ${l.town}. ${l.status}. ${money(l.price)}`}>
+            <Tag class="tile tile--half" href={l.href} tabindex={l.href ? undefined : '0'} aria-label={l.href ? undefined : `${l.address}, ${l.town}. ${l.status}. ${money(l.price)}`}>
               {estate
                 ? <img src="/media/999/front-1280.webp" srcset="/media/999/front-800.webp 800w, /media/999/front-1280.webp 1280w, /media/999/front-1920.webp 1920w" sizes="(max-width: 899px) 100vw, 45vw"
                     width="1920" height="1080" decoding="async" fetchpriority={i === 0 ? 'high' : undefined} style="view-transition-name: estate-front; object-position: 50% 42%"
@@ -104,7 +104,7 @@ const lds = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemL
           const Tag = l.href ? 'a' : 'figure';
           const Info = l.href ? 'span' : 'figcaption';
           return (
-            <Tag class="tile" href={l.href} tabindex={l.href ? undefined : '0'} aria-label={`${l.address}, ${l.town}. Closed ${l.year}. ${money(l.price)}. ${l.side_label}.`}>
+            <Tag class="tile" href={l.href} tabindex={l.href ? undefined : '0'} aria-label={l.href ? undefined : `${l.address}, ${l.town}. Closed ${l.year}. ${money(l.price)}. ${l.side_label}.`}>
               <img {...pic(l)} sizes="(max-width: 560px) 100vw, (max-width: 899px) 50vw, 30vw" width="800" height="600" loading="lazy" decoding="async" style={vt(l)} alt={`${l.address}, ${l.town}`}>
               <span class="tile-status">Closed {l.year}</span>
               <Info class="tile-info">
@@ -132,7 +132,7 @@ const lds = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemL
           const Tag = l.href ? 'a' : 'figure';
           const Info = l.href ? 'span' : 'figcaption';
           return (
-            <Tag class="tile" href={l.href} tabindex={l.href ? undefined : '0'} aria-label={`${l.address}, ${l.town}. Closed ${l.year}. ${money(l.price)}. ${l.side_label}.`}>
+            <Tag class="tile" href={l.href} tabindex={l.href ? undefined : '0'} aria-label={l.href ? undefined : `${l.address}, ${l.town}. Closed ${l.year}. ${money(l.price)}. ${l.side_label}.`}>
               <img {...pic(l)} sizes="(max-width: 560px) 100vw, (max-width: 899px) 50vw, 30vw" width="800" height="600" loading="lazy" decoding="async" alt={`${l.address}, ${l.town}`}>
               <span class="tile-status">Closed {l.year}</span>
               <Info class="tile-info">

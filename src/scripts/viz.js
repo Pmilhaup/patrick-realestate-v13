@@ -65,9 +65,9 @@ function picks(host, label, options, current, onPick) {
   wrap.appendChild(g); host.appendChild(wrap);
   return { set(v) { g.querySelectorAll('.pick').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.value === v))); } };
 }
-function make(el) {
+function make(el, dprCap) {
   const plot = el.querySelector('.viz-plot');
-  const chart = echarts.init(plot, null, { renderer: 'canvas' });
+  const chart = echarts.init(plot, null, { renderer: 'canvas', devicePixelRatio: Math.min(window.devicePixelRatio || 1, dprCap || 3) });
   new ResizeObserver(() => chart.resize()).observe(plot);
   el.classList.add('is-ready');
   return chart;
@@ -156,17 +156,17 @@ async function historyChart(el) {
 async function motionChart(el) {
   const bar = el.querySelector('.viz-bar'), cap = el.querySelector('.viz-cap');
   const h = await history();
-  const chart = make(el);
+  const chart = make(el, 1.5);
   const T = (m) => Math.sqrt(Math.max(0, m));                      // square-root scale: room for today's tight market and for 2009
   const data = {}; let yMax = 0;
   VILLAGES.forEach((v) => { const s = h.villages[v]; data[v] = { x: roll(s.supply, 12, 9), y: roll(s.price, 12, 9), n: rollSum(s.closed, 12) }; data[v].y.forEach((p) => { if (p > yMax) yMax = p; }); });
   const first = 11, N = h.months.length; let i = first, timer = null;
   const ticks = [0, 1, 2, 4, 6, 9, 12, 18, 24, 36], xMax = T(36);
   const frame = (k) => VILLAGES.filter((v) => data[v].x[k] != null && data[v].y[k] != null).map((v) => ({ name: v, value: [T(Math.min(36, data[v].x[k])), data[v].y[k], data[v].n[k] || 0, data[v].x[k]], itemStyle: { color: HUE[v] } }));
-  const trail = (v, k) => { const out = []; for (let j = Math.max(first, k - 30); j <= k; j++) if (data[v].x[j] != null && data[v].y[j] != null) out.push([T(Math.min(36, data[v].x[j])), data[v].y[j]]); return out; };
+  const trail = (v, k) => { const out = []; for (let j = Math.max(first, k - 24); j <= k; j += 2) if (data[v].x[j] != null && data[v].y[j] != null) out.push([T(Math.min(36, data[v].x[j])), data[v].y[j]]); return out; };
   const size = (val) => Math.max(9, Math.sqrt(val[2]) * (small() ? 1.25 : 1.9));
   const yearStyle = (k) => ({ text: h.months[k].slice(0, 4), fontFamily: 'Cormorant Garamond, Georgia, serif', fontWeight: 300, fontSize: small() ? 72 : 150, fill: 'rgba(234,217,174,.16)' });
-  chart.setOption({ ...base(), animationDurationUpdate: reduce ? 0 : 170, animationEasingUpdate: 'linear',
+  chart.setOption({ ...base(), aria: { enabled: false }, animationDurationUpdate: reduce ? 0 : 200, animationEasingUpdate: 'linear',
     grid: { left: 8, right: small() ? 18 : 34, top: 34, bottom: 46, containLabel: true },
     xAxis: { type: 'value', min: 0, max: xMax, name: 'Months of supply  →  more homes than buyers', nameLocation: 'middle', nameGap: 30, nameTextStyle: { color: C.mute, fontFamily: MONO, fontSize: 10 },
       axisLine: { lineStyle: { color: C.hair } }, splitLine: { show: false }, axisTick: { customValues: ticks.map(T), lineStyle: { color: C.hair } }, axisLabel: { ...axisText(), customValues: ticks.map(T), formatter: (v) => String(Math.round(v * v)) } },
@@ -176,25 +176,33 @@ async function motionChart(el) {
     series: [
       { id: 'bands', type: 'scatter', data: [], silent: true, markArea: { silent: true, label: { color: C.mute, fontFamily: MONO, fontSize: small() ? 8.5 : 10, position: 'insideTop', distance: 8 },
         data: [[{ xAxis: 0, name: "SELLER'S MARKET", itemStyle: { color: 'rgba(194,162,101,.07)' } }, { xAxis: T(4) }], [{ xAxis: T(4), name: 'BALANCED', itemStyle: { color: 'rgba(214,221,232,.03)' } }, { xAxis: T(6) }], [{ xAxis: T(6), name: "BUYER'S MARKET", itemStyle: { color: 'rgba(95,140,200,.06)' } }, { xAxis: xMax }]] } },
-      ...VILLAGES.map((v) => ({ id: 't-' + v, type: 'line', data: trail(v, i), showSymbol: false, silent: true, smooth: 0.3, lineStyle: { color: HUE[v], width: 1.2, opacity: 0.38 }, z: 2 })),
-      { id: 'dots', type: 'scatter', data: frame(i), symbolSize: size, z: 5, itemStyle: { opacity: 0.92, borderColor: C.navy0, borderWidth: 1 },
-        label: { show: true, formatter: (p) => p.name, position: 'right', distance: 6, color: C.ink, fontFamily: SANS, fontSize: small() ? 10 : 11.5, textBorderColor: C.navy0, textBorderWidth: 3 }, labelLayout: { hideOverlap: true, moveOverlap: 'shiftY' }, emphasis: { scale: 1.15 } },
+      ...VILLAGES.map((v) => ({ id: 't-' + v, type: 'line', zlevel: 1, data: trail(v, i), showSymbol: false, silent: true, animation: false, lineStyle: { color: HUE[v], width: 1.2, opacity: 0.38 }, z: 2 })),
+      { id: 'dots', type: 'scatter', zlevel: 1, data: frame(i), symbolSize: size, z: 5, itemStyle: { opacity: 0.92, borderColor: C.navy0, borderWidth: 1 },
+        label: { show: true, formatter: (p) => p.name, position: 'right', distance: 6, color: C.ink, fontFamily: SANS, fontSize: small() ? 10 : 11.5, textBorderColor: C.navy0, textBorderWidth: 3 }, emphasis: { scale: 1.15 } },
     ] });
   // controls
   const wrap = document.createElement('div'); wrap.className = 'viz-scrub';
-  wrap.innerHTML = `<button type="button" class="viz-play" aria-label="Play"><span aria-hidden="true">▶</span></button><input type="range" min="${first}" max="${N - 1}" value="${i}" step="1" aria-label="Month"><output class="viz-when"></output>`;
+  wrap.innerHTML = `<button type="button" class="viz-play" aria-label="Play from 2008"><span aria-hidden="true">▶</span></button><input type="range" min="${first}" max="${N - 1}" value="${i}" step="1" aria-label="Month"><output class="viz-when"></output>`;
   bar.appendChild(wrap);
   const btn = wrap.querySelector('.viz-play'), rng = wrap.querySelector('input'), when = wrap.querySelector('output');
+  let shownYear = h.months[i].slice(0, 4);
   const go = (k) => { i = k; rng.value = String(k); when.textContent = monthLabel(h.months[k]); rng.setAttribute('aria-valuetext', monthLabel(h.months[k]));
-    chart.setOption({ graphic: [{ id: 'year', style: yearStyle(k) }], series: [...VILLAGES.map((v) => ({ id: 't-' + v, data: trail(v, k) })), { id: 'dots', data: frame(k) }] }); };
-  const stop = () => { clearInterval(timer); timer = null; btn.firstElementChild.textContent = '▶'; btn.setAttribute('aria-label', 'Play'); };
+    const opt = { series: [...VILLAGES.map((v) => ({ id: 't-' + v, data: trail(v, k) })), { id: 'dots', data: frame(k) }] };
+    const y = h.months[k].slice(0, 4); if (y !== shownYear) { shownYear = y; opt.graphic = [{ id: 'year', style: yearStyle(k) }]; }
+    chart.setOption(opt, { lazyUpdate: true, silent: true }); };
+  const stop = () => { clearInterval(timer); timer = null; btn.firstElementChild.textContent = '▶'; btn.setAttribute('aria-label', 'Play from 2008'); };
   const play = () => { if (i >= N - 1) go(first); btn.firstElementChild.textContent = '❚❚'; btn.setAttribute('aria-label', 'Pause');
-    timer = setInterval(() => { if (i >= N - 1) return stop(); go(i + 1); }, reduce ? 260 : 170); };
+    timer = setInterval(() => { if (i >= N - 1) return stop(); go(Math.min(N - 1, i + 2)); }, reduce ? 320 : 200); };
   btn.addEventListener('click', () => (timer ? stop() : play()));
   rng.addEventListener('input', () => { stop(); go(+rng.value); });
-  go(reduce ? N - 1 : first);
+  // On a desktop the eighteen years play once when the chart is first seen. On phones, and with reduced motion,
+  // it opens on the latest month and plays when asked, so nothing moves or works the processor uninvited.
+  const auto = !reduce && matchMedia('(min-width: 900px) and (pointer: fine)').matches;
+  go(auto ? first : N - 1);
   if (cap) cap.innerHTML = `<b>How to read it.</b> Each circle is a village; its size is the number of homes sold in the prior twelve months. Left means fewer homes for sale relative to demand. Up means a higher median price. Values are twelve-month averages of the monthly record, ${monthLabel(h.months[0])} to ${monthLabel(h.months[N - 1])}. Detached single-family homes. Source: MRED.`;
-  if (!reduce) new IntersectionObserver((es, io) => { if (es[0].isIntersecting) { io.disconnect(); setTimeout(play, 500); } }, { threshold: 0.55 }).observe(el);
+  // Plays once when first seen; always stops when it leaves the screen.
+  let played = false;
+  new IntersectionObserver((es) => { const on = es[0].isIntersecting; if (on && !played && auto) { played = true; setTimeout(() => { if (!timer) play(); }, 600); } else if (!on && timer) stop(); }, { threshold: 0.5 }).observe(el);
   document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); });
 }
 
