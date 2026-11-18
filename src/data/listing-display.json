@@ -6,9 +6,10 @@
       "address": "999 Lake Road",
       "town": "Lake Forest",
       "list_price": 12990000,
-      "specs": "16,000 SF · 3.6 acres",
-      "blurb": "Howard Van Doren Shaw, 1914 · 400′ lake frontage · the Garriques estate",
-      "photo": "lf-market-assets/999-lake-road.jpg"
+      "specs": "15,820 SF · 3.58 acres",
+      "blurb": "Howard Van Doren Shaw, 1914 · more than 400 feet of Lake Michigan shoreline",
+      "photo": "lf-market-assets/999-lake-road.jpg",
+      "href": "/listings/999-lake-road"
     },
     "1040 S GREEN BAY": {
       "public": true,
@@ -16,7 +17,8 @@
       "town": "Lake Forest",
       "list_price": 1290000,
       "specs": "5BD · 3BA · 3,091 SF",
-      "blurb": "Listed October 16 · under contract in four days"
+      "blurb": "Listed October 16 · under contract in four days",
+      "photo": "media/listings/1040-s-green-bay-1400.webp"
     },
     "28 ABERDEEN": {
       "address": "28 Aberdeen Court",
@@ -25,7 +27,7 @@
       "closed": "2026-10",
       "side": "list",
       "blurb": "Tarns of the Moor",
-      "photo": "lf-market-assets/28-aberdeen-court.jpg"
+      "photo": "media/listings/28-aberdeen-court-1400.webp"
     },
     "1330 W WHITMORE": {
       "address": "1330 W. Whitmore Court",
@@ -34,7 +36,7 @@
       "closed": "2026-09-29",
       "side": "list",
       "blurb": "Stone manor on a private cul-de-sac · view the home →",
-      "photo": "lf-market-assets/1330-w-whitmore.jpg",
+      "photo": "media/listings/1330-w-whitmore-1400.webp",
       "href": "/listings/1330-w-whitmore"
     },
     "230 MAJESTIC OAK": {
@@ -44,7 +46,7 @@
       "closed": "2026-09-29",
       "side": "buyer",
       "blurb": "New construction",
-      "photo": "lf-market-assets/230-majestic-oak.jpg"
+      "photo": "media/listings/230-majestic-oak-1400.webp"
     },
     "925 ASHLAND": {
       "address": "925 Ashland Avenue",
@@ -52,7 +54,7 @@
       "sold_price": 2860000,
       "closed": "2026-06-08",
       "side": "list",
-      "photo": "lf-market-assets/925-ashland.jpg"
+      "photo": "media/listings/925-ashland-1400.webp"
     },
     "5 BARRIER BEACH": {
       "address": "5 Barrier Beach Cove",
@@ -76,7 +78,7 @@
       "sold_price": 1825000,
       "closed": "2026-04-30",
       "side": "list",
-      "photo": "lf-market-assets/530-oak-knoll.jpg"
+      "photo": "media/listings/530-oak-knoll-1400.webp"
     },
     "611 OAK KNOLL": {
       "address": "611 Oak Knoll Drive",

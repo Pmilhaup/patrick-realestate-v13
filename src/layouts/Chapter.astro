@@ -1,24 +1,27 @@
 ---
-// v11-identical chapter-page chrome, defined once (Phase A).
-import NavExact from '../components/NavExact.astro';
-import FooterExact from '../components/FooterExact.astro';
+// The single page shell: head, masthead, main, footer — defined once.
+// `legacy` keeps the pre-redesign chapter styles available to pages whose
+// working content was preserved; fully redesigned pages pass legacy={false}.
+import Mast from '../components/Mast.astro';
+import Foot from '../components/Foot.astro';
 
 const {
   title, description, path, current = '',
-  palette = '0.50',
   ogImage = 'https://patrick.realestate/images/patrick-headshot.jpg',
   jsonLd = null,
-  rail = [],
-  stdScripts = true,
-  orchestrator = true,       // [{id:'ch-00', num:'00', label:'Begin'}, ...]
+  legacy = true,
+  page = '',            // body class, e.g. "home", "estate"
+  hero = false,         // true when the page opens on full-bleed photography
 } = Astro.props;
 const canonical = 'https://patrick.realestate' + path;
+const lds = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 ---
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#060D1F">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -31,49 +34,34 @@ const canonical = 'https://patrick.realestate' + path;
 <meta property="og:url" content={canonical}>
 <meta property="og:image" content={ogImage}>
 <meta property="og:site_name" content="Patrick Milhaupt — North Shore">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content={title}>
 <meta name="twitter:description" content={description}>
-{jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Public+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="/brand/brand-shared.css">
-<link rel="stylesheet" href="/brand/brand-dark.css">
-<link rel="stylesheet" href="/brand/chapter.css">
-<link rel="stylesheet" href="/brand/brand-core.css">
-<link rel="stylesheet" href="/brand/v13-corrections.css">
-<script src="/brand/nav-mobile.js" defer is:inline></script>
+{lds.map((ld) => <script type="application/ld+json" set:html={JSON.stringify(ld)} />)}
+<script is:inline>document.documentElement.classList.add('js');</script>
+<link rel="preload" href="/fonts/cormorant-garamond.woff2" as="font" type="font/woff2" crossorigin>
+{legacy && <link rel="stylesheet" href="/brand/brand-shared.css">}
+{legacy && <link rel="stylesheet" href="/brand/brand-dark.css">}
+{legacy && <link rel="stylesheet" href="/brand/chapter.css">}
+{legacy && <link rel="stylesheet" href="/brand/brand-core.css">}
+{legacy && <link rel="stylesheet" href="/brand/v13-corrections.css">}
+<link rel="stylesheet" href="/brand/site.css">
 <slot name="head" />
 </head>
-<body data-liquid-palette={palette}>
-<a class="skip-link" href="#main">Skip to content</a>
-<slot name="bodytop" />
-
-<canvas id="paint"></canvas>
-<div class="veil"></div>
-
-<NavExact current={current} />
-
-{rail.length > 0 && (
-<aside class="rail" aria-label="Chapter index">
-  {rail.map((r, i) => (
-    <a class={i===0 ? 'dot active' : 'dot'} href={'#'+r.id} data-rail={String(i)}>{r.num}<span class="label">&nbsp;&nbsp;{r.label}</span></a>
-  ))}
-</aside>
-)}
-
+<body class:list={['site', page && `page-${page}`, hero && 'has-hero', legacy && 'is-legacy']}>
+<a class="skip" href="#main">Skip to content</a>
+<Mast current={current} />
 <main id="main">
 <slot />
 </main>
-
-<FooterExact />
-
-{stdScripts && <script src="/lib/lenis.min.js" is:inline></script>}
-{stdScripts && <script src="/lib/gsap.min.js" is:inline></script>}
-{stdScripts && <script src="/lib/ScrollTrigger.min.js" is:inline></script>}
-{stdScripts && <script src="/brand/aurora-bg.js" is:inline></script>}
-{orchestrator && <script src="/js/chapter-orchestrator.js" is:inline></script>}
+<Foot />
+<script is:inline>
+/* Behaviour loads after the first frame is on screen, so the opening photograph and headline never wait for it. */
+(function () {
+  var done = false, go = function () { if (done) return; if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', go, { once: true }); return; } done = true; var s = document.createElement('script'); s.src = '/js/site.js'; document.head.appendChild(s); };
+  requestAnimationFrame(function () { setTimeout(go, 0); }); setTimeout(go, 1500);
+})();
+</script>
 <slot name="scripts" />
 </body>
 </html>

@@ -1,0 +1,30 @@
+---
+// The footer — brokerage lockup, contact, index and disclosures, defined once.
+const year = new Date().getFullYear();
+const index = [
+  ['Properties', '/properties'], ['Neighborhoods', '/neighborhoods'], ['Intelligence', '/intelligence'],
+  ['Buying', '/buying'], ['Selling', '/selling'], ['Heritage', '/heritage'], ['About', '/about'], ['Contact', '/contact'],
+];
+---
+<footer class="foot" data-dock-hide>
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <img src="/media/brand/jameson-sir-lockup-white.png" alt="Jameson Sotheby's International Realty" width="900" height="146" loading="lazy">
+      <p>Patrick Milhaupt<br><span>Global Advisor</span></p>
+    </div>
+    <div class="foot-col">
+      <h2>Reach Patrick</h2>
+      <a href="tel:+18478499828">(847) 849-9828</a>
+      <a href="mailto:pmilhaupt@jamesonsir.com">pmilhaupt@jamesonsir.com</a>
+      <a href="/contact">Send a message</a>
+    </div>
+    <nav class="foot-col foot-index" aria-label="Footer">
+      <h2>Index</h2>
+      <ul>{index.map(([label, href]) => <li><a href={href}>{label}</a></li>)}</ul>
+    </nav>
+  </div>
+  <div class="foot-legal">
+    <p>&copy; {year} Patrick Milhaupt &middot; Jameson Sotheby&rsquo;s International Realty &middot; Illinois Real Estate License #475.177332 &middot; Equal Housing Opportunity</p>
+    <p>Each office is independently owned and operated. Sotheby&rsquo;s International Realty&reg; and the Sotheby&rsquo;s International Realty logo are registered service marks used with permission. The information presented on this site is believed to be accurate but is not warranted. A practice of Jameson Sotheby&rsquo;s International Realty.</p>
+  </div>
+</footer>

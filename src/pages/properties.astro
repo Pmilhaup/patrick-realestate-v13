@@ -1,623 +1,182 @@
 ---
+// PROPERTIES — an architectural contact sheet.
+// Rendered from the generated listings data (tools/sync_listings.py). Do not hand-edit the tiles.
 import Chapter from '../layouts/Chapter.astro';
 import listings from '../data/listings.json';
-// Generated daily by tools/sync_listings.py from the sales pipeline workbook. Do not hand-edit the cards below.
+
 const money = (n) => (n ? '$' + Number(n).toLocaleString('en-US') : '');
 const { active, under_contract: pending, sold } = listings;
 const gallery = sold.filter((s) => s.photo);
 const ledger = sold.filter((s) => !s.photo);
-const imgStyle = (l) => (l.photo ? `background-image:url('${l.photo}'); background-size:cover; background-position:center;` : undefined);
-const lds = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://patrick.realestate/"}, {"@type": "ListItem", "position": 2, "name": "Properties", "item": "https://patrick.realestate/properties"}]}];
+// Photographs prepared at two sizes live under media/listings/<name>-1400.webp and -800.webp.
+const pic = (l) => {
+  const src = '/' + l.photo;
+  const m = src.match(/^(\/media\/listings\/.+)-1400\.webp$/);
+  return m ? { src: `${m[1]}-800.webp`, srcset: `${m[1]}-800.webp 800w, ${src} 1400w` } : { src, srcset: undefined };
+};
+const lds = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+  { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://patrick.realestate/' },
+  { '@type': 'ListItem', position: 2, name: 'Properties', item: 'https://patrick.realestate/properties' } ] };
 ---
 <Chapter
   title="Properties — Patrick Milhaupt · Sotheby's International Realty"
   description="A curated portfolio of extraordinary North Shore residences. Vetted for provenance, architectural distinction, and pricing discipline."
-  path="/properties" current="/properties" palette="0.40"
-  jsonLd={lds.length>=1 ? lds[0] : null}
-  rail={[{"id": "ch-00", "num": "00", "label": "Opening"}, {"id": "ch-01", "num": "01", "label": "Active"}, {"id": "ch-02", "num": "02", "label": "Sold"}, {"id": "ch-03", "num": "03", "label": "Off-Market"}]}
-  stdScripts={false} orchestrator={false}
+  path="/properties" current="/properties" legacy={false} page="properties"
+  jsonLd={lds}
 >
   <style slot="head" is:global>
-/* ═══════════════════════════════════════════════════════════════════
-   ZENLIST ICE LAYER — neon-blue branded overlay distinct from patrick.realestate
-   "A layer of ice on top of the practice" — frosted, cool, blended
-   ═══════════════════════════════════════════════════════════════════ */
-:root {
-  --zen-blue:     #4f8fff;          /* neon-blue ZenList brand */
-  --zen-blue-lit: #6FA5FF;
-  --zen-cyan:     #00d4ff;
-  --zen-ice:      rgba(79, 143, 255, 0.08);
-  --zen-frost:    rgba(180, 210, 255, 0.05);
-}
-.zen-card {
-  position: relative;
-  margin: 36px 0 0;
-  padding: 36px 32px 32px;
-  border-radius: 12px;
-  background:
-    linear-gradient(135deg, rgba(180, 210, 255, 0.06) 0%, rgba(79, 143, 255, 0.04) 50%, rgba(180, 210, 255, 0.06) 100%),
-    linear-gradient(180deg, rgba(6, 8, 15, 0.45) 0%, rgba(12, 16, 33, 0.55) 100%);
-  border: 1px solid rgba(79, 143, 255, 0.32);
-  backdrop-filter: blur(22px) saturate(140%);
-  -webkit-backdrop-filter: blur(22px) saturate(140%);
-  box-shadow:
-    0 24px 64px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 rgba(180, 210, 255, 0.10),
-    0 0 0 1px rgba(255, 255, 255, 0.03);
-  overflow: hidden;
-}
-/* Frost-edge top glow */
-.zen-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent 0%, var(--zen-blue) 50%, transparent 100%);
-}
-/* Subtle ice-shimmer band */
-.zen-card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(115deg, transparent 35%, rgba(180, 210, 255, 0.05) 50%, transparent 65%);
-  pointer-events: none;
-  animation: ice-shimmer 8s ease-in-out infinite;
-}
-@keyframes ice-shimmer {
-  0%, 100% { transform: translateX(-100%); opacity: 0; }
-  50% { transform: translateX(100%); opacity: 1; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .zen-card::after { animation: none; }
-}
+  /* ZenList — a distinct blue brand layered on the practice, kept from the previous page */
+  .zen-card { position: relative; margin-top: 32px; padding: clamp(24px, 3vw, 38px); border-radius: 6px; max-width: 760px;
+    background: linear-gradient(135deg, rgba(180,210,255,.06), rgba(79,143,255,.04) 50%, rgba(180,210,255,.06)), rgba(6,13,31,.5);
+    border: 1px solid rgba(79,143,255,.32); }
+  .zen-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, #4f8fff, transparent); }
+  .zen-wordmark { font: 500 16px/1 var(--mono); letter-spacing: .04em; color: #6FA5FF; }
+  .zen-wordmark .zen-tld { font-weight: 400; color: rgba(111,165,255,.75); }
+  .zen-tagline { font: 500 10px/1.5 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: rgba(180,210,255,.7); margin: 8px 0 20px; }
+  .zen-card .h3 { color: #E8EFFF; margin-bottom: 10px; }
+  .zen-card p.zen-body { color: rgba(214,226,246,.94); margin: 0 0 22px; max-width: 58ch; }
+  .zen-btn { display: inline-flex; align-items: center; min-height: 50px; padding: 14px 24px; border-radius: 2px; text-decoration: none;
+    font: 600 12.5px/1.1 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: #06080f; background: #6FA5FF; border: 1px solid #6FA5FF; }
+  .zen-btn:hover { background: #9CC1FF; border-color: #9CC1FF; }
+  .zen-foot { margin: 20px 0 0; padding-top: 14px; border-top: 1px solid rgba(79,143,255,.2); font: 500 10px/1.5 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: rgba(180,210,255,.6); }
+  </style>
 
-/* Ice crystal accent */
-.zen-crystal {
-  position: absolute;
-  top: 22px; right: 22px;
-  width: 48px; height: 48px;
-  color: var(--zen-blue);
-  opacity: 0.45;
-  filter: drop-shadow(0 0 6px rgba(79, 143, 255, 0.4));
-  pointer-events: none;
-}
-
-/* Wordmark */
-.zen-head {
-  display: flex; flex-direction: column;
-  gap: 6px; margin-bottom: 22px;
-}
-.zen-wordmark {
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 500;
-  font-size: 16px;
-  letter-spacing: 0.04em;
-  color: var(--zen-blue);
-  display: flex; align-items: baseline; gap: 0;
-  text-shadow: 0 0 12px rgba(79, 143, 255, 0.35);
-}
-.zen-wordmark .zen-z { font-weight: 600; color: var(--zen-blue-lit); }
-.zen-wordmark .zen-list { font-weight: 400; color: var(--zen-blue); }
-.zen-wordmark .zen-tld { font-weight: 300; color: rgba(79, 143, 255, 0.72); }
-.zen-tagline {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9.5px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: rgba(180, 210, 255, 0.65);
-}
-
-/* Heading inside the ice card */
-.zen-h3 {
-  font-family: 'Playfair Display', serif;
-  font-weight: 400;
-  font-size: clamp(28px, 4vw, 38px);
-  line-height: 1.08;
-  letter-spacing: -0.012em;
-  color: #e8efff;
-  margin: 0 0 14px;
-}
-
-/* Body inside ice card — slightly cooler */
-.zen-body {
-  font-family: 'EB Garamond', serif;
-  font-size: 15.5px;
-  line-height: 1.6;
-  color: rgba(200, 215, 240, 0.92);
-  margin-bottom: 24px;
-}
-
-/* Buttons */
-.zen-actions {
-  display: flex; flex-wrap: wrap; gap: 14px;
-  margin: 20px 0 14px;
-}
-.zen-btn-primary {
-  display: inline-flex; align-items: center;
-  padding: 13px 22px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: #06080f;
-  background: linear-gradient(135deg, var(--zen-blue-lit) 0%, var(--zen-blue) 100%);
-  border: 1px solid var(--zen-blue);
-  border-radius: 999px;
-  text-decoration: none;
-  box-shadow: 0 6px 20px rgba(79, 143, 255, 0.40),
-              inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  font-weight: 500;
-}
-.zen-btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(79, 143, 255, 0.55),
-              inset 0 1px 0 rgba(255, 255, 255, 0.35);
-}
-.zen-btn-secondary {
-  display: inline-flex; align-items: center;
-  padding: 13px 22px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--zen-blue-lit);
-  background: rgba(79, 143, 255, 0.05);
-  border: 1px solid rgba(79, 143, 255, 0.35);
-  border-radius: 999px;
-  text-decoration: none;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.zen-btn-secondary:hover {
-  background: rgba(79, 143, 255, 0.12);
-  border-color: var(--zen-blue);
-}
-
-/* Footnote */
-.zen-foot {
-  margin-top: 18px;
-  padding-top: 14px;
-  border-top: 1px solid rgba(79, 143, 255, 0.18);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.20em;
-  text-transform: uppercase;
-  color: rgba(180, 210, 255, 0.50);
-}
-
-/* Inline ZenList mention in body copy */
-.zen-inline {
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 500;
-  font-size: 0.92em;
-  color: var(--zen-blue-lit);
-  letter-spacing: 0.04em;
-  padding: 0 2px;
-  text-shadow: 0 0 8px rgba(79, 143, 255, 0.30);
-}
-</style>
-  <style slot="head" is:global>
-/* Sold ledger — closings without photography */
-.sold-ledger { margin-top: 44px; max-width: 880px; }
-.sold-ledger-h { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold-lit, #C9A96E); padding-bottom: 12px; border-bottom: 1px solid var(--hairline-gold, rgba(201,169,110,0.35)); }
-.sold-ledger-row { display: grid; grid-template-columns: 1.5fr 1.2fr auto; gap: 16px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--hairline, rgba(255,255,255,0.08)); }
-.sold-ledger-row .la { font-family: var(--font-serif); font-size: 18px; color: var(--white, #fff); }
-.sold-ledger-row .la i { font-style: normal; color: var(--ink-3, #8a94ad); font-size: 15px; }
-.sold-ledger-row .ls { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-3, #8a94ad); }
-.sold-ledger-row .lp { font-family: var(--font-mono); font-size: 15px; font-weight: 500; color: var(--gold-lit, #C9A96E); text-align: right; }
-@media (max-width: 720px) { .sold-ledger-row { grid-template-columns: 1fr auto; } .sold-ledger-row .ls { grid-column: 1 / -1; order: 3; } }
-/* SCROLL GUARANTEE — never lock */
-html, body { overflow-y: auto !important; overflow-x: hidden !important; height: auto !important; scroll-behavior: smooth; }
-body { min-height: 100vh; }
-:root {
-  --atmosphere:
-    radial-gradient(140% 110% at 18% 12%, rgba(201, 169, 110, 0.10) 0%, rgba(201, 169, 110, 0.0) 42%),
-    radial-gradient(120% 100% at 88% 78%, rgba(168, 120, 42, 0.18) 0%, rgba(168, 120, 42, 0.0) 50%),
-    radial-gradient(180% 140% at 50% 50%, rgba(27, 44, 92, 0.55) 0%, rgba(6, 8, 15, 0.95) 75%),
-    linear-gradient(180deg, #060815 0%, #0c1021 50%, #060815 100%);
-}
-body { background: var(--atmosphere) !important; background-attachment: fixed; }
-#paint { position: fixed; inset: 0; z-index: 0; pointer-events: none; width: 100vw; height: 100vh; filter: brightness(1.15) saturate(1.12); }
-.veil { z-index: 1; pointer-events: none; }
-nav.nav, main, aside.rail, footer.site-footer { position: relative; z-index: 2; }
-</style>
-
-
-  <section class="chapter" id="ch-00" data-chapter="0" data-palette="0.15">
-    <div class="inner" style="text-align:center; align-items:center;">
-      <div class="ch-head fade-up" style="justify-content:center;">
-        <span class="hashmark"><i></i></span>
-        <div class="meta" style="border:0; padding:0;">
-          <span class="eyebrow">Portfolio &middot; North Shore</span>
+  <section class="op" aria-labelledby="props-title">
+    <div class="wrap">
+      <div class="op-head">
+        <p class="label">Portfolio &middot; North Shore</p>
+        <h1 class="display" id="props-title">A <em>collection</em>, carried with restraint.</h1>
+        <p class="lede">Current representations, closed sales, and the off-market channel. Every home researched, photographed, and written about the same way.</p>
+        <div class="actions">
+          <a class="link-arrow" href="#sold">The sold record</a>
+          <a class="link-arrow" href="#off-market">Off-market access</a>
         </div>
-      </div>
-      <h1 class="headline" data-headline="">
-        A <em>collection</em>,<br>carried with restraint.
-      </h1>
-      <p class="body fade-up" style="margin: 0 auto; text-align:center;">
-        Current representations, closed sales, and the off-market channel. <strong>Every home researched, photographed, and written about the same way.</strong>
-      </p>
-      <div class="cta-row fade-up" style="justify-content:center;">
-        <a class="btn" href="#ch-01">View active listings &darr;</a>
-        <a class="btn btn-outline" href="#ch-03">Request off-market access</a>
       </div>
     </div>
   </section>
 
-  <section class="chapter" id="ch-01" data-chapter="1" data-palette="0.35">
-    <div class="inner">
-      <div class="ch-head fade-up">
-        <span class="num">01</span>
-        <div class="meta">
-          <span class="eyebrow">Chapter One</span>
-          <span class="sub">Active &middot; On Market</span>
-        </div>
+  <section class="sec" style="padding-top:0" aria-label="Listings">
+    <div class="wrap">
+
+      <div class="sheet-head" id="active">
+        <h2 class="h3">Active</h2>
+        <p class="label label--quiet">{active.length > 0 ? 'On the market' : 'Nothing is publicly listed this week'}</p>
       </div>
-      <h2 class="headline" data-headline="">
-        Live <em>now</em>.
-      </h2>
       {active.length > 0 ? (
-        <p class="body fade-up">
-          Currently represented. Each home one-of-a-kind, each carried through the same curatorial process.
-        </p>
-      ) : (
-        <p class="body fade-up">
-          Nothing is publicly listed this week. The next introductions are made quietly first &mdash; see the off-market channel below.
-        </p>
-      )}
-      {active.length > 0 && (
-        <div class="props">
-          {active.map((l) => (
-            <div class="prop">
-              <div class="img" role="img" aria-label={`${l.address}, ${l.town}`} style={imgStyle(l)}><span class="pill live">Active</span></div>
-              <div class="b">
-                <div class="a">{l.address}<br />{l.town}</div>
-                <div class="priceline"><span class="p">{money(l.price)}</span><span class="s">{l.specs}</span></div>
-                {l.blurb && <div class="s" style="margin-top:8px;">{l.blurb}</div>}
-              </div>
-            </div>
-          ))}
+        <div class="sheet">
+          {active.map((l) => {
+            const estate = l.href === '/listings/999-lake-road';
+            const Tag = l.href ? 'a' : 'figure';
+            return (
+              <Tag class="tile tile--lead" href={l.href} tabindex={l.href ? undefined : '0'} aria-label={`${l.address}, ${l.town}. ${l.status}. ${money(l.price)}`}>
+                {estate
+                  ? <img src="/media/999/front-1280.webp" srcset="/media/999/front-800.webp 800w, /media/999/front-1280.webp 1280w, /media/999/front-1920.webp 1920w" sizes="(max-width: 899px) 100vw, 90vw"
+                      width="1920" height="1080" decoding="async" fetchpriority="high" style="view-transition-name: estate-front; object-position: 50% 42%"
+                      alt={`The entrance front of ${l.address}, ${l.town}`}>
+                  : <img {...pic(l)} sizes="(max-width: 899px) 100vw, 90vw" width="1400" height="933" decoding="async" alt={`${l.address}, ${l.town}`}>}
+                <span class="tile-status" data-s="active">{l.status}</span>
+                <span class="tile-info">
+                  <span class="a">{l.address}</span>
+                  <span class="m">{l.town} &middot; <b>{money(l.price)}</b>{l.specs ? ` · ${l.specs}` : ''}</span>
+                  {l.blurb && <span class="m">{l.blurb}</span>}
+                </span>
+              </Tag>
+            );
+          })}
         </div>
+      ) : (
+        <p class="lede">The next introductions are made quietly first. See off-market access below.</p>
       )}
 
       {pending.length > 0 && (
         <Fragment>
-          <div class="ch-head fade-up" style="margin-top:64px;">
-            <span class="num">01b</span>
-            <div class="meta">
-              <span class="eyebrow">Under Contract</span>
-              <span class="sub">Listing Representation</span>
-            </div>
+          <div class="sheet-head">
+            <h2 class="h3">Under contract</h2>
+            <p class="label label--quiet">Listing representation</p>
           </div>
-          <div class="props">
+          <div class="sheet sheet--two">
             {pending.map((l) => (
-              <div class="prop">
-                <div class="img" role="img" aria-label={`${l.address}, ${l.town}`} style={imgStyle(l)}><span class="pill pending" style="background:rgba(184,140,60,0.92); color:#06080f;">Under Contract</span></div>
-                <div class="b">
-                  <div class="a">{l.address}<br />{l.town}</div>
-                  <div class="priceline"><span class="p">{money(l.price)}</span><span class="s">{l.specs}</span></div>
-                  {l.blurb && <div class="s" style="margin-top:8px;">{l.blurb}</div>}
-                </div>
-              </div>
+              <figure class="tile tile--half" tabindex="0" aria-label={`${l.address}, ${l.town}. Under contract. Listed at ${money(l.price)}`}>
+                {l.photo && <img {...pic(l)} sizes="(max-width: 899px) 100vw, 45vw" width="1400" height="781" loading="lazy" decoding="async" alt={`${l.address}, ${l.town}`}>}
+                <span class="tile-status">{l.status}</span>
+                <figcaption class="tile-info">
+                  <span class="a">{l.address}</span>
+                  <span class="m">{l.town} &middot; <b>{money(l.price)}</b>{l.specs ? ` · ${l.specs}` : ''}</span>
+                  {l.blurb && <span class="m">{l.blurb}</span>}
+                </figcaption>
+              </figure>
             ))}
+            {pending.length === 1 && pending[0].blurb && (
+              <div class="sheet-aside">
+                <p class="label">On the record</p>
+                <p class="sheet-quote">{pending[0].blurb.split(' · ').map((part, i) => <Fragment>{i > 0 && <br />}{part.charAt(0).toUpperCase() + part.slice(1)}{i === pending[0].blurb.split(' · ').length - 1 ? '.' : ','}</Fragment>)}</p>
+                <p class="note">{pending[0].address}, {pending[0].town}. Offered at {money(pending[0].price)}.</p>
+              </div>
+            )}
           </div>
+        </Fragment>
+      )}
+
+      <div class="sheet-head" id="sold">
+        <h2 class="h3">Sold</h2>
+        <p class="label label--quiet">Closed sales of $1,000,000 and above</p>
+      </div>
+      <div class="sheet sheet--reveal">
+        {gallery.map((l) => {
+          const Tag = l.href ? 'a' : 'figure';
+          const Info = l.href ? 'span' : 'figcaption';
+          return (
+            <Tag class="tile" href={l.href} tabindex={l.href ? undefined : '0'} aria-label={`${l.address}, ${l.town}. Closed ${l.year}. ${money(l.price)}. ${l.side_label}.`}>
+              <img {...pic(l)} sizes="(max-width: 560px) 100vw, (max-width: 899px) 50vw, 30vw" width="800" height="600" loading="lazy" decoding="async" alt={`${l.address}, ${l.town}`}>
+              <span class="tile-status">Closed {l.year}</span>
+              <Info class="tile-info">
+                <span class="a">{l.address}</span>
+                <span class="m">{l.town} &middot; <b>{money(l.price)}</b></span>
+                <span class="m">{l.side_label}{l.href ? ' · View the home' : ''}</span>
+              </Info>
+            </Tag>
+          );
+        })}
+      </div>
+
+      {ledger.length > 0 && (
+        <Fragment>
+          <div class="sheet-head">
+            <h2 class="h3">Also closed</h2>
+            <p class="label label--quiet">Without photography on file</p>
+          </div>
+          <ul class="ledger-rows">
+            {ledger.map((l) => (
+              <li>
+                <span class="la">{l.address}<i> &middot; {l.town}</i></span>
+                <span class="ls">{l.side_label} &middot; {l.year}</span>
+                <span class="lp">{money(l.price)}</span>
+              </li>
+            ))}
+          </ul>
         </Fragment>
       )}
     </div>
   </section>
 
-  <section class="chapter" id="ch-02" data-chapter="2" data-palette="0.65">
-    <div class="inner">
-      <div class="ch-head fade-up">
-        <span class="num">02</span>
-        <div class="meta">
-          <span class="eyebrow">Chapter Two</span>
-          <span class="sub">Sold</span>
-        </div>
+  <section class="sec sec--surface" id="off-market" aria-labelledby="om-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">Off-market &middot; by introduction</p>
+        <h2 class="h2" id="om-title">The market you can&rsquo;t see.</h2>
+        <p class="lede">A quiet, curated pre-MLS pipeline measured in days, not weeks. Access is by introduction: activate your private search through the ZenList network or request a personal invitation.</p>
       </div>
-      <h2 class="headline" data-headline="">
-        The <em>record</em>.
-      </h2>
-      <p class="body fade-up">
-        Closed sales of $1,000,000 and above &mdash; each one represented through the same curatorial process. Long-form narration, golden-hour photography, reconciliation pricing.
-      </p>
-      <div class="props">
-        {gallery.map((l) => {
-          const Tag = l.href ? 'a' : 'div';
-          return (
-            <Tag class="prop" href={l.href} style={l.href ? 'text-decoration:none; color:inherit;' : undefined}>
-              <div class="img" role="img" aria-label={`Photograph of ${l.address}, ${l.town}`} style={imgStyle(l)}><span class="pill sold">Closed</span></div>
-              <div class="b">
-                <div class="a">{l.address}<br />{l.town}</div>
-                <div class="priceline"><span class="p">{money(l.price)}</span><span class="s">{l.year}</span></div>
-                <div class="s" style="margin-top:8px;">{l.side_label}{l.blurb ? ` · ${l.blurb}` : ''}</div>
-              </div>
-            </Tag>
-          );
-        })}
-      </div>
-      {ledger.length > 0 && (
-        <div class="sold-ledger fade-up">
-          <div class="sold-ledger-h">Also closed</div>
-          {ledger.map((l) => (
-            <div class="sold-ledger-row">
-              <span class="la">{l.address}<i> &middot; {l.town}</i></span>
-              <span class="ls">{l.side_label} &middot; {l.year}</span>
-              <span class="lp">{money(l.price)}</span>
-            </div>
-          ))}
+      <div class="zen-card">
+        <div class="zen-wordmark">zenlist<span class="zen-tld">.realestate</span></div>
+        <div class="zen-tagline">Private Listing Network &middot; Powered by ZenList</div>
+        <h3 class="h3">Access by introduction.</h3>
+        <p class="zen-body">ZenList&rsquo;s pre-MLS feed gives qualified buyers access to homes weeks before they reach public listing sites: quiet sellers, off-market introductions, soft-launch pricing. Activation is complimentary for active clients.</p>
+        <div class="actions">
+          <a class="zen-btn" href="https://zenlist.realestate" target="_blank" rel="noopener">Activate ZenList access</a>
+          <a class="btn-line" href="/contact">Request introduction</a>
         </div>
-      )}
-    </div>
-  </section>
-
-  <section class="chapter zenlist-section" id="ch-03" data-chapter="3" data-palette="0.95">
-    <div class="inner">
-      <div class="ch-head fade-up">
-        <span class="num">03</span>
-        <div class="meta">
-          <span class="eyebrow">Chapter Three</span>
-          <span class="sub">Off-Market &middot; By Introduction</span>
-        </div>
-      </div>
-      <h2 class="headline" data-headline="">
-        The market you <em>can't</em> see.
-      </h2>
-      <p class="body fade-up">
-        A quiet, curated pre-MLS pipeline measured in days, not weeks. Access is by introduction &mdash; activate your private search through the <span class="zen-inline">ZenList</span> network or request a personal invite below.
-      </p>
-
-      <!-- ZenList ice layer — distinct neon-blue brand atop the patrick.realestate base -->
-      <div class="zen-card fade-up">
-        <div class="zen-crystal" aria-hidden="true">
-          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.2">
-            <path d="M32 4 L52 18 L52 46 L32 60 L12 46 L12 18 Z"></path>
-            <path d="M32 4 L32 60 M12 18 L52 46 M52 18 L12 46"></path>
-            <circle cx="32" cy="32" r="6"></circle>
-          </svg>
-        </div>
-        <div class="zen-head">
-          <div class="zen-wordmark">
-            <span class="zen-z">zen</span><span class="zen-list">list</span><span class="zen-tld">.realestate</span>
-          </div>
-          <div class="zen-tagline">Private Listing Network &middot; Powered by ZenList</div>
-        </div>
-        <h3 class="zen-h3">Access by introduction.</h3>
-        <p class="zen-body">
-          ZenList&apos;s pre-MLS feed gives qualified buyers access to homes weeks before they reach public listing sites &mdash;
-          quiet sellers, off-market introductions, soft-launch pricing. Activation is complimentary for active clients.
-        </p>
-        <div class="zen-actions">
-          <a class="zen-btn-primary" href="https://zenlist.realestate" target="_blank" rel="noopener">
-            <span>Activate ZenList access</span>
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14" style="vertical-align:middle;margin-left:8px;">
-              <path d="M2 8h12M9 3l5 5-5 5"></path>
-            </svg>
-          </a>
-          <a class="zen-btn-secondary" href="/contact">Request introduction</a>
-        </div>
-        <div class="zen-foot">A layer on top of the practice &middot; not a replacement for it</div>
-      </div>
-
-      <div class="cta-row fade-up" style="margin-top:32px;">
-        <a class="btn btn-outline" href="/">Back to the story</a>
+        <p class="zen-foot">A layer on top of the practice &middot; not a replacement for it</p>
       </div>
     </div>
   </section>
-
-
-  <Fragment slot="scripts">
-
-
-<script is:inline>
-/* Mobile WebGL hardening */
-(function() {
-  if (window.innerWidth <= 820) {
-    Object.defineProperty(window, 'devicePixelRatio', { value: 1, configurable: true });
-  }
-})();
-</script>
-<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.1/three.min.js"></script>
-<script is:inline>
-/* ═══════════════════════════════════════════════════════════════════
-   PROPERTIES ENGINE — falling-gold-dust + native scroll + reveals
-   No Lenis, no GSAP. Bulletproof scrolling.
-   ═══════════════════════════════════════════════════════════════════ */
-(function() {
-  // ── Falling gold dust shader (matches 1330 W. Whitmore) ──
-  if (typeof THREE !== 'undefined') {
-    var canvas = document.getElementById('paint');
-    if (canvas) {
-      var renderer;
-      try {
-        renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: false, alpha: false, powerPreference: 'high-performance' });
-      } catch (e) { renderer = null; }
-      if (renderer) {
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        var scene = new THREE.Scene();
-        var camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-        var uniforms = {
-          uTime: { value: 0 },
-          uResolution: { value: new THREE.Vector2(1, 1) },
-          uScroll: { value: 0 },
-          uDensity: { value: window.innerWidth <= 720 ? 0.85 : 1.0 }
-        };
-        var vert = 'void main() { gl_Position = vec4(position, 1.0); }';
-        var frag = [
-          'precision highp float;',
-          'uniform float uTime; uniform vec2 uResolution; uniform float uScroll; uniform float uDensity;',
-          'float hash21(vec2 p) { p = fract(p * vec2(443.8975, 397.2973)); p += dot(p, p.yx + 19.19); return fract((p.x + p.y) * p.x); }',
-          'vec2 hash22(vec2 p) { return fract(sin(vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)))) * 43758.5453); }',
-          'vec2 hashN2(vec2 p) { p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3))); return -1.0 + 2.0 * fract(sin(p) * 43758.5453123); }',
-          'float noise(vec2 p) { const float K1=0.366025404; const float K2=0.211324865;',
-          '  vec2 i=floor(p+(p.x+p.y)*K1); vec2 a=p-i+(i.x+i.y)*K2; float m=step(a.y,a.x);',
-          '  vec2 o=vec2(m,1.0-m); vec2 b=a-o+K2; vec2 c=a-1.0+2.0*K2;',
-          '  vec3 h=max(0.5-vec3(dot(a,a),dot(b,b),dot(c,c)),0.0);',
-          '  vec3 n=h*h*h*h*vec3(dot(a,hashN2(i)),dot(b,hashN2(i+o)),dot(c,hashN2(i+1.0)));',
-          '  return dot(n,vec3(70.0)); }',
-          'float fbm(vec2 p) { float v=0.0; float a=0.5; for(int i=0;i<4;i++){ v+=a*noise(p); p=p*2.03+vec2(1.7,9.2); a*=0.5; } return v; }',
-          'vec2 liquidFlow(vec2 p, float t) {',
-          '  vec2 q = vec2(fbm(p+vec2(0.0,t*0.5)), fbm(p+vec2(5.2,t*0.4)));',
-          '  vec2 r = vec2(fbm(p+2.0*q+vec2(1.7,9.2)+t*0.3), fbm(p+2.0*q+vec2(8.3,2.8)+t*0.25));',
-          '  return r * 0.06;',
-          '}',
-          'float dustOctave(vec2 uv, float time, float seed, float density, float radius) {',
-          '  vec2 cell=floor(uv); vec2 local=fract(uv);',
-          '  float h=hash21(cell+seed*17.0);',
-          '  if (h > 1.0-density) {',
-          '    vec2 c = vec2(0.5) + 0.40 * (hash22(cell+seed*31.0)-0.5);',
-          '    float fallVar=0.5+hash21(cell+seed*43.0)*0.8;',
-          '    float driftPhase=hash21(cell+seed*59.0)*6.2832;',
-          '    c.y -= mod(time*fallVar, 1.4);',
-          '    c.x += sin(time*0.4+driftPhase+uv.y*2.5)*0.045 + cos(time*0.18+driftPhase*1.3)*0.025;',
-          '    if (c.y < -0.2) c.y += 1.4;',
-          '    float d=distance(local,c);',
-          '    float sz=radius*(0.45+hash21(cell+seed*71.0)*0.55);',
-          '    return smoothstep(sz,0.0,d) * (0.45+h*0.55);',
-          '  }',
-          '  return 0.0;',
-          '}',
-          'void main() {',
-          '  vec2 uv = gl_FragCoord.xy / uResolution.xy;',
-          '  float aspect = uResolution.x / uResolution.y;',
-          '  vec2 auv = vec2(uv.x*aspect, uv.y);',
-          '  vec2 flow = liquidFlow(auv*1.4, uTime*0.04);',
-          '  float bg = fbm(auv*2.2+flow); bg = bg*0.5+0.5;',
-          '  vec3 navy0=vec3(0.012,0.038,0.115); vec3 navy1=vec3(0.034,0.082,0.205); vec3 navy2=vec3(0.062,0.142,0.310);',
-          '  vec3 col = mix(navy0, navy1, smoothstep(0.0,0.55,bg));',
-          '  col = mix(col, navy2, smoothstep(0.50,0.88,bg)*0.62);',
-          '  float caustic = pow(bg,2.4); col += vec3(0.18,0.12,0.03)*caustic*0.35;',
-          '  vec2 puv = auv + flow*0.045;',
-          '  float scrollY = uScroll*0.40;',
-          '  vec3 goldA=vec3(0.722,0.525,0.043); vec3 goldB=vec3(0.941,0.839,0.541); vec3 goldC=vec3(1.000,0.917,0.625);',
-          '  float p; vec3 c;',
-          '  p=dustOctave(puv*  5.0,(uTime+scrollY)*0.045, 1.0,0.014*uDensity,0.085); c=mix(goldA,goldB,0.30); col+=c*p*0.85;',
-          '  p=dustOctave(puv*  8.0,(uTime+scrollY)*0.065, 2.0,0.022*uDensity,0.072); c=mix(goldA,goldB,0.55); col+=c*p*0.78;',
-          '  p=dustOctave(puv* 12.5,(uTime+scrollY)*0.090, 3.0,0.034*uDensity,0.060); c=mix(goldB,goldC,0.20); col+=c*p*0.72;',
-          '  p=dustOctave(puv* 19.0,(uTime+scrollY)*0.118, 4.0,0.050*uDensity,0.050); c=mix(goldA,goldB,0.70); col+=c*p*0.65;',
-          '  p=dustOctave(puv* 29.0,(uTime+scrollY)*0.148, 5.0,0.068*uDensity,0.042); c=mix(goldB,goldC,0.10); col+=c*p*0.58;',
-          '  p=dustOctave(puv* 44.0,(uTime+scrollY)*0.182, 6.0,0.090*uDensity,0.035); c=mix(goldA,goldB,0.85); col+=c*p*0.50;',
-          '  p=dustOctave(puv* 68.0,(uTime+scrollY)*0.220, 7.0,0.115*uDensity,0.028); c=mix(goldB,goldC,0.05); col+=c*p*0.42;',
-          '  p=dustOctave(puv*104.0,(uTime+scrollY)*0.260, 8.0,0.142*uDensity,0.022); c=mix(goldA,goldB,0.60); col+=c*p*0.34;',
-          '  p=dustOctave(puv*158.0,(uTime+scrollY)*0.300, 9.0,0.170*uDensity,0.018); c=mix(goldB,goldC,0.30); col+=c*p*0.28;',
-          '  p=dustOctave(puv*240.0,(uTime+scrollY)*0.340,10.0,0.190*uDensity,0.015); c=mix(goldA,goldB,0.50); col+=c*p*0.22;',
-          '  p=dustOctave(puv*365.0,(uTime+scrollY)*0.380,11.0,0.210*uDensity,0.013); c=mix(goldB,goldC,0.00); col+=c*p*0.17;',
-          '  p=dustOctave(puv*555.0,(uTime+scrollY)*0.420,12.0,0.230*uDensity,0.011); c=goldB; col+=c*p*0.12;',
-          '  float brush=fbm(auv*5.5+uTime*0.018); col *= 0.92+brush*0.12;',
-          '  vec2 vu=uv-0.5; float vig=smoothstep(1.05,0.30,length(vu*vec2(1.3,1.0))); col *= mix(0.42,1.0,vig);',
-          '  float grain=(fract(sin(dot(gl_FragCoord.xy,vec2(12.9898,78.233)))*43758.5453)-0.5)*0.018; col += grain;',
-          '  gl_FragColor = vec4(col, 1.0);',
-          '}'
-        ].join('\n');
-        var mat = new THREE.ShaderMaterial({ uniforms: uniforms, vertexShader: vert, fragmentShader: frag });
-        var mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat);
-        scene.add(mesh);
-        function resize() { var w=window.innerWidth, h=window.innerHeight; renderer.setSize(w,h,false); uniforms.uResolution.value.set(w,h); }
-        resize();
-        window.addEventListener('resize', resize);
-        window.addEventListener('scroll', function() { uniforms.uScroll.value = window.scrollY / window.innerHeight; }, { passive: true });
-        window.__paintUniforms = uniforms;
-        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (reduce) { uniforms.uTime.value = 8.0; renderer.render(scene, camera); }
-        else {
-          var start = performance.now();
-          (function tick() {
-            uniforms.uTime.value = (performance.now() - start) / 1000;
-            renderer.render(scene, camera);
-            requestAnimationFrame(tick);
-          })();
-        }
-      }
-    }
-  }
-
-  // ── Headline word-stagger split ──
-  document.querySelectorAll('[data-headline]').forEach(function(h) {
-    var walk = function(node) {
-      Array.from(node.childNodes).forEach(function(child) {
-        if (child.nodeType === 3) {
-          var text = child.nodeValue;
-          if (!text.trim()) return;
-          var frag = document.createDocumentFragment();
-          text.split(/(\s+)/).forEach(function(part) {
-            if (!part) return;
-            if (/^\s+$/.test(part)) frag.appendChild(document.createTextNode(part));
-            else {
-              var w = document.createElement('span');
-              w.className = 'w-anim';
-              w.textContent = part;
-              w.style.cssText = 'display:inline-block; opacity:0; transform:translateY(28px); transition:opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);';
-              frag.appendChild(w);
-            }
-          });
-          node.replaceChild(frag, child);
-        } else if (child.nodeType === 1 && child.tagName !== 'BR') walk(child);
-      });
-    };
-    walk(h);
-  });
-
-  // ── Reveal-on-scroll for fade-up + cards ──
-  var fadeEls = document.querySelectorAll('.fade-up, .prop, .lock-card, .zen-card');
-  fadeEls.forEach(function(el) {
-    el.style.cssText += '; opacity:0; transform:translateY(28px); transition:opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);';
-  });
-  var revealObs = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) {
-      if (e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'translateY(0)';
-        revealObs.unobserve(e.target);
-      }
-    });
-  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
-  fadeEls.forEach(function(el) { revealObs.observe(el); });
-
-  // ── Headline word stagger ──
-  var headlineObs = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) {
-      if (e.isIntersecting) {
-        var words = e.target.querySelectorAll('.w-anim');
-        words.forEach(function(w, i) {
-          setTimeout(function() {
-            w.style.opacity = '1';
-            w.style.transform = 'translateY(0)';
-          }, i * 45);
-        });
-        headlineObs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.2 });
-  document.querySelectorAll('[data-headline]').forEach(function(h) { headlineObs.observe(h); });
-
-  // ── Chapter rail dot active state ──
-  var dots = document.querySelectorAll('.rail .dot');
-  var chapters = document.querySelectorAll('.chapter');
-  var chapterObs = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) {
-      if (e.isIntersecting && e.intersectionRatio > 0.3) {
-        var idx = Array.prototype.indexOf.call(chapters, e.target);
-        dots.forEach(function(d) { d.classList.toggle('active', +d.dataset.rail === idx); });
-      }
-    });
-  }, { threshold: [0.3, 0.5, 0.7] });
-  chapters.forEach(function(ch) { chapterObs.observe(ch); });
-
-  // ── Native smooth-scroll for hash links ──
-  document.querySelectorAll('a[href^="#"]').forEach(function(a) {
-    a.addEventListener('click', function(e) {
-      var id = a.getAttribute('href').slice(1);
-      var target = document.getElementById(id);
-      if (target) {
-        e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    });
-  });
-
-  console.log('[properties] engine ready · ' + chapters.length + ' chapters');
-})();
-</script>
-
-  </Fragment>
 </Chapter>

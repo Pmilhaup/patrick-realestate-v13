@@ -1,13 +1,13 @@
 ---
 import Chapter from '../layouts/Chapter.astro';
+import c from '../data/contact.json';
 const lds = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://patrick.realestate/"}, {"@type": "ListItem", "position": 2, "name": "Contact", "item": "https://patrick.realestate/contact"}]}];
 ---
 <Chapter
   title="Contact — Patrick Milhaupt · North Shore"
   description="Schedule a 30-minute call with Patrick Milhaupt — Global Advisor at Jameson Sotheby's International Realty. Direct line, email, calendar."
-  path="/contact" current="/contact" palette="0.50"
+  path="/contact" current="/contact" page="contact"
   jsonLd={lds.length>=1 ? lds[0] : null}
-  rail={[{"id": "ch-00", "num": "00", "label": "Begin"}, {"id": "ch-01", "num": "01", "label": "Form"}]}
 >
   <style slot="head" is:global>
 .contact-form {
@@ -48,27 +48,25 @@ const lds = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "item
 </style>
 
 
-  <section class="chapter" id="ch-00" data-chapter="0" data-palette="0.30">
-    <div class="inner" style="text-align:center; align-items:center;">
-      <div class="ch-head fade-up" style="justify-content:center;">
-        <span class="hashmark"><i></i></span>
-        <div class="meta" style="border:0; padding:0;">
-          <span class="eyebrow">Contact &middot; A 30-minute call</span>
+    <section class="op" aria-labelledby="contact-title">
+    <div class="wrap">
+      <div class="still">
+        <div>
+          <div class="op-head">
+            <p class="label">Contact</p>
+            <h1 class="display" id="contact-title">Let&rsquo;s <em>talk</em>.</h1>
+            <p class="lede">Thirty minutes, no pitch. Tell me what you are trying to do, and I will tell you plainly whether I am the right advisor for it. If I am not, I know who is.</p>
+          </div>
+          <div class="reach">
+            <a href={`tel:${c.tel}`}><span class="k">Call</span><span class="v">{c.phone}</span></a>
+            <a href={`mailto:${c.email}`}><span class="k">Email</span><span class="v">{c.email}</span></a>
+            <a href="#write"><span class="k">Write</span><span class="v">Send a note below</span></a>
+          </div>
         </div>
-      </div>
-      <h1 class="headline" data-headline="">
-        Let's <em>talk</em>.
-      </h1>
-      <p class="body fade-up" style="margin: 0 auto; text-align:center;">
-        Thirty minutes. No pitch. A direct conversation about what you're trying to do &mdash; and an honest read on whether I'm the right advisor for it. If I'm not, I know who is.
-      </p>
-      <div class="begin-block fade-up">
-        <div class="col"><div class="l">Direct</div><div class="v"><a href="tel:+18478499828" style="color:inherit;text-decoration:none;">(847) 849-9828</a></div></div>
-        <div class="col"><div class="l">Email</div><div class="v"><a href="mailto:pmilhaupt@jamesonsir.com">pmilhaupt@jamesonsir.com</a></div></div>
-      </div>
-      <div class="cta-row fade-up" style="justify-content:center; margin-top: 32px;">
-        <a class="btn" href="mailto:pmilhaupt@jamesonsir.com">Email Patrick &rarr;</a>
-        <a class="btn btn-outline" href="#ch-01">Send a message below</a>
+        <figure class="still-photo">
+          <img src="/media/home/first-light-portrait-800.webp" width="800" height="941" decoding="async" alt="Lake Michigan from the Lake Forest bluff at first light">
+          <figcaption class="note">Lake Michigan at first light, from the bluff in Lake Forest.</figcaption>
+        </figure>
       </div>
     </div>
   </section>
@@ -89,11 +87,13 @@ const lds = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "item
         Whether you're considering representation, exploring an off-market introduction, or simply curious what your home is truly worth &mdash; a short note below and I'll be in touch within the business day.
       </p>
 
-      <form class="contact-form fade-up" id="leadForm" novalidate>
-        <label>Name<input type="text" name="name" required maxlength="200"></label>
-        <label>Email<input type="email" name="email" required maxlength="200"></label>
-        <label>Phone<input type="tel" name="phone" maxlength="50"></label>
-        <label>I'm interested in
+      <form class="contact-form fade-up" id="write" data-lead="contact" novalidate>
+        <p class="regarding full" hidden><b>Regarding</b> <span></span></p>
+        <input type="hidden" name="property" value="">
+        <label>Name<input type="text" name="name" required maxlength="200" autocomplete="name"></label>
+        <label>Email<input type="email" name="email" required maxlength="200" autocomplete="email"></label>
+        <label>Phone<input type="tel" name="phone" maxlength="50" autocomplete="tel"></label>
+        <label>I&rsquo;m interested in
           <select name="interest">
             <option value="selling">Selling my home</option>
             <option value="buying">Buying on the North Shore</option>
@@ -103,55 +103,13 @@ const lds = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "item
           </select>
         </label>
         <label class="full">Address or village (optional)<input type="text" name="address" maxlength="200" placeholder="e.g. Lake Forest, Winnetka, or a street address"></label>
-        <label class="full">Message<textarea name="message" maxlength="4000" placeholder="A short note &mdash; timeline, price range, what you're trying to do."></textarea></label>
+        <label class="full">Message<textarea name="message" maxlength="4000" placeholder="A short note: timeline, price range, what you&rsquo;re trying to do."></textarea></label>
         <label class="full" style="position:absolute;left:-9999px;" aria-hidden="true">Company<input type="text" name="company" tabindex="-1" autocomplete="off"></label>
         <div class="full submit-row">
-          <button class="btn" type="submit" id="leadSubmit">Send Message &rarr;</button>
-          <span id="leadStatus" role="status" style="font-family:var(--font-mono);font-size:10.5px;color:var(--ink-3,#8896AD);">Delivered directly to Patrick</span>
+          <button class="btn" type="submit">Send Message &rarr;</button>
+          <span class="lead-status" role="status">Delivered directly to Patrick</span>
         </div>
       </form>
-      <script is:inline>
-      (function(){
-        var form = document.getElementById('leadForm');
-        var btn = document.getElementById('leadSubmit');
-        var status = document.getElementById('leadStatus');
-        form.addEventListener('submit', function(e){
-          e.preventDefault();
-          if (form.company && form.company.value) return;
-          if (!form.reportValidity()) return;
-          btn.disabled = true; status.textContent = 'Sending\u2026';
-          var msg = (form.interest.value ? '[' + form.interest.value + '] ' : '') +
-                    (form.address.value ? form.address.value + ' \u2014 ' : '') +
-                    form.message.value;
-          fetch('https://itupjrknklzvmmqicuyc.supabase.co/rest/v1/leads', {
-            method: 'POST',
-            headers: {
-              'apikey': 'sb_publishable_fQnZLJnaC-dAHBuGBHJgjQ_RUHCe_7S',
-              'Authorization': 'Bearer sb_publishable_fQnZLJnaC-dAHBuGBHJgjQ_RUHCe_7S',
-              'Content-Type': 'application/json',
-              'Prefer': 'return=minimal'
-            },
-            body: JSON.stringify({
-              source: 'contact',
-              name: form.name.value.trim(),
-              email: form.email.value.trim(),
-              phone: form.phone.value.trim(),
-              message: msg.trim(),
-              page: location.pathname,
-              user_agent: navigator.userAgent.slice(0, 250)
-            })
-          }).then(function(r){
-            if (!r.ok) throw new Error(r.status);
-            form.reset(); btn.disabled = false;
-            status.textContent = 'Received. You\u2019ll hear back within the business day.';
-            status.style.color = 'var(--gold-lit, #E0BC7E)';
-          }).catch(function(){
-            btn.disabled = false;
-            status.textContent = 'Something went wrong \u2014 please email pmilhaupt@jamesonsir.com directly.';
-          });
-        });
-      })();
-      </script>
     </div>
   </section>
 

@@ -1,0 +1,16 @@
+---
+// One photograph in the estate walk: a cropped thumbnail that opens the full frame in the gallery.
+import media from '../data/media.json';
+const { name, alt, caption = '', shape = 'land', sizes = '(max-width: 899px) 100vw, 50vw', folder = '999' } = Astro.props;
+const m = media[`${folder}/${name}`];
+const big = m.sizes[0], small = m.sizes[m.sizes.length - 1];
+const full = `/media/${folder}/${name}-${big[0]}.webp`;
+const thumb = `/media/${folder}/${name}-${small[0]}.webp`;
+---
+<figure class={`shot shot--${shape} rv`}>
+  <a href={full} data-pswp data-pswp-width={big[0]} data-pswp-height={big[1]} data-cropped="true" data-caption={caption}>
+    <img src={thumb} srcset={`${thumb} ${small[0]}w, ${full} ${big[0]}w`} sizes={sizes}
+      width={small[0]} height={small[1]} loading="lazy" decoding="async" alt={alt}>
+  </a>
+  <figcaption set:html={caption} />
+</figure>

@@ -5,28 +5,40 @@ const lds = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "item
 <Chapter
   title="Buying — Patrick Milhaupt · North Shore"
   description="A buyer-side practice built on the pre-MLS pipeline, institutional comp analysis, and negotiation discipline drawn from a deep DOM library across the North Shore corridor."
-  path="/buying" current="/buying" palette="0.35"
+  path="/buying" current="/buying" page="buying"
   jsonLd={lds.length>=1 ? lds[0] : null}
-  rail={[{"id": "ch-00", "num": "00", "label": "Opening"}, {"id": "ch-01", "num": "01", "label": "Discovery"}, {"id": "ch-02", "num": "02", "label": "Off-Market"}, {"id": "ch-03", "num": "03", "label": "Negotiation"}, {"id": "ch-04", "num": "04", "label": "Begin"}]}
 >
 
 
-  <section class="chapter" id="ch-00" data-chapter="0" data-palette="0.10">
-    <div class="inner" style="text-align:center; align-items:center;">
-      <div class="ch-head fade-up" style="justify-content:center;">
-        <span class="hashmark"><i></i></span>
-        <div class="meta" style="border:0; padding:0;">
-          <span class="eyebrow">Buying &middot; North Shore</span>
+    <section class="op" aria-labelledby="buy-title">
+    <div class="wrap">
+      <div class="walk" data-steps>
+        <div class="op-head">
+          <p class="label">Buying &middot; North Shore</p>
+          <h1 class="display" id="buy-title">Buyer-side <em>representation</em>.</h1>
+          <p class="lede">Buying well here means seeing homes before they are listed, knowing what each one is worth, and holding to that number at the table. The math comes first.</p>
+          <div class="actions">
+            <a class="btn-gold" href="/contact">Talk with Patrick</a>
+            <a class="btn-line" href="#ch-01">How I work with buyers</a>
+          </div>
         </div>
-      </div>
-      <h1 class="headline" data-headline="">
-        Buyer-side <em>representation</em>.
-      </h1>
-      <p class="body fade-up" style="margin: 0 auto; text-align:center;">
-        A buyer-side practice built on the Sotheby's pre-MLS network, institutional comp analysis, and the conviction that the right home never looks like a deal at the table &mdash; it looks <em>extraordinary</em> in retrospect. <strong>The math has to come first.</strong>
-      </p>
-      <div class="cta-row fade-up" style="justify-content:center;">
-        <a class="btn" href="#ch-01">Walk through the process &darr;</a>
+        <div>
+          <figure class="walk-stage" aria-live="polite">
+            <img class="is-on" src="/media/listings/whitmore-approach-900.webp" srcset="/media/listings/whitmore-approach-900.webp 900w, /media/listings/whitmore-approach-1800.webp 1800w" sizes="(max-width: 899px) 100vw, 55vw" width="1800" height="1344" fetchpriority="high" decoding="async" alt="The approach to 1330 W. Whitmore Court, Lake Forest">
+            <img src="/media/listings/whitmore-threshold-900.webp" srcset="/media/listings/whitmore-threshold-900.webp 900w, /media/listings/whitmore-threshold-1800.webp 1800w" sizes="(max-width: 899px) 100vw, 55vw" width="1800" height="1344" loading="lazy" decoding="async" alt="The entrance of 1330 W. Whitmore Court">
+            <img src="/media/listings/whitmore-interior-900.webp" srcset="/media/listings/whitmore-interior-900.webp 900w, /media/listings/whitmore-interior-1800.webp 1800w" sizes="(max-width: 899px) 100vw, 55vw" width="1800" height="1344" loading="lazy" decoding="async" alt="An interior at 1330 W. Whitmore Court">
+          </figure>
+          <div class="walk-bar">
+            <div class="walk-steps" role="group" aria-label="Walk through a house">
+              <button type="button" data-step aria-pressed="true" data-caption="<b>Approach.</b> What you learn before you leave the car: the street, the setting, how the house sits on its land.">Approach</button>
+              <button type="button" data-step aria-pressed="false" data-caption="<b>Threshold.</b> The entrance shows how a house was built and how it has been kept.">Threshold</button>
+              <button type="button" data-step aria-pressed="false" data-caption="<b>Interior.</b> Then the rooms, the light, and whether the plan suits the way you live.">Interior</button>
+            </div>
+            <button type="button" class="walk-next" aria-label="Next view">&rarr;</button>
+          </div>
+          <p class="note walk-cap"><b>Approach.</b> What you learn before you leave the car: the street, the setting, how the house sits on its land.</p>
+          <p class="note" style="margin-top: 6px">Photographed at 1330 W. Whitmore Court, Lake Forest, a home I represented. Sold September 2026.</p>
+        </div>
       </div>
     </div>
   </section>

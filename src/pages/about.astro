@@ -5,29 +5,27 @@ const lds = [{"@context": "https://schema.org", "@type": "Person", "@id": "https
 <Chapter
   title="About — Patrick Milhaupt · Global Advisor"
   description="Patrick Milhaupt — Global Advisor at Jameson Sotheby's International Realty. More than fifteen years across institutional real estate and luxury brokerage. A curated, data-honest practice on the North Shore."
-  path="/about" current="/about" palette="0.20"
+  path="/about" current="/about" page="about"
   jsonLd={lds.length>=1 ? lds[0] : null}
-  rail={[{"id": "ch-00", "num": "00", "label": "Opening"}, {"id": "ch-01", "num": "01", "label": "Practice"}, {"id": "ch-02", "num": "02", "label": "Brand"}, {"id": "ch-03", "num": "03", "label": "Begin"}]}
 >
   <link slot="head" rel="stylesheet" href="/brand/brand-core.css">
 
 
-  <section class="chapter" id="ch-00" data-chapter="0" data-palette="0.10">
-    <div class="inner" style="text-align:center; align-items:center;">
-      <div class="ch-head fade-up" style="justify-content:center;">
-        <span class="hashmark"><i></i></span>
-        <div class="meta" style="border:0; padding:0;">
-          <span class="eyebrow">About &middot; Patrick Milhaupt</span>
+    <section class="op" aria-labelledby="about-title">
+    <div class="wrap">
+      <div class="portrait-op">
+        <figure>
+          <img src="/media/brand/patrick-portrait-600.webp" srcset="/media/brand/patrick-portrait-600.webp 600w, /media/brand/patrick-portrait-928.webp 928w" sizes="(max-width: 899px) 300px, 34vw" width="928" height="1201" fetchpriority="high" decoding="async" alt="Patrick Milhaupt">
+        </figure>
+        <div class="op-head">
+          <p class="label">About &middot; Patrick Milhaupt</p>
+          <h1 class="display" id="about-title">An advisor&rsquo;s <em>practice</em>.</h1>
+          <p class="first-person">I came to brokerage from the institutional side of real estate: nine years in acquisitions and asset management before I joined Sotheby&rsquo;s International Realty in 2016. I work as one advisor on one calendar, and I start every morning with the market&rsquo;s numbers.</p>
+          <div class="actions">
+            <a class="btn-gold" href="/contact">Talk with Patrick</a>
+            <a class="btn-line" href="#ch-01">Background and record</a>
+          </div>
         </div>
-      </div>
-      <h1 class="headline" data-headline="">
-        An advisor's <em>practice</em>.
-      </h1>
-      <p class="body fade-up" style="margin: 0 auto; text-align:center;">
-        More than fifteen years across real-estate investment, asset management, and luxury brokerage. One advisor, one calendar &mdash; and a market read that starts <strong>fresh every morning</strong>.
-      </p>
-      <div class="cta-row fade-up" style="justify-content:center;">
-        <a class="btn" href="#ch-01">Continue &darr;</a>
       </div>
     </div>
   </section>

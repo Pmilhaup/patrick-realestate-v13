@@ -1,0 +1,37 @@
+---
+// The masthead — one definition for every page.
+const links = [
+  ['/properties', 'Properties'], ['/neighborhoods', 'Neighborhoods'], ['/intelligence', 'Intelligence'],
+  ['/buying', 'Buying'], ['/selling', 'Selling'], ['/heritage', 'Heritage'], ['/about', 'About'],
+];
+const { current = '' } = Astro.props;
+---
+<header class="mast" data-mast>
+  <a class="mast-lockup" href="/" aria-label="Patrick Milhaupt, Sotheby's International Realty. Home">
+    <img src="/brand/assets/logos/wordmark-white-md.png" alt="Sotheby's International Realty" width="1024" height="354">
+    <span class="mast-bar" aria-hidden="true"></span>
+    <span class="mast-name"><span>Patrick Milhaupt</span><small>Global Advisor</small></span>
+  </a>
+  <nav class="mast-nav" aria-label="Primary">
+    {links.map(([href, label]) => (
+      <a href={href} aria-current={current === href ? 'page' : undefined}>{label}</a>
+    ))}
+    <a class="mast-cta" href="/contact" aria-current={current === '/contact' ? 'page' : undefined}>Contact</a>
+  </nav>
+  <button class="mast-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="Open menu">
+    <span></span><span></span>
+  </button>
+</header>
+<div class="menu" id="site-menu" role="dialog" aria-modal="true" aria-label="Site navigation" hidden>
+  <nav class="menu-links" aria-label="Site">
+    <a href="/" aria-current={current === '/home' ? 'page' : undefined}>Home</a>
+    {links.map(([href, label]) => (
+      <a href={href} aria-current={current === href ? 'page' : undefined}>{label}</a>
+    ))}
+    <a href="/contact" aria-current={current === '/contact' ? 'page' : undefined}>Contact</a>
+  </nav>
+  <div class="menu-foot">
+    <a href="tel:+18478499828">(847) 849-9828</a>
+    <a href="mailto:pmilhaupt@jamesonsir.com">pmilhaupt@jamesonsir.com</a>
+  </div>
+</div>

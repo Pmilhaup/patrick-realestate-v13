@@ -1,0 +1,344 @@
+---
+// 999 LAKE ROAD — an architectural portrait.
+// Opens directly on the house and its address. Status and price come from the
+// generated listings data, so the page follows the sales pipeline; history is
+// sourced from the History Center of Lake Forest–Lake Bluff and Crain's (see Provenance).
+import Chapter from '../../layouts/Chapter.astro';
+import Shot from '../../components/Shot.astro';
+import listings from '../../data/listings.json';
+import c from '../../data/contact.json';
+
+const KEY = '999 LAKE';
+const find = (arr) => (arr || []).find((l) => l.key === KEY);
+const rec = find(listings.active) || find(listings.under_contract) || find(listings.sold);
+const status = rec ? rec.status : 'Off market';
+const isActive = status === 'Active';
+const price = rec && rec.price ? '$' + Number(rec.price).toLocaleString('en-US') : '';
+const cta = isActive ? 'Request a private showing' : 'Ask about a similar home';
+const ADDRESS = '999 Lake Road';
+
+const lds = [
+  {
+    '@context': 'https://schema.org', '@type': 'SingleFamilyResidence', name: ADDRESS,
+    url: 'https://patrick.realestate/listings/999-lake-road',
+    image: 'https://patrick.realestate/media/999/og.jpg',
+    address: { '@type': 'PostalAddress', streetAddress: ADDRESS, addressLocality: 'Lake Forest', addressRegion: 'IL', postalCode: '60045', addressCountry: 'US' },
+    numberOfBedrooms: 6, yearBuilt: 1914,
+    floorSize: { '@type': 'QuantitativeValue', value: 15820, unitCode: 'FTK' },
+  },
+  {
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://patrick.realestate/' },
+      { '@type': 'ListItem', position: 2, name: 'Properties', item: 'https://patrick.realestate/properties' },
+      { '@type': 'ListItem', position: 3, name: ADDRESS, item: 'https://patrick.realestate/listings/999-lake-road' },
+    ],
+  },
+];
+const thenCap = '<b>An early photograph of the entrance front,</b> taken from the gate on Lake Road. Undated print from the listing’s research file.';
+const nowCap = '<b>The entrance front today.</b> The portico, balustrade and dormers read as they did in the early photograph.';
+---
+<Chapter
+  title="999 Lake Road, Lake Forest — Howard Van Doren Shaw, 1914 · Patrick Milhaupt"
+  description="999 Lake Road, Lake Forest, Illinois. A Howard Van Doren Shaw house of 1914 on the Lake Michigan bluff: 15,820 square feet on 3.58 acres with more than 400 feet of shoreline."
+  path="/listings/999-lake-road" current="/properties" legacy={false} page="estate" hero={true}
+  ogImage="https://patrick.realestate/media/999/og.jpg"
+  jsonLd={lds}
+>
+  <Fragment slot="head">
+    <link rel="preload" as="image" type="image/avif" fetchpriority="high" media="(min-width: 900px)"
+      imagesrcset="/media/999/front-1280.avif 1280w, /media/999/front-1920.avif 1920w, /media/999/front-2880.avif 2880w" imagesizes="105vw">
+    <link rel="preload" as="image" type="image/avif" fetchpriority="high" media="(max-width: 899px)"
+      imagesrcset="/media/999/front-wide-640.avif 640w, /media/999/front-wide-900.avif 900w, /media/999/front-wide-1400.avif 1400w" imagesizes="100vw">
+  </Fragment>
+
+  <!-- ═══ Opening — the house and its address ═══ -->
+  <section class="hero hero--estate" data-hero="once" aria-labelledby="estate-title">
+    <div class="hero-media">
+      <picture>
+        <source media="(max-width: 899px)" type="image/avif" sizes="100vw"
+          srcset="/media/999/front-wide-640.avif 640w, /media/999/front-wide-900.avif 900w, /media/999/front-wide-1400.avif 1400w">
+        <source media="(max-width: 899px)" type="image/webp" sizes="100vw"
+          srcset="/media/999/front-wide-640.webp 640w, /media/999/front-wide-900.webp 900w, /media/999/front-wide-1400.webp 1400w">
+        <source type="image/avif" sizes="105vw"
+          srcset="/media/999/front-1280.avif 1280w, /media/999/front-1920.avif 1920w, /media/999/front-2880.avif 2880w">
+        <source type="image/webp" sizes="105vw"
+          srcset="/media/999/front-1280.webp 1280w, /media/999/front-1920.webp 1920w, /media/999/front-2880.webp 2880w">
+        <img src="/media/999/front-1920.jpg" width="1920" height="1080" fetchpriority="high" decoding="async"
+          style="view-transition-name: estate-front"
+          alt="The entrance front of 999 Lake Road, seen straight on: a symmetrical brick house with a four-column portico, a balustrade above it, three dormers and two tall chimneys.">
+      </picture>
+    </div>
+    <div class="hero-body">
+      <div class="estate-title">
+        <span class="brass" aria-hidden="true"></span>
+        <h1 id="estate-title">{ADDRESS}</h1>
+        <p class="estate-place">Lake Forest, Illinois</p>
+        <p class="estate-status"><span class="pill">{status}</span>{price && <span class="price">{price}</span>}</p>
+      </div>
+      <div class="hero-side">
+        <button class="motion-ctl" type="button" data-state="replay"><i aria-hidden="true"></i><span class="t">Replay approach</span></button>
+        <div class="actions">
+          <a class="btn-gold" href="#inquire">{cta}</a>
+          <a class="btn-line" href="#walk" data-open-gallery>View the gallery</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ What it is ═══ -->
+  <section class="sec" aria-label="Overview">
+    <div class="wrap estate-intro">
+      <p class="standfirst rv">Howard Van Doren Shaw designed this house for Clayton and Anna Mark and their nine children. It stands on the bluff, above more than 400 feet of Lake Michigan shoreline.</p>
+      <dl class="ledger rv">
+        <div><dt>Architect</dt><dd>Howard Van Doren Shaw</dd></div>
+        <div><dt>Built</dt><dd>1914</dd></div>
+        <div><dt>Landscape</dt><dd>Rose Standish Nichols</dd></div>
+        <div><dt>Style</dt><dd>Italian Renaissance</dd></div>
+        <div><dt>Residence</dt><dd>15,820 sq ft above grade<small>6 bedrooms &middot; 9 full and 3 half baths</small></dd></div>
+        <div><dt>Grounds</dt><dd>3.58 acres<small>More than 400 feet of shoreline</small></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <div id="walk">
+  <a class="vh" href="/media/999/front-2880.webp" data-pswp data-pswp-width="2880" data-pswp-height="1620" tabindex="-1" aria-hidden="true"
+     data-caption="<b>The entrance front,</b> from the lawn inside the drive.">Entrance front</a>
+
+  <!-- ═══ 01 Arrival ═══ -->
+  <section class="sec sec--surface" aria-labelledby="s-arrival">
+    <div class="wrap">
+      <div class="walk-head rv">
+        <span class="num">01</span><h2 class="h2" id="s-arrival">Arrival</h2>
+        <p class="lede">A brick drive loops from Lake Road to a portico of four columns. The front door stands on the centre line of the house.</p>
+      </div>
+      <div class="plate plate--a">
+        <Shot name="arrival" shape="four" sizes="(max-width: 899px) 100vw, 56vw"
+          alt="Aerial view from above Lake Road: the looped brick drive, the entrance front of the house and Lake Michigan stretching to the horizon."
+          caption="<b>From above Lake Road.</b> The drive, the entrance front and the lake beyond." />
+        <Shot name="entry" shape="land" sizes="(max-width: 899px) 100vw, 38vw"
+          alt="The entry hall, looking back through the open front door to the lawn; stone piers, a coffered ceiling and a brass chandelier."
+          caption="<b>The entry hall,</b> looking back through the front door to the drive." />
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 02 Architecture ═══ -->
+  <section class="sec" aria-labelledby="s-arch">
+    <div class="wrap">
+      <div class="walk-head rv">
+        <span class="num">02</span><h2 class="h2" id="s-arch">Architecture</h2>
+        <p class="lede">The principal rooms open off a single gallery on the lake side of the house. Each rewards a closer look.</p>
+      </div>
+      <div class="plate plate--b">
+        <Shot name="gallery" shape="land" sizes="(max-width: 899px) 100vw, 50vw"
+          alt="A long stone-faced gallery with a patterned plaster ceiling, tiled floor, chandeliers and tall glazed doors along the right-hand wall."
+          caption="<b>The gallery.</b> Sixty-four feet long on the measured plan, with glazed doors to the fountain court." />
+        <Shot name="doors" shape="tall" sizes="(max-width: 899px) 50vw, 23vw"
+          alt="A pair of paneled wooden doors in a stone surround, with a bust set in a circular niche above."
+          caption="<b>Detail.</b> Paneled doors beneath a bust in a roundel." />
+        <Shot name="statue" shape="tall" sizes="(max-width: 899px) 50vw, 23vw"
+          alt="A carved figure on a pedestal in a shell-headed stone niche with a low basin."
+          caption="<b>Detail.</b> The fountain figure in its niche." />
+      </div>
+      <div class="plate plate--c">
+        <Shot name="niche" shape="land"
+          alt="A small stone-walled hall with the fountain niche at its centre, flanked by paneled doors; glazed doors open to rooms on either side."
+          caption="<b>The fountain</b> between the billiard room and the dining room." />
+        <Shot name="billiards" shape="land"
+          alt="A vaulted room with a carved billiard table under a brass chandelier and tall windows with red curtains."
+          caption="<b>The billiard room,</b> under a plaster vault." />
+      </div>
+      <div class="plate plate--full">
+        <Shot name="dining" shape="wide" sizes="100vw"
+          alt="A long paneled dining room with a decorated plaster ceiling and crystal chandelier; glazed doors at the far end stand open to the lake."
+          caption="<b>The dining room,</b> its doors open to the lake. Shaw planned this room and its dining porch for the Marks’ nine children." />
+      </div>
+      <div class="plate plate--d">
+        <Shot name="dining-mantel" shape="land" sizes="(max-width: 899px) 100vw, 38vw"
+          alt="A dark veined marble fireplace in a paneled wall, with a portrait above and crystal sconces to either side."
+          caption="<b>Detail.</b> The dining room mantel." />
+        <Shot name="library" shape="land" sizes="(max-width: 899px) 100vw, 56vw"
+          alt="A paneled wall with a fireplace at its centre, fluted pilasters, a portrait above the mantel and built-in bookcases to either side, over a herringbone floor."
+          caption="<b>The living room.</b> A paneled fireplace wall with built-in bookcases." />
+      </div>
+      <div class="plate plate--a">
+        <Shot name="kitchen" shape="land" sizes="(max-width: 899px) 100vw, 56vw"
+          alt="A white kitchen with a coffered ceiling, blue glass pendant lights, a long island and a range under a steel hood."
+          caption="<b>The kitchen,</b> updated during the restoration; fifty-one feet long on the measured plan." />
+        <Shot name="oven" shape="land" sizes="(max-width: 899px) 100vw, 38vw"
+          alt="A tiled hearth oven with a metal hood set into the kitchen wall."
+          caption="<b>Detail.</b> The hearth oven." />
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 03 Life at the lake ═══ -->
+  <section class="sec sec--surface" aria-labelledby="s-lake">
+    <div class="wrap">
+      <div class="walk-head rv">
+        <span class="num">03</span><h2 class="h2" id="s-lake">Life at the lake</h2>
+        <p class="lede">The first photograph is taken from inside the gallery. The second is taken from the court it looks onto, facing back at the same doors.</p>
+      </div>
+      <div class="plate plate--c">
+        <Shot name="hall-lake" shape="land"
+          alt="From inside the gallery: glazed doors stand open to a paved court with a fountain, and Lake Michigan beyond."
+          caption="<b>From the residence.</b> The gallery doors open to the fountain court and the lake." />
+        <Shot name="court" shape="land"
+          alt="The fountain court seen from the lake side: a long stone basin with a fountain figure, and the brick lake front of the house behind."
+          caption="<b>Where you are standing.</b> The fountain court, looking back at those doors." />
+      </div>
+      <div class="plate plate--full">
+        <Shot name="bluff" shape="wide" sizes="100vw"
+          alt="The house on its bluff in early morning light, with terraces stepping down to the beach, stone breakwaters and the lake."
+          caption="<b>The bluff at first light.</b> The house, its terraces, the beach and the lake." />
+      </div>
+    </div>
+  </section>
+  </div>
+
+  <!-- ═══ 04 Provenance ═══ -->
+  <section class="sec" aria-labelledby="s-prov">
+    <div class="wrap">
+      <div class="walk-head rv">
+        <span class="num">04</span><h2 class="h2" id="s-prov">Provenance</h2>
+      </div>
+      <div class="thennow" data-thennow>
+        <div class="rv">
+          <figure class="tn-frame" data-show="then">
+            <img data-view="then" src="/media/999/archival-900.webp" srcset="/media/999/archival-900.webp 900w, /media/999/archival-1600.webp 1600w"
+              sizes="(max-width: 899px) 100vw, 56vw" width="1600" height="1195" loading="lazy" decoding="async"
+              alt="An early black and white photograph of the house in snow, seen from the brick gate piers on Lake Road.">
+            <img data-view="now" src="/media/999/front-1280.webp" srcset="/media/999/front-1280.webp 1280w, /media/999/front-1920.webp 1920w"
+              sizes="(max-width: 899px) 100vw, 56vw" width="1920" height="1080" loading="lazy" decoding="async"
+              alt="The entrance front of the house today, seen straight on.">
+          </figure>
+          <div class="tn-ctl" role="group" aria-label="Change the view">
+            <button type="button" data-view="then" aria-pressed="true" data-caption={thenCap}>Early photograph</button>
+            <button type="button" data-view="now" aria-pressed="false" data-caption={nowCap}>Today</button>
+          </div>
+          <p class="note tn-cap" aria-live="polite" set:html={thenCap} />
+        </div>
+        <div class="prose rv">
+          <p>Clayton Mark was a steel industrialist and education reformer who presided over the Chicago Board of Education and the board of trustees of Lake Forest College. He and Anna Griffith Mark commissioned the house from Howard Van Doren Shaw, with grounds by the landscape architect Rose Standish Nichols. The estate originally covered twenty acres.</p>
+          <p>The Marks had nine children. Shaw planned the dining room and dining porch for large family meals, and gave every child&rsquo;s bedroom on the second floor a view of the lake.</p>
+          <p>Mark also commissioned Shaw to design Marktown, a planned community for his company&rsquo;s workers in East Chicago, Indiana.</p>
+          <p>A restoration that began in 2007 re-created an original wing that had been demolished, installed nineteenth-century light fixtures, and brought back furniture and artworks the Marks had in the house in the 1910s.</p>
+          <p class="source">Sources: History Center of Lake Forest&ndash;Lake Bluff, &ldquo;Houses of Lake Road&rdquo; walking tour. Crain&rsquo;s Chicago Business, March 10, 2024.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 05 Details and inquiry ═══ -->
+  <section class="sec sec--surface" aria-labelledby="s-details">
+    <div class="wrap">
+      <div class="walk-head rv">
+        <span class="num">05</span><h2 class="h2" id="s-details">Details</h2>
+      </div>
+      <div class="estate-intro">
+        <dl class="ledger rv">
+          <div><dt>Address</dt><dd>{ADDRESS}, Lake Forest, Illinois 60045</dd></div>
+          <div><dt>Status</dt><dd>{status}</dd></div>
+          {price && <div><dt>Offered at</dt><dd>{price}</dd></div>}
+          <div><dt>Bedrooms</dt><dd>6</dd></div>
+          <div><dt>Baths</dt><dd>9 full, 3 half</dd></div>
+          <div><dt>Above grade</dt><dd>15,820 sq ft</dd></div>
+          <div><dt>Site</dt><dd>3.58 acres</dd></div>
+          <div><dt>Shoreline</dt><dd>More than 400 feet on Lake Michigan</dd></div>
+        </dl>
+        <dl class="ledger rv">
+          <div><dt>Gallery</dt><dd>64&prime;1&Prime; &times; 11&prime;1&Prime;</dd></div>
+          <div><dt>Dining room</dt><dd>25&prime;3&Prime; &times; 34&prime;10&Prime;</dd></div>
+          <div><dt>Living room</dt><dd>26&prime;0&Prime; &times; 35&prime;3&Prime;</dd></div>
+          <div><dt>Billiard room</dt><dd>26&prime;6&Prime; &times; 18&prime;4&Prime;</dd></div>
+          <div><dt>Kitchen</dt><dd>51&prime;2&Prime; &times; 22&prime;7&Prime;</dd></div>
+          <div><dt>Lower level</dt><dd>Sport court, 30&prime;3&Prime; &times; 40&prime;6&Prime;</dd></div>
+        </dl>
+      </div>
+      <p class="note rv" style="margin-top:18px;">Specifications are from the MLS listing record; room dimensions are from the measured floor plans. Information is believed accurate but is not warranted.</p>
+
+      <div class="plans" id="plans" style="margin-top: clamp(32px, 5vh, 56px);">
+        <figure class="plan rv">
+          <a href="/media/999/plan-main-2400.webp" data-pswp data-pswp-width="2400" data-pswp-height="900" data-caption="<b>Main floor.</b> Measured plan.">
+            <img src="/media/999/plan-main-1200.webp" width="1200" height="450" loading="lazy" decoding="async"
+              alt="Measured plan of the main floor: garage and sunroom, kitchen, dining room, billiard room, foyer, the long hall and the living room."></a>
+          <figcaption><span>Main floor</span><span>Select to enlarge</span></figcaption>
+        </figure>
+        <figure class="plan rv">
+          <a href="/media/999/plan-second-2400.webp" data-pswp data-pswp-width="2400" data-pswp-height="1120" data-caption="<b>Second floor.</b> Measured plan.">
+            <img src="/media/999/plan-second-1200.webp" width="1200" height="560" loading="lazy" decoding="async"
+              alt="Measured plan of the second floor: the primary bedroom suite, bedrooms along the lake side and an eighty-foot hall."></a>
+          <figcaption><span>Second floor</span><span>Select to enlarge</span></figcaption>
+        </figure>
+      </div>
+      <p class="note rv" style="margin-top:14px;">Measurements are calculated by CubiCasa technology. Deemed highly reliable but not guaranteed.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="inquire" aria-labelledby="s-inquire" data-dock-hide>
+    <div class="wrap inquiry">
+      <div class="inquiry-aside rv">
+        <p class="label">{isActive ? 'Private showings' : 'Inquiries'}</p>
+        <h2 class="h2" id="s-inquire">{cta}</h2>
+        <p class="lede">{isActive
+          ? 'Showings are by appointment. Send a note and I will reply within the business day, or call me directly.'
+          : 'Send a note and I will reply within the business day, or call me directly.'}</p>
+        <p class="direct">
+          <a href={`tel:${c.tel}`}>{c.phone}</a>
+          <a href={`mailto:${c.email}?subject=${encodeURIComponent(ADDRESS)}`}>Email Patrick</a>
+        </p>
+      </div>
+      <form class="lead rv" data-lead="listing-999-lake-road" data-property={ADDRESS} novalidate>
+        <input type="hidden" name="property" value={ADDRESS}>
+        <p class="regarding full"><b>Regarding</b><span>{ADDRESS}</span></p>
+        <label>Name<input type="text" name="name" required maxlength="200" autocomplete="name"></label>
+        <label>Email<input type="email" name="email" required maxlength="200" autocomplete="email"></label>
+        <label class="full">Phone<input type="tel" name="phone" maxlength="50" autocomplete="tel"></label>
+        <label class="full">Message<textarea name="message" maxlength="4000" placeholder="When you would like to see the house, and anything I should know."></textarea></label>
+        <label class="hp" aria-hidden="true">Company<input type="text" name="company" tabindex="-1" autocomplete="off"></label>
+        <div class="full lead-foot">
+          <button class="btn-gold" type="submit">Send inquiry</button>
+          <p class="lead-status" role="status">Delivered directly to Patrick</p>
+        </div>
+      </form>
+    </div>
+    <div class="wrap">
+      <p class="note attribution">Presented by Patrick Milhaupt, Global Advisor, Jameson Sotheby&rsquo;s International Realty. <a href="/properties">All properties</a></p>
+    </div>
+  </section>
+
+  <div class="dock" aria-hidden="true">
+    <a class="btn-line" href="#walk" data-open-gallery tabindex="-1">Gallery</a>
+    <a class="btn-gold" href="#inquire" tabindex="-1">Inquire</a>
+  </div>
+
+  <script>
+    // Gallery: PhotoSwipe (MIT). Opens from the thumbnail; swipe, pinch-to-zoom,
+    // arrow keys and Escape; focus returns to the thumbnail that opened it.
+    import PhotoSwipeLightbox from 'photoswipe/lightbox';
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const lightbox = new PhotoSwipeLightbox({
+      gallery: '#main', children: 'a[data-pswp]',
+      pswpModule: () => import('photoswipe'),
+      bgOpacity: 0.97, wheelToZoom: true,
+      showHideAnimationType: reduce ? 'none' : 'zoom',
+      showAnimationDuration: reduce ? 0 : 320, hideAnimationDuration: reduce ? 0 : 260,
+      padding: { top: 56, bottom: 92, left: 0, right: 0 },
+      closeTitle: 'Close gallery', zoomTitle: 'Zoom', arrowPrevTitle: 'Previous photograph', arrowNextTitle: 'Next photograph',
+    });
+    lightbox.on('uiRegister', () => {
+      lightbox.pswp.ui.registerElement({
+        name: 'cap', order: 9, isButton: false, appendTo: 'root',
+        onInit: (el, pswp) => {
+          el.className = 'pswp-cap';
+          el.setAttribute('aria-live', 'polite');
+          pswp.on('change', () => { const a = pswp.currSlide?.data?.element; el.innerHTML = (a && a.dataset.caption) || ''; });
+        },
+      });
+    });
+    lightbox.init();
+    document.querySelectorAll('[data-open-gallery]').forEach((b) => {
+      b.addEventListener('click', (e) => { e.preventDefault(); lightbox.loadAndOpen(1); });
+    });
+  </script>
+</Chapter>

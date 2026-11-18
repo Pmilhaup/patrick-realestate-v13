@@ -5,28 +5,28 @@ const lds = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "item
 <Chapter
   title="Heritage — Sotheby's · Patrick Milhaupt"
   description="The 280-year Sotheby's lineage — auction house, realty network, editorial brand. Why a house founded in 1744 still sets the standard for the world's most storied homes."
-  path="/heritage" current="/heritage" palette="0.15"
+  path="/heritage" current="/heritage" page="heritage"
   jsonLd={lds.length>=1 ? lds[0] : null}
-  rail={[{"id": "ch-00", "num": "00", "label": "Opening"}, {"id": "ch-01", "num": "01", "label": "1744"}, {"id": "ch-02", "num": "02", "label": "Network"}, {"id": "ch-03", "num": "03", "label": "Chicago"}]}
 >
 
 
-  <section class="chapter" id="ch-00" data-chapter="0" data-palette="0.05">
-    <div class="inner" style="text-align:center; align-items:center;">
-      <div class="ch-head fade-up" style="justify-content:center;">
-        <span class="hashmark"><i></i></span>
-        <div class="meta" style="border:0; padding:0;">
-          <span class="eyebrow">Heritage &middot; Sotheby's</span>
+    <section class="op" aria-labelledby="her-title">
+    <div class="wrap">
+      <div class="reading">
+        <div class="op-head">
+          <p class="label">Heritage &middot; Sotheby&rsquo;s</p>
+          <h1 class="display" id="her-title">A standard,<br>not a <em>slogan</em>.</h1>
+          <p class="lede">The auction house is older than the United States. The realty network is fifty years old. What stands behind the name is a way of working, and it is the same in Lake Forest as it is in Lake Como.</p>
+          <div class="actions"><a class="link-arrow" href="#ch-01">Read the history</a></div>
         </div>
-      </div>
-      <h1 class="headline" data-headline="">
-        A standard,<br>not a <em>slogan</em>.
-      </h1>
-      <p class="body fade-up" style="margin: 0 auto; text-align:center;">
-        The realty network is fifty years old. The house is two hundred and eighty-one. Heritage here is operational: the same standard of curation, photography, and reach applies whether the home is in Lake Forest or Lake Como. A short reading on what stands behind the wordmark.
-      </p>
-      <div class="cta-row fade-up" style="justify-content:center;">
-        <a class="btn" href="#ch-01">Continue &darr;</a>
+        <aside class="reading-plate" aria-label="A short chronology">
+          <h2>A short chronology</h2>
+          <ol>
+            <li><span class="yr">1744</span><span class="ev">Samuel Baker holds his first auction in London. The house that becomes Sotheby&rsquo;s begins with a sale of books.</span></li>
+            <li><span class="yr">1976</span><span class="ev">Sotheby&rsquo;s International Realty is founded to bring the same standard to houses.</span></li>
+            <li><span class="yr">2016</span><span class="ev">I join Sotheby&rsquo;s International Realty after nine years in institutional real estate.</span></li>
+          </ol>
+        </aside>
       </div>
     </div>
   </section>
