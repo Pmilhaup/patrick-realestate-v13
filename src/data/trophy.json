@@ -538,6 +538,382 @@
      "shape": "land"
     }
    ]
+  },
+  {
+   "key": "1300 KENNICOTT",
+   "slug": "1300-w-kennicott-drive",
+   "folder": "sold/1300-kennicott",
+   "hero": "54",
+   "heroAlt": "1300 W. Kennicott Drive from the drive: a brick and stone house with a cedar shake roof, reached by a curving bluestone walk across the lawn.",
+   "summary": "A brick and stone house of 2001 on three-quarters of an acre.",
+   "sale": {
+    "list": 2350000,
+    "closed": "2023-07-05",
+    "dom": 3
+   },
+   "story": [
+    "A brick and stone house of 2001 on W. Kennicott Drive in Lake Forest, with four bedrooms, a billiard room and a wine cellar on the lower level, and gardens on three-quarters of an acre.",
+    "It went under contract in three days. I represented the seller."
+   ],
+   "facts": [
+    [
+     "Built",
+     "2001"
+    ],
+    [
+     "Above grade",
+     "4,420 sq ft"
+    ],
+    [
+     "Lot",
+     "0.77 acres"
+    ],
+    [
+     "Bedrooms",
+     "4"
+    ],
+    [
+     "Baths",
+     "4 full, 2 half"
+    ]
+   ],
+   "factsSource": "Specifications are from the MLS listing record.",
+   "photos": [
+    {
+     "n": "53",
+     "cap": "The house from the lawn.",
+     "alt": "The house seen across the front lawn, under a tall oak",
+     "shape": "land"
+    },
+    {
+     "n": "55",
+     "cap": "The entry.",
+     "alt": "The front door, set in a stone surround between two urns of red geraniums",
+     "shape": "land"
+    },
+    {
+     "n": "62",
+     "cap": "The terrace behind the house.",
+     "alt": "The back of the house with a bluestone terrace, a dining table and stepping stones across the lawn",
+     "shape": "land"
+    },
+    {
+     "n": "15",
+     "cap": "The stair hall.",
+     "alt": "A curved staircase with a dark wood rail rising through a white two-story hall",
+     "shape": "land"
+    },
+    {
+     "n": "01",
+     "cap": "The living room.",
+     "alt": "The living room: a white sectional before a painted brick fireplace, with a bay of tall windows behind",
+     "shape": "land"
+    },
+    {
+     "n": "13",
+     "cap": "The dining room.",
+     "alt": "The dining room: a long wood table and a black chandelier before a dark painted fireplace",
+     "shape": "land"
+    },
+    {
+     "n": "07",
+     "cap": "The kitchen.",
+     "alt": "The kitchen: white cabinetry, a white stone island with four leather stools, and steel ovens",
+     "shape": "land"
+    },
+    {
+     "n": "59",
+     "cap": "The garden path.",
+     "alt": "A gravel garden path with a wooden bench, the house visible beyond the plantings",
+     "shape": "land"
+    },
+    {
+     "n": "42",
+     "cap": "The billiard room, on the lower level.",
+     "alt": "A billiard table in an oval room papered in a floral pattern",
+     "shape": "land"
+    },
+    {
+     "n": "50",
+     "cap": "The wine cellar.",
+     "alt": "Glass doors opening to a wine cellar lined with wooden racks",
+     "shape": "land"
+    }
+   ]
+  },
+  {
+   "key": "611 OAK KNOLL",
+   "slug": "611-oak-knoll-drive",
+   "folder": "sold/611-oak-knoll",
+   "hero": "57",
+   "heroAlt": "611 Oak Knoll Drive from above the drive: a long pale house with a dark roof, arched dormers and a columned porch, set among mature trees.",
+   "summary": "A 1966 house on 1.4 acres, sold above the asking price in five days.",
+   "sale": {
+    "list": 1895000,
+    "closed": "2025-08-21",
+    "dom": 5
+   },
+   "story": [
+    "A house of 1966 on 1.4 acres on Oak Knoll Drive in Lake Forest, with five bedrooms, a pergola terrace with an outdoor fireplace, and a garden that runs back into the trees.",
+    "It went under contract in five days and closed above the asking price. I represented the seller."
+   ],
+   "facts": [
+    [
+     "Built",
+     "1966"
+    ],
+    [
+     "Above grade",
+     "4,290 sq ft"
+    ],
+    [
+     "Lot",
+     "1.4 acres"
+    ],
+    [
+     "Bedrooms",
+     "5"
+    ],
+    [
+     "Baths",
+     "4 full, 2 half"
+    ]
+   ],
+   "factsSource": "Specifications are from the MLS listing record.",
+   "photos": [
+    {
+     "n": "02",
+     "cap": "The front of the house.",
+     "alt": "The front of the house: a columned porch with a balcony above, arched dormers along the roof",
+     "shape": "land"
+    },
+    {
+     "n": "16",
+     "cap": "The stair hall.",
+     "alt": "A curved staircase with a striped runner behind a round table set with orchids",
+     "shape": "land"
+    },
+    {
+     "n": "63",
+     "cap": "The house from the back lawn.",
+     "alt": "The back of the house across the lawn, with a white pergola at the left and a terrace along its length",
+     "shape": "land"
+    },
+    {
+     "n": "13",
+     "cap": "The living room.",
+     "alt": "The living room: pale sofas around a glass table, a picture window at the far end",
+     "shape": "land"
+    },
+    {
+     "n": "18",
+     "cap": "The dining room.",
+     "alt": "The dining room: a long table with upholstered chairs, panelled below grasscloth walls",
+     "shape": "land"
+    },
+    {
+     "n": "31",
+     "cap": "The kitchen.",
+     "alt": "The kitchen: white cabinetry, a long counter with three patterned stools, glass-fronted cupboards",
+     "shape": "land"
+    },
+    {
+     "n": "26",
+     "cap": "The sitting room.",
+     "alt": "A sitting room with two armchairs before a stone fireplace flanked by bookshelves",
+     "shape": "land"
+    },
+    {
+     "n": "73",
+     "cap": "The pergola and outdoor fireplace.",
+     "alt": "A white pergola over a stone terrace with seating and a stone fireplace, edged with hostas",
+     "shape": "land"
+    },
+    {
+     "n": "48",
+     "cap": "The primary bedroom.",
+     "alt": "The primary bedroom with a fireplace and a skylight",
+     "shape": "land"
+    },
+    {
+     "n": "65",
+     "cap": "The fire pit, in the trees behind the house.",
+     "alt": "A stone fire pit ringed by six wooden chairs in a clearing, the house beyond the lawn",
+     "shape": "land"
+    }
+   ]
+  },
+  {
+   "key": "530 OAK KNOLL",
+   "slug": "530-oak-knoll-drive",
+   "folder": "sold/530-oak-knoll",
+   "hero": "18",
+   "heroAlt": "530 Oak Knoll Drive in autumn: a grey shingled house with steep gables behind a curving walk, a red maple at the door and a yellow maple beside it.",
+   "summary": "A shingled house of 1991 on an acre and a half.",
+   "sale": {
+    "list": 1849500,
+    "closed": "2026-04-30",
+    "dom": 89
+   },
+   "story": [
+    "A grey shingled house of 1991 on an acre and a half on Oak Knoll Drive in Lake Forest, with four bedrooms and a glass-gabled great room built around a stone fireplace.",
+    "It was listed at the end of December and went under contract in March. I represented the seller."
+   ],
+   "facts": [
+    [
+     "Built",
+     "1991"
+    ],
+    [
+     "Above grade",
+     "4,184 sq ft"
+    ],
+    [
+     "Lot",
+     "1.51 acres"
+    ],
+    [
+     "Bedrooms",
+     "4"
+    ],
+    [
+     "Baths",
+     "3 full, 1 half"
+    ]
+   ],
+   "factsSource": "Specifications are from the MLS listing record.",
+   "photos": [
+    {
+     "n": "01",
+     "cap": "The house from the lawn.",
+     "alt": "The house across a lawn scattered with yellow leaves, a tall maple in full colour at the right",
+     "shape": "land"
+    },
+    {
+     "n": "04",
+     "cap": "The entry.",
+     "alt": "The front door with a wreath, framed by two red Japanese maples",
+     "shape": "land"
+    },
+    {
+     "n": "07",
+     "cap": "The great room, from the garden.",
+     "alt": "The back of the house: a tall glass gable beside a stone chimney",
+     "shape": "land"
+    },
+    {
+     "n": "37",
+     "cap": "The great room.",
+     "alt": "The great room: four round chairs before a floor-to-ceiling stone fireplace, glass walls on both sides",
+     "shape": "land"
+    },
+    {
+     "n": "42",
+     "cap": "The kitchen.",
+     "alt": "The kitchen: white cabinetry and a long curved counter with five stools",
+     "shape": "land"
+    },
+    {
+     "n": "46",
+     "cap": "The dining room.",
+     "alt": "The dining room: a dark table for six beside a wall of windows",
+     "shape": "land"
+    },
+    {
+     "n": "50",
+     "cap": "The primary bedroom.",
+     "alt": "The primary bedroom under a vaulted ceiling, with shuttered windows on two sides",
+     "shape": "land"
+    },
+    {
+     "n": "59",
+     "cap": "The screened porch.",
+     "alt": "A screened porch with a stone chimney, wooden seating and a view into the trees",
+     "shape": "land"
+    }
+   ]
+  },
+  {
+   "key": "1339 LAWRENCE",
+   "slug": "1339-lawrence-avenue",
+   "folder": "sold/1339-lawrence",
+   "hero": "03",
+   "heroAlt": "1339 Lawrence Avenue from the lawn: a brick and clapboard house with steep cedar roofs and an arched front door.",
+   "summary": "A 1990 house in Arbor Ridge, under contract in four days.",
+   "sale": {
+    "list": 1599000,
+    "closed": "2025-06-12",
+    "dom": 4
+   },
+   "story": [
+    "A brick and clapboard house of 1990 in Arbor Ridge in Lake Forest, with five bedrooms, an octagonal cedar sunroom and a deck that looks over a pond.",
+    "It went under contract in four days. I represented the seller."
+   ],
+   "facts": [
+    [
+     "Built",
+     "1990"
+    ],
+    [
+     "Style",
+     "Traditional"
+    ],
+    [
+     "Above grade",
+     "3,992 sq ft"
+    ],
+    [
+     "Lot",
+     "0.46 acres"
+    ],
+    [
+     "Bedrooms",
+     "5"
+    ],
+    [
+     "Baths",
+     "5 full"
+    ]
+   ],
+   "factsSource": "Specifications are from the MLS listing record.",
+   "photos": [
+    {
+     "n": "01",
+     "cap": "The entry.",
+     "alt": "The front door beneath a brick arch, with lanterns on either side",
+     "shape": "land"
+    },
+    {
+     "n": "13",
+     "cap": "The stair hall.",
+     "alt": "A curved staircase in a two-story hall, the dining room visible through an opening",
+     "shape": "land"
+    },
+    {
+     "n": "10",
+     "cap": "The pond, from the deck.",
+     "alt": "A deck with white chairs looking over a lawn to a pond ringed with trees",
+     "shape": "land"
+    },
+    {
+     "n": "22",
+     "cap": "The kitchen.",
+     "alt": "The kitchen: cherry cabinetry and a granite island, a stone fireplace in the room beyond",
+     "shape": "land"
+    },
+    {
+     "n": "29",
+     "cap": "The sunroom.",
+     "alt": "An octagonal sunroom lined in cedar, with windows on every side",
+     "shape": "land"
+    },
+    {
+     "n": "07",
+     "cap": "The house from the garden.",
+     "alt": "The back of the house: brick and clapboard, with the octagonal sunroom at the left and a deck across the middle",
+     "shape": "land"
+    }
+   ]
   }
  ]
 }

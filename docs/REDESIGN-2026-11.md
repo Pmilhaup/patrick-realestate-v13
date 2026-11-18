@@ -68,6 +68,29 @@ The star field, the luminous waves, GSAP, Lenis, ScrollTrigger, three.js (Proper
 
 Measured on the deployed preview, Lighthouse mobile: Home LCP 1.6 s (performance 99); `/sold/28-aberdeen-court` 1.5 s (100); Properties 2.2 s (99); Intelligence 1.7 s, blocking time 1.2 s (75). Accessibility 100 on all four. Intelligence's remaining blocking time is ECharts parse plus the page's own older dashboard script.
 
+## Third pass (17 Nov, late): more stories, a budget tool, the age of the houses
+
+**Four more sold stories.** `/sold/1300-w-kennicott-drive`, `/sold/611-oak-knoll-drive`, `/sold/530-oak-knoll-drive`, `/sold/1339-lawrence-avenue`. Same template and data file (`src/data/trophy.json`). They sit below the trophy tier, so they appear under "Sold" on Properties and are not in the "More trophy sales" strip. Facts are from the MLS record; photographs are the photographer's delivered files, not the edited copies:
+
+| Listing | Source folder used | Left out, and why |
+|---|---|---|
+| 1300 W. Kennicott | `MRED Photos` | |
+| 611 Oak Knoll | `VHT Photos - Large Raw` | Family room: framed portraits on the wall |
+| 530 Oak Knoll | `Original Photos - Media` | Living room: wall of family photographs. Great room cropped to drop a shelf of framed photographs. `Final` and `Edited` are upscaled or edited copies |
+| 1339 Lawrence | `VHT Photos/MRED` | Seven files in `Final - MLS Photos` are 1536 x 1024 AI edits, including the lead exterior and the primary bedroom. Furnished living, dining and family rooms left out until staging is confirmed |
+
+Not built: 1350 W. Whitmore (the folder holds the 1330 house photographs, none of the land) and 417 E. Deerpath (walk-through snapshots only, no marketing photographs).
+
+The rank line now reads "The top N percent" down to the top third and "Above the village median" below that. The median label sits a row under "This sale" so the two cannot collide on a phone.
+
+**Budget tool (Buying).** `kind="budget"`: a slider and six presets move one budget across seven villages. Each village is drawn from its closed-sale quantiles (5th to 95th percentile, middle half, median) on a log price scale. A table under the chart gives, for each village: share of sales at or below the budget, sales within 15 percent of it, and the median size, lot, year built and days to contract of those sales, plus how many closed at or above asking. Medians show only where at least five sold. The table is a real `<table>` and restacks on a phone.
+
+**Age of the houses (Neighborhoods).** `kind="eras"`: homes by decade built, stacked by village or one village at a time; a second view shows what each decade's homes have sold for in the past 36 months (a village-by-decade grid for all seven, bars for one village). The sentence under the chart is computed from the same figures.
+
+**Data for both.** `public/data/budget.json` and `public/data/eras.json`, aggregates only (counts and medians, no individual sale). `raw_sales` is not public, so the path is: run `tools/sql/budget.sql` and `tools/sql/eras.sql`, save the rows as `tools/data/*_raw.json`, run `python tools/build_market_extras.py`. Each row carries a checksum computed in the database and the script refuses to write if a row does not add up. A public aggregate view in Supabase would let these refresh nightly like `history.json`; that is a database change and has not been made.
+
+**Loading.** The chart engine is imported only after the page's `load` event, so it never competes with the hero image.
+
 ## Still-image treatments
 
 - Home hero: now film (see above).

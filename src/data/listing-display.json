@@ -80,7 +80,8 @@
       "sold_price": 1825000,
       "closed": "2026-04-30",
       "side": "list",
-      "photo": "media/listings/530-oak-knoll-1400.webp"
+      "photo": "media/sold/530-oak-knoll/hero-1280.webp",
+      "href": "/sold/530-oak-knoll-drive"
     },
     "611 OAK KNOLL": {
       "address": "611 Oak Knoll Drive",
@@ -89,7 +90,8 @@
       "closed": "2025-08-21",
       "side": "list",
       "blurb": "Sold above the asking price",
-      "photo": "lf-market-assets/611-oak-knoll.jpg"
+      "photo": "media/sold/611-oak-knoll/hero-1280.webp",
+      "href": "/sold/611-oak-knoll-drive"
     },
     "1339 LAWRENCE": {
       "address": "1339 Lawrence Avenue",
@@ -97,7 +99,8 @@
       "sold_price": 1524000,
       "closed": "2025-06-12",
       "side": "list",
-      "photo": "lf-market-assets/1339-lawrence.jpg"
+      "photo": "media/sold/1339-lawrence/hero-1280.webp",
+      "href": "/sold/1339-lawrence-avenue"
     },
     "4 HIGH TERRACE": {
       "address": "4 High Terrace Lane",
@@ -181,7 +184,8 @@
       "sold_price": 2125000,
       "closed": "2023-07-05",
       "side": "list",
-      "photo": "lf-market-assets/notable-1300-kennicott.jpg"
+      "photo": "media/sold/1300-kennicott/hero-1280.webp",
+      "href": "/sold/1300-w-kennicott-drive"
     },
     "1047 AYNSLEY": {
       "address": "1047 Aynsley Avenue",

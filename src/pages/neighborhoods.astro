@@ -1,6 +1,7 @@
 ---
 import Chapter from '../layouts/Chapter.astro';
 import CoastMap from '../components/CoastMap.astro';
+import Viz from '../components/Viz.astro';
 const lds = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://patrick.realestate/"}, {"@type": "ListItem", "position": 2, "name": "Neighborhoods", "item": "https://patrick.realestate/neighborhoods"}]}];
 ---
 <Chapter
@@ -48,6 +49,17 @@ const lds = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "item
         <CoastMap start="Lake Forest" heading="h2" />
       </div>
       <p class="op-foot"><a class="link-arrow" href="#ch-01">Read the village guides</a> <a class="link-arrow" href="/intelligence" style="margin-left: 28px">Open the full market dashboard</a></p>
+    </div>
+  </section>
+
+  <section class="sec sec--surface" id="eras" aria-labelledby="eras-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">The houses</p>
+        <h2 class="h2" id="eras-title">When was the shore built?</h2>
+        <p class="lede">Each village has its decades. Kenilworth is a town of the 1920s; Lake Forest kept building through the 1980s. The age of the houses explains much of what a street feels like, and what it costs.</p>
+      </div>
+      <Viz kind="eras" village="all" metric="homes" height={460} label="Homes by decade built, seven villages" />
     </div>
   </section>
 

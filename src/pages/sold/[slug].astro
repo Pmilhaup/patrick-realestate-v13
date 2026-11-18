@@ -99,7 +99,7 @@ const lds = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemL
       </dl>
       {ctx && (
         <div class="rank rv">
-          <p class="rank-line"><b>No. {ctx.rank}</b> of {ctx.n} single-family sales in {l.town} in {l.year}{ytd ? ' to date' : ''}, by price. <span>The top {topPct} percent.</span></p>
+          <p class="rank-line"><b>No. {ctx.rank}</b> of {ctx.n} single-family sales in {l.town} in {l.year}{ytd ? ' to date' : ''}, by price. <span>{topPct <= 33 ? `The top ${topPct} percent.` : l.price > ctx.median ? `Above the village median of ${money(ctx.median)}.` : ''}</span></p>
           <div class="rank-track" role="img" aria-label={`This sale ranked number ${ctx.rank} of ${ctx.n} by price. The village median was ${money(ctx.median)}.`}>
             <span class="rank-pin" style={`left:${pin}%`}><i></i><b>This sale</b></span>
             <span class="rank-med"><i></i><b>Median {money(ctx.median)}</b></span>

@@ -1,12 +1,13 @@
 // Interactive market visualizations for patrick.realestate.
 // Apache ECharts (tree-shaken), loaded only when a chart nears the viewport.
 // Data: /data/history.json (monthly record, 2008 onward; tools/sync_history.py) and the live
-// daily_snapshots table (March 2026 onward). Nothing here is hand-typed.
+// daily_snapshots table (March 2026 onward). /data/budget.json and /data/eras.json are aggregates of
+// MLS closed sales baked by tools/build_market_extras.py. Nothing here is hand-typed.
 import * as echarts from 'echarts/core';
-import { LineChart, ScatterChart, HeatmapChart, BarChart } from 'echarts/charts';
+import { LineChart, ScatterChart, HeatmapChart, BarChart, CustomChart } from 'echarts/charts';
 import { GridComponent, TooltipComponent, DataZoomComponent, MarkLineComponent, MarkAreaComponent, MarkPointComponent, VisualMapComponent, GraphicComponent, AriaComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
-echarts.use([LineChart, ScatterChart, HeatmapChart, BarChart, GridComponent, TooltipComponent, DataZoomComponent, MarkLineComponent, MarkAreaComponent, MarkPointComponent, VisualMapComponent, GraphicComponent, AriaComponent, CanvasRenderer]);
+echarts.use([LineChart, ScatterChart, HeatmapChart, BarChart, CustomChart, GridComponent, TooltipComponent, DataZoomComponent, MarkLineComponent, MarkAreaComponent, MarkPointComponent, VisualMapComponent, GraphicComponent, AriaComponent, CanvasRenderer]);
 
 const C = { navy0: '#060D1F', navy1: '#0B1730', navy2: '#122246', gold: '#C2A265', pale: '#EAD9AE', ink: '#EEF1F6', mute: '#AEB9CC', steel: '#8FA3C4', hair: 'rgba(214,221,232,.16)', grid: 'rgba(214,221,232,.07)' };
 const SANS = "'Public Sans', system-ui, sans-serif", MONO = "'JetBrains Mono', ui-monospace, monospace", SERIF = "'Cormorant Garamond', Georgia, serif";
@@ -264,7 +265,128 @@ function recordChart(el) {
   if (cap) cap.innerHTML = `<b>${sales.length} closed sales of $1,000,000 and above, ${y0} to ${y1}.</b> ${top} at ${money(tier)} and above; ${money(total)} in total. Circle size follows price. Circles ringed in white open the full story of the sale.`;
 }
 
-const KINDS = { history: historyChart, motion: motionChart, seasons: seasonsChart, record: recordChart };
+
+// ── 5. What a budget buys: one figure against seven villages ───────────
+let _budget; const budgetData = () => (_budget = _budget || fetch('/data/budget.json').then((r) => { if (!r.ok) throw new Error('budget ' + r.status); return r.json(); }));
+async function budgetChart(el) {
+  const bar = el.querySelector('.viz-bar'), cap = el.querySelector('.viz-cap'), plot = el.querySelector('.viz-plot');
+  const d = await budgetData();
+  const chart = make(el);
+  const V = d.order, G = d.grid, X = (p) => Math.log2(p / 5e5), MIN_N = 5;
+  let gi = G.indexOf(+el.dataset.budget || 1500000); if (gi < 0) gi = 10;
+  const asof = new Date(d.asof + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  const sits = (v) => { const below = d.villages[v].g[gi][0], n = d.villages[v].n; if (below >= n) return { p: 100, t: 'Above every sale', s: 'Top' }; if (below <= 0) return { p: 0, t: 'Below every sale', s: 'Below' }; const p = Math.max(1, Math.min(99, Math.round((below / n) * 100))); return { p, t: `Above ${p}% of sales`, s: `${p}%` }; };
+  const acres = (a) => (a >= 1 ? `${(+a.toFixed(1)).toString()} acres` : `${a.toFixed(2)} acre`);
+
+  // The readout is a real table: the chart shows the shape, the table carries the figures.
+  const table = document.createElement('table'); table.className = 'viz-table';
+  table.innerHTML = '<caption class="vh">What this budget buys in each village</caption><thead><tr><th scope="col">Village</th><th scope="col">Where it sits</th><th scope="col">Sold near this price</th><th scope="col">Typical home</th><th scope="col">Days to contract</th><th scope="col">At or above asking</th></tr></thead><tbody></tbody>';
+  plot.after(table); const body = table.querySelector('tbody');
+
+  const strips = V.map((name, i) => ({ name, value: [i, ...d.villages[name].q.map(X)] }));
+  const renderItem = (params, api) => {
+    const k = api.value(0), y = api.coord([0, k])[1], x = (j) => api.coord([api.value(j), k])[0];
+    const hue = HUE[V[k]], band = Math.max(10, Math.min(24, api.size([0, 1])[1] * 0.4));
+    return { type: 'group', children: [
+      { type: 'rect', shape: { x: x(1), y: y - 1, width: x(7) - x(1), height: 2 }, style: { fill: hue, opacity: 0.4 } },
+      { type: 'rect', shape: { x: x(2), y: y - band * 0.3, width: x(6) - x(2), height: band * 0.6, r: 1 }, style: { fill: hue, opacity: 0.26 } },
+      { type: 'rect', shape: { x: x(3), y: y - band / 2, width: x(5) - x(3), height: band, r: 2 }, style: { fill: hue, opacity: 0.62 } },
+      { type: 'rect', shape: { x: x(4) - 1, y: y - band * 0.8, width: 2, height: band * 1.6 }, style: { fill: C.ink } }] };
+  };
+  chart.setOption({ ...base(),
+    grid: { left: 8, right: small() ? 18 : 34, top: 34, bottom: 8, containLabel: true },
+    xAxis: { type: 'value', min: -1, max: 4.3, interval: 1, position: 'bottom', axisLine: { lineStyle: { color: C.hair } }, axisTick: { show: false }, splitLine: { lineStyle: { color: C.grid } }, axisLabel: { ...axisText(), showMaxLabel: false, formatter: (v) => (Number.isInteger(v) ? money(5e5 * Math.pow(2, v)) : '') } },   // a log scale: each step doubles the price
+    yAxis: { type: 'category', data: V, inverse: true, axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: C.ink, fontFamily: SANS, fontSize: small() ? 11.5 : 13, margin: small() ? 10 : 16 } },
+    tooltip: { ...tip(), trigger: 'item', formatter: (p) => { const v = d.villages[p.name]; if (!v) return ''; const s = sits(p.name), c = v.g[gi];
+      return head(p.name, `${v.n} sales`) + row(HUE[p.name], 'Middle half', `${money(v.q[2])} to ${money(v.q[4])}`) + row(C.ink, 'Median', money(v.q[3])) + row(C.gold, money(G[gi]), s.t.replace(' of sales', '')) + `<div style="color:${C.mute};margin-top:4px">${c[1]} sold within 15% of ${money(G[gi])}</div>`; } },
+    series: [{ id: 'strip', type: 'custom', renderItem, data: strips, encode: { x: [1, 2, 3, 4, 5, 6, 7], y: 0 }, z: 2 },
+      { id: 'mark', type: 'scatter', z: 4, data: [], symbol: 'circle', itemStyle: { color: C.gold, borderColor: C.navy0, borderWidth: 2, shadowBlur: 12, shadowColor: 'rgba(234,217,174,.5)' }, label: { show: true, color: C.ink, fontFamily: MONO, fontSize: small() ? 10 : 11.5, distance: 7, backgroundColor: 'rgba(6,13,31,.88)', padding: [4, 7], borderRadius: 2 }, animationDurationUpdate: reduce ? 0 : 420 }] }, { notMerge: true });
+
+  let ctl;
+  function update() {
+    const b = G[gi], bx = X(b), flip = bx > X(2600000);
+    chart.setOption({ series: [{ id: 'mark',
+      data: V.map((name, i) => { const s = sits(name), near = d.villages[name].g[gi][1]; return { name, value: [bx, i], symbolSize: small() ? 9 + Math.min(9, Math.sqrt(near)) : 11 + Math.min(16, Math.sqrt(near) * 1.5), label: { position: flip ? 'left' : 'right', formatter: small() ? s.s : s.t.replace(' of sales', '') } }; }),
+      markLine: { silent: true, symbol: 'none', animation: false, lineStyle: { color: C.gold, width: 1.2, type: [4, 4], opacity: 0.85 }, label: { formatter: money(b), color: C.pale, fontFamily: MONO, fontSize: 12, fontWeight: 500, position: 'start', distance: 8 }, data: [{ xAxis: bx }] } }] });
+    body.innerHTML = V.map((name) => { const v = d.villages[name], c = v.g[gi], s = sits(name), ok = c[1] >= MIN_N;
+      const home = ok ? [c[2] ? c[2].toLocaleString('en-US') + ' sq ft' : '', c[3] ? acres(c[3]) : '', c[4] ? 'built ' + c[4] : ''].filter(Boolean).join(' · ') : (c[1] ? 'Too few sales to say' : 'None sold near this price');
+      return `<tr><th scope="row"><i style="background:${HUE[name]}"></i>${name}</th><td data-th="Where it sits"><b>${s.t}</b></td><td data-th="Sold near this price">${c[1]}</td><td data-th="Typical home">${home}</td><td data-th="Days to contract">${ok ? c[5] : '–'}</td><td data-th="At or above asking">${ok ? `${c[6]} of ${c[1]}` : '–'}</td></tr>`; }).join('');
+    const hi = V.slice().sort((p, q) => sits(q).p - sits(p).p), top = hi[0], low = hi[hi.length - 1];
+    plot.setAttribute('aria-label', `A budget of ${money(b)} against closed sales in seven villages. ${top}: ${sits(top).t.toLowerCase()}. ${low}: ${sits(low).t.toLowerCase()}. The table that follows gives each village.`);
+    if (cap) cap.innerHTML = `<b>${money(b)} sits highest in ${top} (${sits(top).t.toLowerCase()}) and lowest in ${low} (${sits(low).t.toLowerCase()}).</b> Each bar is a village's closed sales: the thin line runs from the 5th to the 95th percentile, the solid block is the middle half, the white tick the median. The gold marker grows with the number of sales near the budget. &ldquo;Typical home&rdquo; is the median of sales within 15 percent of the budget, shown where at least ${MIN_N} sold. Detached single-family homes closed in the ${d.months} months to ${asof}. Source: MRED.`;
+    if (ctl) { ctl.rng.value = gi; ctl.out.textContent = money(b); ctl.rng.setAttribute('aria-valuetext', money(b)); ctl.quick.set(String(b)); }
+  }
+  const set = (k) => { gi = Math.max(0, Math.min(G.length - 1, k)); update(); };
+
+  const wrap = document.createElement('div'); wrap.className = 'viz-scrub viz-scrub--plain';
+  wrap.innerHTML = `<span class="label label--quiet" id="budget-l">Budget</span><input type="range" min="0" max="${G.length - 1}" step="1" value="${gi}" aria-labelledby="budget-l"><output class="viz-when"></output>`;
+  bar.appendChild(wrap);
+  const quick = picks(bar, 'Jump to', [800000, 1000000, 1500000, 2000000, 3000000, 5000000].map((b) => [String(b), money(b)]), String(G[gi]), (v) => set(G.indexOf(+v)));
+  ctl = { rng: wrap.querySelector('input'), out: wrap.querySelector('output'), quick };
+  ctl.rng.addEventListener('input', () => set(+ctl.rng.value));
+  chart.getZr().on('click', (e) => { const pt = chart.convertFromPixel({ gridIndex: 0 }, [e.offsetX, e.offsetY]); if (!pt) return; const p = 5e5 * Math.pow(2, pt[0]); let best = 0; G.forEach((g, k) => { if (Math.abs(Math.log(g / p)) < Math.abs(Math.log(G[best] / p))) best = k; }); set(best); });
+  addEventListener('resize', () => update(), { passive: true });
+  update();
+}
+
+// ── 6. When the shore was built: homes by decade, village by village ───
+let _eras; const erasData = () => (_eras = _eras || fetch('/data/eras.json').then((r) => { if (!r.ok) throw new Error('eras ' + r.status); return r.json(); }));
+async function erasChart(el) {
+  const bar = el.querySelector('.viz-bar'), cap = el.querySelector('.viz-cap'), plot = el.querySelector('.viz-plot');
+  const d = await erasData();
+  const chart = make(el);
+  const st = { village: el.dataset.village || 'all', metric: el.dataset.metric || 'homes' }, MIN_N = 5;
+  const D = d.decades, name = (y) => (y <= 1870 ? 'Before 1880' : y + 's'), tick = (y) => (y <= 1870 ? (small() ? '<1880' : 'Before 1880') : small() ? String(y) : y + 's');
+  const key = document.createElement('ul'); key.className = 'viz-key'; key.setAttribute('aria-hidden', 'true');
+  key.innerHTML = d.order.map((v) => `<li><i style="background:${HUE[v]}"></i>${v}</li>`).join(''); plot.before(key);
+  function render() {
+    const names = st.village === 'all' ? d.order : [st.village], all = st.village === 'all', homes = st.metric === 'homes';
+    key.hidden = !(all && homes);
+    if (all && !homes) {            // seven villages by sixteen decades reads best as a grid
+      const cells = [], vals = [];
+      d.order.forEach((v, r) => D.forEach((_, k) => { const c = d.villages[v].d[k]; if (c[1] >= MIN_N) { cells.push({ value: [k, r, c[2] * 1000], n: c[1] }); vals.push(c[2] * 1000); } }));
+      vals.sort((a, b) => a - b);
+      chart.setOption({ ...base(),
+        grid: { left: 6, right: small() ? 8 : 18, top: 10, bottom: 56, containLabel: true },
+        xAxis: { type: 'category', data: D.map(tick), axisLine: { show: false }, axisTick: { show: false }, axisLabel: { ...axisText(), interval: small() ? 2 : 0, hideOverlap: true }, splitArea: { show: false } },
+        yAxis: { type: 'category', data: d.order, inverse: true, axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: C.ink, fontFamily: SANS, fontSize: small() ? 11 : 13 } },
+        tooltip: { ...tip(), formatter: (p) => head(d.order[p.value[1]], 'built ' + name(D[p.value[0]]).toLowerCase()) + row(p.color, 'Median sale', money(p.value[2])) + `<div style="color:${C.mute};margin-top:4px">${p.data.n} sales in the past ${d.recent_months} months</div>` },
+        visualMap: { type: 'continuous', min: vals[0], max: vals[Math.floor(vals.length * 0.95)], calculable: false, orient: 'horizontal', left: 'center', bottom: 6, itemWidth: 10, itemHeight: small() ? 150 : 220, text: [money(vals[Math.floor(vals.length * 0.95)]) + '+', money(vals[0])], textStyle: { color: C.mute, fontFamily: MONO, fontSize: 10 }, inRange: { color: ['#0E1C3C', '#1E3567', '#3C568E', '#8E7B50', '#C2A265', '#EAD9AE'] } },
+        series: [{ id: 'grid', type: 'heatmap', data: cells, itemStyle: { borderColor: C.navy1, borderWidth: small() ? 1 : 2, borderRadius: 2 }, emphasis: { itemStyle: { borderColor: C.pale, borderWidth: 1.5 } }, progressive: 0,
+          label: { show: !small(), formatter: (p) => money(p.value[2]), fontFamily: MONO, fontSize: 10, color: '#fff', textBorderColor: 'rgba(6,13,31,.75)', textBorderWidth: 2 } }] }, { notMerge: true });
+      let best = null; cells.forEach((c) => { if (!best || c.value[2] > best.value[2]) best = c; });
+      const lead = `The highest median belongs to ${d.order[best.value[1]]} homes built in the ${name(D[best.value[0]])}: ${money(best.value[2])} across ${best.n} sales.`;
+      plot.setAttribute('aria-label', `Median sale price by village and decade built. ${lead}`);
+      if (cap) cap.innerHTML = `<b>${lead}</b> Each square is the median price of homes from that decade sold in the past ${d.recent_months} months; a blank square means fewer than ${MIN_N} sold. Detached single-family homes. Source: MRED.`;
+      return;
+    }
+    const val = (v, k) => { const c = d.villages[v].d[k]; return homes ? c[0] : c[1] >= MIN_N ? c[2] * 1000 : null; };
+    const series = names.map((v) => (homes || !all
+      ? { id: v, name: v, type: 'bar', stack: homes ? 'a' : undefined, data: D.map((_, k) => val(v, k)), barMaxWidth: 54, itemStyle: { color: HUE[v], opacity: 0.9, borderColor: C.navy1, borderWidth: all ? 0.5 : 0, borderRadius: all ? 0 : [2, 2, 0, 0] }, emphasis: { focus: 'series' } }
+      : { id: v, name: v, type: 'line', data: D.map((_, k) => val(v, k)), connectNulls: false, smooth: 0.25, symbol: 'circle', symbolSize: 6, showSymbol: true, lineStyle: { color: HUE[v], width: 2 }, itemStyle: { color: HUE[v] }, emphasis: { focus: 'series' } }));
+    chart.setOption({ ...base(),
+      grid: { left: 6, right: small() ? 10 : 22, top: 22, bottom: 6, containLabel: true },
+      xAxis: { type: 'category', data: D.map(tick), axisLine: { lineStyle: { color: C.hair } }, axisTick: { show: false }, axisLabel: { ...axisText(), interval: small() ? 2 : 0, hideOverlap: true } },
+      yAxis: { type: 'value', axisLabel: { ...axisText(), formatter: homes ? (v) => v.toLocaleString('en-US') : money }, splitLine: { lineStyle: { color: C.grid } } },
+      tooltip: { ...tip(), trigger: 'axis', axisPointer: { type: 'shadow', shadowStyle: { color: 'rgba(214,221,232,.05)' } }, formatter: (ps) => { const k = ps[0].dataIndex; let tot = 0;
+        const rows = names.map((v) => { const c = d.villages[v].d[k]; tot += c[0]; return homes ? (c[0] ? row(HUE[v], v, c[0].toLocaleString('en-US')) : '') : row(HUE[v], v, c[1] >= MIN_N ? `${money(c[2] * 1000)} <span style="color:${C.mute};font-weight:400">· ${c[1]}</span>` : `<span style="color:${C.mute};font-weight:400">${c[1] || 'no'} sale${c[1] === 1 ? '' : 's'}</span>`); }).join('');
+        return head('Built ' + name(D[k]).toLowerCase(), homes ? 'homes' : 'median · sales') + rows + (homes && all ? `<div style="border-top:1px solid ${C.hair};margin-top:6px;padding-top:6px">${row('transparent', 'All seven', tot.toLocaleString('en-US'))}</div>` : ''); } },
+      series }, { notMerge: true });
+    // The sentence under the chart is computed from the same figures.
+    const sum = D.map((_, k) => names.reduce((a, v) => a + d.villages[v].d[k][0], 0)), total = sum.reduce((a, b) => a + b, 0);
+    const order = sum.map((n, k) => [n, k]).sort((a, b) => b[0] - a[0]), pre1950 = Math.round((sum.filter((_, k) => D[k] < 1950).reduce((a, b) => a + b, 0) / total) * 100);
+    let dear = null; if (!all) D.forEach((_, k) => { const c = d.villages[st.village].d[k]; if (c[1] >= MIN_N && (!dear || c[2] > dear[2])) dear = [k, c[1], c[2]]; });
+    const where = all ? 'Across the seven villages' : 'In ' + st.village;
+    const lead = `${where}, the ${name(D[order[0][1]])} built the most homes that still trade (${order[0][0].toLocaleString('en-US')}), then the ${name(D[order[1][1]])} (${order[1][0].toLocaleString('en-US')}). ${pre1950}% were built before 1950.`;
+    plot.setAttribute('aria-label', `${homes ? 'Homes by decade built' : 'Median sale price by decade built'}, ${all ? 'seven villages' : st.village}. ${lead}`);
+    if (cap) cap.innerHTML = `<b>${lead}</b>${dear ? ` Homes from the ${name(D[dear[0]])} have sold for the most lately: a ${money(dear[2] * 1000)} median across ${dear[1]} sales.` : ''} A home is counted once if it has sold since ${d.since}; homes that have not changed hands since then are not in the count. Prices are the median of sales in the past ${d.recent_months} months, shown where at least ${MIN_N} sold. Detached single-family homes. Source: MRED.`;
+  }
+  picks(bar, 'Show', [['homes', 'Homes built'], ['price', 'What they sell for now']], st.metric, (v) => { st.metric = v; render(); });
+  picks(bar, 'Village', [['all', 'All seven'], ...VILLAGES.map((v) => [v, v])], st.village, (v) => { st.village = v; render(); });
+  render();
+}
+
+const KINDS = { history: historyChart, motion: motionChart, seasons: seasonsChart, record: recordChart, budget: budgetChart, eras: erasChart };
 export function mount(els) {
   els.forEach((el) => {
     if (el.dataset.vizOn) return; el.dataset.vizOn = '1';

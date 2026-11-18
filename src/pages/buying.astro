@@ -1,5 +1,6 @@
 ---
 import Chapter from '../layouts/Chapter.astro';
+import Viz from '../components/Viz.astro';
 const lds = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://patrick.realestate/"}, {"@type": "ListItem", "position": 2, "name": "Buying", "item": "https://patrick.realestate/buying"}]}];
 ---
 <Chapter
@@ -40,6 +41,17 @@ const lds = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "item
           <p class="note" style="margin-top: 6px">Photographed at 1330 W. Whitmore Court, Lake Forest, a home I represented. Sold September 2026.</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="sec sec--surface" id="budget" aria-labelledby="budget-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">Budget</p>
+        <h2 class="h2" id="budget-title">What does a budget buy here?</h2>
+        <p class="lede">The same figure is a different purchase in each village. Move the budget and see where it sits against two years of closed sales, and what it typically bought.</p>
+      </div>
+      <Viz kind="budget" budget={1500000} height={400} label="A budget against closed sales in seven villages" />
     </div>
   </section>
 

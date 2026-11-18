@@ -109,38 +109,41 @@
       "key": "530 OAK KNOLL",
       "address": "530 Oak Knoll Drive",
       "town": "Lake Forest",
-      "photo": "media/listings/530-oak-knoll-1400.webp",
+      "photo": "media/sold/530-oak-knoll/hero-1280.webp",
       "status": "Closed",
       "price": 1825000,
       "side": "list",
       "side_label": "Listing representation",
       "year": 2026,
-      "closed": "2026-04-30"
+      "closed": "2026-04-30",
+      "href": "/sold/530-oak-knoll-drive"
     },
     {
       "key": "611 OAK KNOLL",
       "address": "611 Oak Knoll Drive",
       "town": "Lake Forest",
-      "photo": "lf-market-assets/611-oak-knoll.jpg",
+      "photo": "media/sold/611-oak-knoll/hero-1280.webp",
       "blurb": "Sold above the asking price",
       "status": "Closed",
       "price": 1950000,
       "side": "list",
       "side_label": "Listing representation",
       "year": 2025,
-      "closed": "2025-08-21"
+      "closed": "2025-08-21",
+      "href": "/sold/611-oak-knoll-drive"
     },
     {
       "key": "1339 LAWRENCE",
       "address": "1339 Lawrence Avenue",
       "town": "Lake Forest",
-      "photo": "lf-market-assets/1339-lawrence.jpg",
+      "photo": "media/sold/1339-lawrence/hero-1280.webp",
       "status": "Closed",
       "price": 1524000,
       "side": "list",
       "side_label": "Listing representation",
       "year": 2025,
-      "closed": "2025-06-12"
+      "closed": "2025-06-12",
+      "href": "/sold/1339-lawrence-avenue"
     },
     {
       "key": "1360 ELM TREE",
@@ -264,13 +267,14 @@
       "key": "1300 KENNICOTT",
       "address": "1300 W. Kennicott Drive",
       "town": "Lake Forest",
-      "photo": "lf-market-assets/notable-1300-kennicott.jpg",
+      "photo": "media/sold/1300-kennicott/hero-1280.webp",
       "status": "Closed",
       "price": 2125000,
       "side": "list",
       "side_label": "Listing representation",
       "year": 2023,
-      "closed": "2023-07-05"
+      "closed": "2023-07-05",
+      "href": "/sold/1300-w-kennicott-drive"
     },
     {
       "key": "1047 AYNSLEY",

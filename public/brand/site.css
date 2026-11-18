@@ -566,6 +566,25 @@ html.menu-open { overflow: hidden; }
 .viz.is-ready .viz-wait { display: none; }
 .viz-cap { max-width: 96ch; }
 .viz-cap b { color: var(--ink-1); font-weight: 500; }
+.viz-scrub--plain { grid-template-columns: auto minmax(0, 1fr) auto; flex: 1 1 320px; }
+.viz-scrub--plain .viz-when { font-size: 20px; min-width: 6ch; }
+.viz-key { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 18px; font: 400 12px/1.4 var(--sans); color: var(--ink-2); }
+.viz-key[hidden] { display: none; }
+.viz-key i, .viz-table th i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 8px; vertical-align: 1px; }
+.viz-table { width: 100%; border-collapse: collapse; font: 400 13.5px/1.45 var(--sans); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.viz-table thead th { font: 500 9.5px/1.3 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-4); text-align: left; padding: 0 14px 10px 0; border-bottom: 1px solid var(--hair); white-space: nowrap; }
+.viz-table tbody th, .viz-table td { padding: 12px 14px 12px 0; border-bottom: 1px solid var(--hair-soft); text-align: left; vertical-align: baseline; }
+.viz-table tbody th { font-weight: 500; color: var(--ink-1); white-space: nowrap; }
+.viz-table td b { font-weight: 500; color: var(--gold-100); }
+@media (max-width: 859px) {
+  .viz-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .viz-table, .viz-table tbody, .viz-table tr { display: block; }
+  .viz-table tr { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; padding: 14px 0; border-bottom: 1px solid var(--hair-soft); }
+  .viz-table tbody th, .viz-table td { display: block; padding: 0; border: 0; }
+  .viz-table tbody th { grid-column: 1 / -1; font-size: 15px; }
+  .viz-table td::before { content: attr(data-th); display: block; font: 500 9px/1.5 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-4); }
+  .viz-table td[data-th="Typical home"] { grid-column: 1 / -1; }
+}
 .viz-scrub { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 16px; align-items: center; width: 100%; }
 .viz-play { width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--gold-300); background: rgba(194, 162, 101, 0.12); color: var(--gold-100); font-size: 13px; cursor: pointer; display: grid; place-items: center; }
 .viz-play:hover { background: rgba(194, 162, 101, 0.24); }
@@ -618,14 +637,14 @@ a.rail-card:hover .rail-photo img { transform: scale(1.035); }
 .rank-line { margin: 0; font: 300 clamp(22px, 2.2vw, 30px)/1.3 var(--serif); color: var(--ink-1); }
 .rank-line b { font-weight: 500; color: var(--gold-100); }
 .rank-line span { color: var(--ink-3); }
-.rank-track { position: relative; height: 64px; margin-top: 30px; }
+.rank-track { position: relative; height: 72px; margin-top: 30px; }
 .rank-track::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 10px; background: linear-gradient(90deg, var(--gold-100), var(--gold-300) 12%, rgba(143, 163, 196, 0.5) 45%, rgba(143, 163, 196, 0.16)); }
 .rank-pin, .rank-med { position: absolute; top: 0; display: grid; justify-items: center; transform: translateX(-50%); }
 .rank-pin i { width: 2px; height: 26px; margin-top: -8px; background: #fff; }
 .rank-pin b { font: 500 10.5px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-1); white-space: nowrap; margin-top: 8px; transform: translateX(calc(50% - 6px)); justify-self: start; }
 .rank-med { left: 50%; }
 .rank-med i { width: 1px; height: 18px; background: var(--ink-3); }
-.rank-med b { font: 500 10.5px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; margin-top: 8px; }
+.rank-med b { font: 500 10.5px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; margin-top: 26px; }   /* a row below "This sale", so the two never collide */
 .rank-ends { display: flex; justify-content: space-between; margin: 0; font: 500 10px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-4); }
 .hero--sold .hero-media img { object-position: 50% 58%; }
 
