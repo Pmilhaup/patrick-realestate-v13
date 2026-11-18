@@ -1120,3 +1120,9 @@ body.is-legacy .chapter .headline { font-size: clamp(31px, 3.7vw, 54px); line-he
   .motion-ctl { display: none; }
   .tn-frame img, .walk-stage img, .feature-media img, .shot img, .tile img { transition: none !important; }
 }
+
+/* Legacy chapters: the older style sheets set the dimmest text below the
+   contrast floor on the navy ground. Lift it here so every page meets it. */
+body.is-legacy { --ink-4: #8492AD; --ink-5: #8492AD; --color-ink-4: #8492AD; --fg-fade: #8492AD; }
+body.is-legacy .lw-sub { color: #8492AD; }
+body.is-legacy .lock-card a:not([class]), body.is-legacy .act-note a { text-decoration: underline; text-underline-offset: 3px; }
