@@ -5,6 +5,7 @@
 // Act 1: The Map · Act 2: One chart, selectable datasets, 5 consumer KPIs
 // Act 3: Momentum verdict + briefing signup
 import Chapter from '../layouts/Chapter.astro';
+import Viz from '../components/Viz.astro';
 const lds = [{
   "@context":"https://schema.org","@type":"Dataset",
   "name":"North Shore Market Intelligence",
@@ -18,10 +19,8 @@ const lds = [{
 <Chapter
   title="Intelligence — Patrick Milhaupt"
   description="The North Shore market in one page: live map, one chart with every dataset, and a momentum read per village — reconciled daily from the MLS."
-  path="/intelligence" current="/intelligence" palette="0.55"
+  path="/intelligence" current="/intelligence" page="intelligence"
   jsonLd={lds[0]}
-  rail={[{id:'act-1',num:'01',label:'Map'},{id:'act-2',num:'02',label:'Chart'},{id:'act-3',num:'03',label:'Verdict'}]}
-  stdScripts={true} orchestrator={true}
 >
   <link slot="head" rel="stylesheet" href="/brand/brand-core.css">
   <script slot="head" src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js" defer is:inline></script>
@@ -123,10 +122,24 @@ const lds = [{
   </style>
 
   <!-- ═══ ACT 1 · THE MAP — orientation first ═══ -->
+  <section class="op" aria-labelledby="intel-title">
+    <div class="wrap">
+      <div class="op-head">
+        <p class="label">Intelligence &middot; North Shore</p>
+        <h1 class="display" id="intel-title">Eighteen years of the North Shore, in <em>motion</em>.</h1>
+        <p class="lede">Seven villages from 2008 to this year. Watch supply drain and prices climb, village by village, then stop on any month.</p>
+      </div>
+      <div style="margin-top: clamp(28px, 5vh, 56px)">
+        <Viz kind="motion" height={560} label="Months of supply against median sale price for seven North Shore villages, by month since 2008" />
+      </div>
+      <p class="op-foot"><a class="link-arrow" href="#act-1">The live map and tonight&rsquo;s figures</a></p>
+    </div>
+  </section>
+
   <section class="chapter act" id="act-1" data-chapter="0" data-palette="0.40">
     <div class="inner">
       <span class="act-eyebrow fade-up">Intelligence &middot; Act I</span>
-      <h1 class="headline" data-headline="">Where is the market <em>moving</em>?</h1>
+      <h2 class="headline" data-headline="">Where is the market <em>moving</em>?</h2>
       <p class="lede fade-up">Every closed sale on the corridor, plotted live. Bubble size is transaction activity; color is momentum.</p>
       <div class="pill-live fade-up" id="livePill"><span class="dot"></span><span id="liveTxt">Connecting&hellip;</span></div>
       <div class="map-frame fade-up">

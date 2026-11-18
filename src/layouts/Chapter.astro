@@ -38,7 +38,7 @@ const lds = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 <meta name="twitter:title" content={title}>
 <meta name="twitter:description" content={description}>
 {lds.map((ld) => <script type="application/ld+json" set:html={JSON.stringify(ld)} />)}
-<script is:inline>document.documentElement.classList.add('js');</script>
+<script is:inline>document.documentElement.classList.add('js');addEventListener('unhandledrejection',function(e){var r=e.reason;if(r&&r.name==='AbortError'&&/Transition was aborted/.test(r.message||''))e.preventDefault();});  /* a skipped page transition is not an error: the page simply appears */</script>
 <link rel="preload" href="/fonts/cormorant-garamond.woff2" as="font" type="font/woff2" crossorigin>
 {legacy && <link rel="stylesheet" href="/brand/brand-shared.css">}
 {legacy && <link rel="stylesheet" href="/brand/brand-dark.css">}

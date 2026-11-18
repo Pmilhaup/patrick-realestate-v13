@@ -1,0 +1,543 @@
+{
+ "_about": "Presentation data for trophy sales (closed sales at or above `tier`). `context` is each sale's rank by price among MLS closed single-family sales in its village and year (raw_sales, queried 2026-11-17; 2026 is year to date). Specifications are from the MLS record, or from Patrick's own listing description where the MLS record is outside the seven-village database.",
+ "tier": 2500000,
+ "context_as_of": "2026-11-16",
+ "context": {
+  "1000 E ILLINOIS": {
+   "n": 269,
+   "rank": 13,
+   "median": 1100000
+  },
+  "1002 WOODBINE": {
+   "n": 242,
+   "rank": 22,
+   "median": 1200000
+  },
+  "1047 AYNSLEY": {
+   "n": 381,
+   "rank": 41,
+   "median": 1210845
+  },
+  "1057 WALDEN": {
+   "n": 242,
+   "rank": 64,
+   "median": 1200000
+  },
+  "1300 KENNICOTT": {
+   "n": 269,
+   "rank": 31,
+   "median": 1100000
+  },
+  "1320 ELM TREE": {
+   "n": 242,
+   "rank": 9,
+   "median": 1200000
+  },
+  "1330 W WHITMORE": {
+   "n": 224,
+   "rank": 12,
+   "median": 1410000
+  },
+  "1339 LAWRENCE": {
+   "n": 254,
+   "rank": 110,
+   "median": 1380000
+  },
+  "1360 ELM TREE": {
+   "n": 242,
+   "rank": 10,
+   "median": 1200000
+  },
+  "143 CARY": {
+   "n": 567,
+   "rank": 4,
+   "median": 542000
+  },
+  "15 WOODLEY": {
+   "n": 340,
+   "rank": 45,
+   "median": 1303250
+  },
+  "217 MORAINE": {
+   "n": 588,
+   "rank": 17,
+   "median": 633000
+  },
+  "230 MAJESTIC OAK": {
+   "n": 224,
+   "rank": 21,
+   "median": 1410000
+  },
+  "400 WASHINGTON": {
+   "n": 381,
+   "rank": 53,
+   "median": 1210845
+  },
+  "417 E DEERPATH": {
+   "n": 242,
+   "rank": 144,
+   "median": 1200000
+  },
+  "525 CRABTREE": {
+   "n": 446,
+   "rank": 18,
+   "median": 795000
+  },
+  "530 OAK KNOLL": {
+   "n": 224,
+   "rank": 66,
+   "median": 1410000
+  },
+  "611 OAK KNOLL": {
+   "n": 254,
+   "rank": 68,
+   "median": 1380000
+  },
+  "771 BARBERRY": {
+   "n": 242,
+   "rank": 32,
+   "median": 1200000
+  },
+  "85 MORRIS": {
+   "n": 242,
+   "rank": 45,
+   "median": 1200000
+  },
+  "925 ASHLAND": {
+   "n": 257,
+   "rank": 19,
+   "median": 1400072
+  },
+  "990 E ILLINOIS": {
+   "n": 242,
+   "rank": 27,
+   "median": 1200000
+  }
+ },
+ "stories": [
+  {
+   "key": "28 ABERDEEN",
+   "slug": "28-aberdeen-court",
+   "folder": "sold/28-aberdeen",
+   "hero": "45",
+   "heroAlt": "The entrance front of 28 Aberdeen Court at dusk: a grey shingle-style house with white trim and lit windows.",
+   "summary": "A shingle-style house of 2017 on 2.4 fenced acres in Tarns of the Moor.",
+   "story": [
+    "A shingle-style house built in 2017 at the end of Tarns of the Moor, a private court in Bannockburn. It stands on 2.4 fenced acres that face south, with a pool, a shingled pavilion and a stone terrace behind the house.",
+    "Inside are 12,290 square feet on three levels and five bedroom suites. I represented the seller."
+   ],
+   "facts": [
+    [
+     "Built",
+     "2017"
+    ],
+    [
+     "Style",
+     "Shingle"
+    ],
+    [
+     "Residence",
+     "12,290 sq ft",
+     "Three levels · five bedroom suites"
+    ],
+    [
+     "Grounds",
+     "2.4 acres",
+     "Fenced · pool and pavilion"
+    ]
+   ],
+   "factsSource": "Specifications are from the listing description.",
+   "photos": [
+    {
+     "n": "23",
+     "cap": "The entrance front.",
+     "alt": "The entrance front",
+     "shape": "land"
+    },
+    {
+     "n": "06",
+     "cap": "The pool and pavilion.",
+     "alt": "The pool and pavilion",
+     "shape": "land"
+    },
+    {
+     "n": "01",
+     "cap": "The garden side of the house, from the pool.",
+     "alt": "The garden side of the house, from the pool",
+     "shape": "land"
+    },
+    {
+     "n": "32",
+     "cap": "The garden side at dusk.",
+     "alt": "The garden side at dusk",
+     "shape": "land"
+    },
+    {
+     "n": "34",
+     "cap": "The pavilion at dusk.",
+     "alt": "The pavilion at dusk",
+     "shape": "land"
+    },
+    {
+     "n": "14",
+     "cap": "The house in its setting, from the air.",
+     "alt": "The house in its setting, from the air",
+     "shape": "land"
+    },
+    {
+     "n": "19",
+     "cap": "The approach, from above.",
+     "alt": "The approach, from above",
+     "shape": "land"
+    },
+    {
+     "n": "36",
+     "cap": "The pool terrace from directly above.",
+     "alt": "The pool terrace from directly above",
+     "shape": "land"
+    }
+   ]
+  },
+  {
+   "key": "4 HIGH TERRACE",
+   "slug": "4-high-terrace",
+   "folder": "sold/4-high-terrace",
+   "hero": "78",
+   "heroAlt": "4 High Terrace at dusk, seen across its pond: a low contemporary house with lit glass walls reflected in the water.",
+   "summary": "A contemporary house set against its own pond.",
+   "story": [
+    "A contemporary house set against its own pond in Bannockburn: low metal roofs, walls of glass, and terraces that step down to a pool.",
+    "I represented both the seller and the buyer."
+   ],
+   "facts": [],
+   "photos": [
+    {
+     "n": "49",
+     "cap": "The house and its pond, from the air.",
+     "alt": "The house and its pond, from the air",
+     "shape": "land"
+    },
+    {
+     "n": "58",
+     "cap": "The garden front and pool.",
+     "alt": "The garden front and pool",
+     "shape": "land"
+    },
+    {
+     "n": "11",
+     "cap": "The living room.",
+     "alt": "The living room",
+     "shape": "land"
+    },
+    {
+     "n": "20",
+     "cap": "The family room.",
+     "alt": "The family room",
+     "shape": "land"
+    },
+    {
+     "n": "24",
+     "cap": "The kitchen.",
+     "alt": "The kitchen",
+     "shape": "land"
+    },
+    {
+     "n": "25",
+     "cap": "The breakfast room.",
+     "alt": "The breakfast room",
+     "shape": "land"
+    },
+    {
+     "n": "41",
+     "cap": "The wine room.",
+     "alt": "The wine room",
+     "shape": "land"
+    },
+    {
+     "n": "47",
+     "cap": "The pool.",
+     "alt": "The pool",
+     "shape": "land"
+    },
+    {
+     "n": "74",
+     "cap": "The terraces at dusk.",
+     "alt": "The terraces at dusk",
+     "shape": "land"
+    },
+    {
+     "n": "54",
+     "cap": "The entrance walk.",
+     "alt": "The entrance walk",
+     "shape": "land"
+    }
+   ]
+  },
+  {
+   "key": "1000 E ILLINOIS",
+   "slug": "1000-e-illinois-road",
+   "folder": "sold/1000-e-illinois",
+   "hero": "46",
+   "heroAlt": "The entrance front of 1000 E. Illinois Road: a long white house with a tile roof and dark shutters across a lawn.",
+   "summary": "A Mediterranean house of 1914 on 3.81 acres.",
+   "sale": {
+    "list": 3050000,
+    "closed": "2023-07-24",
+    "dom": 37
+   },
+   "story": [
+    "Built in 1914 in the Mediterranean manner: white walls, a tile roof, an arcade at the motor court and a formal parterre behind the house. The property is 3.81 acres in east Lake Forest.",
+    "The house has 6,268 square feet and six bedrooms. It went under contract in 37 days. I represented the seller."
+   ],
+   "facts": [
+    [
+     "Built",
+     "1914"
+    ],
+    [
+     "Style",
+     "Mediterranean"
+    ],
+    [
+     "Residence",
+     "6,268 sq ft",
+     "6 bedrooms · 6 full and 1 half baths"
+    ],
+    [
+     "Grounds",
+     "3.81 acres"
+    ]
+   ],
+   "factsSource": "Specifications are from the MLS listing record.",
+   "photos": [
+    {
+     "n": "01",
+     "cap": "The entrance hall.",
+     "alt": "The entrance hall",
+     "shape": "land"
+    },
+    {
+     "n": "08",
+     "cap": "The library.",
+     "alt": "The library",
+     "shape": "land"
+    },
+    {
+     "n": "14",
+     "cap": "The dining room.",
+     "alt": "The dining room",
+     "shape": "land"
+    },
+    {
+     "n": "22",
+     "cap": "The kitchen.",
+     "alt": "The kitchen",
+     "shape": "land"
+    },
+    {
+     "n": "24",
+     "cap": "The breakfast room.",
+     "alt": "The breakfast room",
+     "shape": "land"
+    },
+    {
+     "n": "55",
+     "cap": "The garden front above the parterre.",
+     "alt": "The garden front above the parterre",
+     "shape": "land"
+    },
+    {
+     "n": "37",
+     "cap": "The parterre.",
+     "alt": "The parterre",
+     "shape": "land"
+    },
+    {
+     "n": "48",
+     "cap": "The arcade at the motor court.",
+     "alt": "The arcade at the motor court",
+     "shape": "land"
+    },
+    {
+     "n": "43",
+     "cap": "The house from the lawn.",
+     "alt": "The house from the lawn",
+     "shape": "land"
+    }
+   ]
+  },
+  {
+   "key": "925 ASHLAND",
+   "slug": "925-ashland-avenue",
+   "folder": "sold/925-ashland",
+   "hero": "02",
+   "heroAlt": "925 Ashland Avenue from the street: a three-story red brick house with a front porch beneath a tall tree.",
+   "summary": "A brick Colonial of 1920 in Wilmette.",
+   "sale": {
+    "list": 2950000,
+    "closed": "2026-06-08",
+    "dom": 14
+   },
+   "story": [
+    "A brick Colonial of 1920 on Ashland Avenue in Wilmette, with six bedrooms and a garden behind it.",
+    "It went under contract in 14 days. I represented the seller."
+   ],
+   "facts": [
+    [
+     "Built",
+     "1920"
+    ],
+    [
+     "Style",
+     "Colonial"
+    ],
+    [
+     "Bedrooms",
+     "6"
+    ],
+    [
+     "Baths",
+     "5 full, 1 half"
+    ]
+   ],
+   "factsSource": "Specifications are from the MLS listing record.",
+   "photos": [
+    {
+     "n": "41",
+     "cap": "The house from the street.",
+     "alt": "The house from the street",
+     "shape": "land"
+    },
+    {
+     "n": "20",
+     "cap": "The stair hall.",
+     "alt": "The stair hall",
+     "shape": "land"
+    },
+    {
+     "n": "17",
+     "cap": "The dining room.",
+     "alt": "The dining room",
+     "shape": "land"
+    },
+    {
+     "n": "23",
+     "cap": "The kitchen.",
+     "alt": "The kitchen",
+     "shape": "land"
+    },
+    {
+     "n": "27",
+     "cap": "The family room.",
+     "alt": "The family room",
+     "shape": "land"
+    },
+    {
+     "n": "16",
+     "cap": "The sun room.",
+     "alt": "The sun room",
+     "shape": "land"
+    },
+    {
+     "n": "15",
+     "cap": "The garden side of the house.",
+     "alt": "The garden side of the house",
+     "shape": "land"
+    },
+    {
+     "n": "13",
+     "cap": "The terrace.",
+     "alt": "The terrace",
+     "shape": "land"
+    }
+   ]
+  },
+  {
+   "key": "1002 WOODBINE",
+   "slug": "1002-woodbine-place",
+   "folder": "sold/1002-woodbine",
+   "hero": "02",
+   "heroAlt": "The entrance front of 1002 Woodbine Place: a half-timbered Tudor house behind a clipped hedge and a brick walk.",
+   "summary": "A Tudor house of 1907 on just under an acre.",
+   "sale": {
+    "list": 2700000,
+    "closed": "2024-07-01",
+    "dom": 13
+   },
+   "story": [
+    "A Tudor house of 1907 on just under an acre in Lake Forest, with a sun room of arched windows and a covered stone terrace at the back.",
+    "The house has 5,628 square feet and six bedrooms. It went under contract in 13 days. I represented the seller."
+   ],
+   "facts": [
+    [
+     "Built",
+     "1907"
+    ],
+    [
+     "Style",
+     "Tudor"
+    ],
+    [
+     "Residence",
+     "5,628 sq ft",
+     "6 bedrooms · 4 full and 2 half baths"
+    ],
+    [
+     "Grounds",
+     "0.98 acres"
+    ]
+   ],
+   "factsSource": "Specifications are from the MLS listing record.",
+   "photos": [
+    {
+     "n": "04",
+     "cap": "The entrance front.",
+     "alt": "The entrance front",
+     "shape": "land"
+    },
+    {
+     "n": "09",
+     "cap": "The dining room.",
+     "alt": "The dining room",
+     "shape": "land"
+    },
+    {
+     "n": "16",
+     "cap": "The kitchen.",
+     "alt": "The kitchen",
+     "shape": "land"
+    },
+    {
+     "n": "21",
+     "cap": "The living room.",
+     "alt": "The living room",
+     "shape": "land"
+    },
+    {
+     "n": "23",
+     "cap": "The sun room.",
+     "alt": "The sun room",
+     "shape": "land"
+    },
+    {
+     "n": "26",
+     "cap": "The family room.",
+     "alt": "The family room",
+     "shape": "land"
+    },
+    {
+     "n": "47",
+     "cap": "The house from the rear lawn.",
+     "alt": "The house from the rear lawn",
+     "shape": "land"
+    },
+    {
+     "n": "54",
+     "cap": "The covered terrace.",
+     "alt": "The covered terrace",
+     "shape": "land"
+    }
+   ]
+  }
+ ]
+}

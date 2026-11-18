@@ -1,5 +1,6 @@
 ---
 import Chapter from '../layouts/Chapter.astro';
+import Viz from '../components/Viz.astro';
 const lds = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://patrick.realestate/"}, {"@type": "ListItem", "position": 2, "name": "Selling", "item": "https://patrick.realestate/selling"}]}];
 ---
 <Chapter
@@ -39,6 +40,17 @@ const lds = [{"@context": "https://schema.org", "@type": "BreadcrumbList", "item
         <a class="btn-gold" href="/contact">Talk with Patrick</a>
         <a class="btn-line" href="#ch-01">The six steps</a>
       </div>
+    </div>
+  </section>
+
+  <section class="sec sec--surface" aria-labelledby="seasons-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">Timing</p>
+        <h2 class="h2" id="seasons-title">When do homes here sell?</h2>
+        <p class="lede">Every month since 2008, village by village. The pattern repeats: it is the first thing I look at when a seller asks when to list.</p>
+      </div>
+      <Viz kind="seasons" village="Lake Forest" metric="closed" height={620} label="Closed sales by month and year" />
     </div>
   </section>
 

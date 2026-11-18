@@ -1,15 +1,23 @@
 ---
 // HOMEPAGE — Lake Michigan at first light.
-// One job per section: arrive on the North Shore, discover a house, read the market,
+// One job per section: arrive on the North Shore, see the trophy sales, read the market,
 // find a village, understand the approach, reach Patrick.
 // The previous eight-movement homepage is preserved in git history (commit 9323813).
 import Chapter from '../layouts/Chapter.astro';
 import CoastMap from '../components/CoastMap.astro';
+import Viz from '../components/Viz.astro';
+import trophy from '../data/trophy.json';
 import listings from '../data/listings.json';
 import c from '../data/contact.json';
 
-const estate = listings.active.find((l) => l.key === '999 LAKE');
 const money = (n) => '$' + Number(n).toLocaleString('en-US');
+// Trophy sales: closed sales at or above the tier, highest first. Each links to its story where one exists.
+const tier = trophy.tier;
+const SIDE = { list: 'listing', buyer: 'buyer', both: 'both', referral: 'buyer' };
+const withCtx = (l) => ({ ...l, ...(trophy.context[l.key] || {}), ytd: l.year === +trophy.context_as_of.slice(0, 4) });
+const trophies = listings.sold.filter((l) => l.price >= tier && l.photo).sort((a, b) => b.price - a.price).map(withCtx);
+const record = listings.sold.map(withCtx).map((l) => ({ address: l.address, town: l.town, year: l.year, price: l.price, side: SIDE[l.side] || 'listing', side_label: l.side_label, href: l.href || '', rank: l.rank, n: l.n, ytd: l.ytd }));
+const pic = (l) => { const src = '/' + l.photo; const m = src.match(/^(.*)-(1400|1280)\.webp$/); return m ? { src: `${m[1]}-800.webp`, srcset: `${m[1]}-800.webp 800w, ${src} ${m[2]}w` } : { src }; };
 const ld = {
   '@context': 'https://schema.org', '@type': 'RealEstateAgent', '@id': 'https://patrick.realestate/#agent',
   name: 'Patrick Milhaupt', url: 'https://patrick.realestate/',
@@ -30,26 +38,28 @@ const ld = {
 >
   <Fragment slot="head">
     <link rel="preload" as="image" type="image/avif" fetchpriority="high" media="(min-width: 900px)"
-      imagesrcset="/media/home/first-light-1280.avif 1280w, /media/home/first-light-1920.avif 1920w, /media/home/first-light-2880.avif 2880w" imagesizes="106vw">
+      imagesrcset="/media/home/first-light-1280.avif 1280w, /media/home/first-light-1920.avif 1920w, /media/home/first-light-2880.avif 2880w" imagesizes="100vw">
     <link rel="preload" as="image" type="image/avif" fetchpriority="high" media="(max-width: 899px)"
       imagesrcset="/media/home/first-light-portrait-640.avif 640w, /media/home/first-light-portrait-800.avif 800w, /media/home/first-light-portrait-1280.avif 1280w" imagesizes="100vw">
   </Fragment>
 
   <!-- ═══ Opening — the bluff at first light ═══ -->
-  <section class="hero hero--home" data-hero="loop" aria-labelledby="home-title">
+  <section class="hero hero--home" data-hero="loop" data-film aria-labelledby="home-title">
     <div class="hero-media">
       <picture>
         <source media="(max-width: 899px)" type="image/avif" sizes="100vw"
           srcset="/media/home/first-light-portrait-640.avif 640w, /media/home/first-light-portrait-800.avif 800w, /media/home/first-light-portrait-1280.avif 1280w">
         <source media="(max-width: 899px)" type="image/webp" sizes="100vw"
           srcset="/media/home/first-light-portrait-640.webp 640w, /media/home/first-light-portrait-800.webp 800w, /media/home/first-light-portrait-1280.webp 1280w">
-        <source type="image/avif" sizes="106vw"
+        <source type="image/avif" sizes="100vw"
           srcset="/media/home/first-light-1280.avif 1280w, /media/home/first-light-1920.avif 1920w, /media/home/first-light-2880.avif 2880w">
-        <source type="image/webp" sizes="106vw"
+        <source type="image/webp" sizes="100vw"
           srcset="/media/home/first-light-1280.webp 1280w, /media/home/first-light-1920.webp 1920w, /media/home/first-light-2880.webp 2880w">
         <img src="/media/home/first-light-1920.jpg" width="1920" height="1080" fetchpriority="high" decoding="async"
-          alt="First light on the Lake Michigan bluff at Lake Forest: a wooded shoreline, a beach and stone breakwaters, seen from above the water.">
+          alt="Lake Michigan at first light, looking south along the Lake Forest shore: calm water, a beach with stone breakwaters, and the wooded bluff.">
       </picture>
+      <video class="hero-film" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1" disablepictureinpicture
+        data-src-wide="/media/home/film-1080.mp4" data-src-tall="/media/home/film-portrait-720.mp4"></video>
     </div>
     <div class="hero-body">
       <p class="label">Patrick Milhaupt &middot; Jameson Sotheby&rsquo;s International Realty</p>
@@ -61,39 +71,50 @@ const ld = {
       </div>
     </div>
     <div class="hero-tools">
-      <p class="hero-caption">Lake Forest &middot; the bluff at first light</p>
+      <p class="hero-caption">Lake Forest &middot; the shore at first light</p>
       <button class="motion-ctl" type="button" data-state="playing"><i aria-hidden="true"></i><span class="t">Pause motion</span></button>
     </div>
   </section>
 
-  <!-- ═══ A house — 999 Lake Road ═══ -->
-  {estate && (
-  <section class="sec" aria-labelledby="feature-title">
-    <div class="feature">
-      <a class="feature-media rv" href="/listings/999-lake-road" aria-label="Explore 999 Lake Road">
-        <img src="/media/999/front-1280.webp" srcset="/media/999/front-800.webp 800w, /media/999/front-1280.webp 1280w, /media/999/front-1920.webp 1920w"
-          sizes="(max-width: 899px) 100vw, 60vw" width="1920" height="1080" loading="lazy" fetchpriority="low" decoding="async"
-          style="view-transition-name: estate-front"
-          alt="The entrance front of 999 Lake Road: a symmetrical brick house with a four-column portico beneath a hipped roof.">
-      </a>
-      <div class="feature-body rv">
-        <p class="label">{estate.status} &middot; {estate.town}</p>
-        <h2 class="feature-name" id="feature-title"><a href="/listings/999-lake-road">{estate.address}</a></h2>
-        <p class="feature-by">Howard Van Doren Shaw &middot; 1914 &middot; Lake Forest</p>
-        <dl class="facts">
-          <div><dt>Residence</dt><dd>15,820 sq ft</dd></div>
-          <div><dt>Grounds</dt><dd>3.58 acres</dd></div>
-          <div><dt>Shoreline</dt><dd>400+ ft</dd></div>
-        </dl>
-        <p class="feature-price">{money(estate.price)}</p>
-        <div class="actions">
-          <a class="btn-gold" href="/listings/999-lake-road">Explore the estate</a>
-          <a class="btn-line" href="/listings/999-lake-road#inquire">Request a private showing</a>
+  <!-- ═══ Trophy sales ═══ -->
+  <section class="sec" aria-labelledby="trophy-title">
+    <div class="wrap">
+      <div class="sec-head sec-head--split rv">
+        <div>
+          <p class="label">Trophy sales</p>
+          <h2 class="h2" id="trophy-title">The sales at the top of the market.</h2>
         </div>
+        <p class="lede">{trophies.length} closings at {money(tier)} and above, on both sides of the table. Each is placed against every sale in its village that year.</p>
       </div>
     </div>
+    <div class="rail rv" data-rail>
+      <ul class="rail-track" tabindex="0" aria-label="Trophy sales, highest price first">
+        {trophies.map((l, i) => {
+          const Tag = l.href ? 'a' : 'div';
+          return (
+            <li class="rail-item">
+              <Tag class="rail-card" href={l.href || undefined}>
+                <span class="rail-photo"><img {...pic(l)} sizes="(max-width: 700px) 82vw, 420px" width="800" height="600" loading={i < 2 ? 'eager' : 'lazy'} fetchpriority="low" decoding="async"
+                  style={l.href && l.href.startsWith('/sold/') ? `view-transition-name: sold-${l.href.slice(6)}` : undefined} alt={`${l.address}, ${l.town}`}></span>
+                <span class="rail-meta"><span class="label">Closed {l.year} &middot; {l.town}</span><span class="rail-price">{money(l.price)}</span></span>
+                <span class="rail-name">{l.address}</span>
+                <span class="rail-note">{l.side_label}{l.rank ? ` · No. ${l.rank} of ${l.n} ${l.town} sales${l.ytd ? ' to date' : ''}` : ''}</span>
+                {l.href && <span class="link-arrow" aria-hidden="true">Read the sale</span>}
+              </Tag>
+            </li>
+          );
+        })}
+      </ul>
+      <div class="rail-ctl wrap">
+        <button type="button" class="rail-btn" data-rail-prev aria-label="Previous sales">&larr;</button>
+        <button type="button" class="rail-btn" data-rail-next aria-label="More sales">&rarr;</button>
+        <a class="link-arrow" href="/properties">Every property and sale</a>
+      </div>
+    </div>
+    <div class="wrap" style="margin-top: clamp(36px, 6vh, 72px)">
+      <Viz kind="record" tier={tier} data={record} height={400} label="Closed sales of one million dollars and above, by year and price" />
+    </div>
   </section>
-  )}
 
   <!-- ═══ The market — quiet surface, real data ═══ -->
   <section class="sec sec--surface" aria-labelledby="brief-title" data-brief>
@@ -105,24 +126,15 @@ const ld = {
       <dl class="brief-grid rv">
         <div class="kpi-cell"><dt>Median sale &middot; 30 days</dt><dd><span class="n" data-b="med">&mdash;</span><span class="d" data-b="med-d">Median of the seven village medians</span></dd></div>
         <div class="kpi-cell"><dt>Closed sales &middot; 30 days</dt><dd><span class="n" data-b="closed">&mdash;</span><span class="d" data-b="closed-d">Across the seven villages</span></dd></div>
-        <div class="kpi-cell"><dt>Months of supply</dt><dd><span class="n" data-b="supply">&mdash;</span><span class="d" data-b="supply-d">Corridor median &middot; under four favors sellers</span></dd></div>
+        <div class="kpi-cell"><dt>Days on market &middot; 30 days</dt><dd><span class="n" data-b="dom">&mdash;</span><span class="d">Median of the seven village medians</span></dd></div>
       </dl>
       <p class="brief-read rv" data-b="read" aria-live="polite"></p>
-      <div class="trend rv">
-        <div class="trend-head">
-          <p class="trend-title" data-b="title">Corridor median sale price &middot; 30-day rolling</p>
-          <p class="trend-now" data-b="now" aria-live="polite"></p>
-        </div>
-        <div class="trend-stage">
-          <div class="trend-plot" data-b="plot"></div>
-          <div class="trend-tip" data-b="tip" hidden></div>
-        </div>
-        <div class="trend-ctl">
-          <div class="picks" data-b="villages" role="group" aria-label="Village"></div>
-          <div class="picks" data-b="window" role="group" aria-label="Period"></div>
-        </div>
-        <p class="asof" data-b="asof">Data as of &mdash;</p>
+      <p class="asof rv" data-b="asof">Data as of &mdash;</p>
+      <div class="sec-head rv" style="margin-top: clamp(40px, 7vh, 84px)">
+        <p class="label">Eighteen years, and tonight</p>
+        <h3 class="h3">Every month since 2008, with the live figure at the end.</h3>
       </div>
+      <Viz kind="history" village="all" metric="price" span="all" height={480} label="North Shore market history since 2008" />
       <p class="op-foot rv"><a class="link-arrow" href="/intelligence">Read the full briefing</a></p>
     </div>
   </section>

@@ -1,0 +1,201 @@
+---
+// TROPHY SALE — one closed sale told in full: the house, the sale, where it ranked, the photographs.
+// Data: src/data/trophy.json (facts, market rank, photographs) joined to the generated listings record.
+import Chapter from '../../layouts/Chapter.astro';
+import Shot from '../../components/Shot.astro';
+import Gallery from '../../components/Gallery.astro';
+import listings from '../../data/listings.json';
+import trophy from '../../data/trophy.json';
+import media from '../../data/media.json';
+import c from '../../data/contact.json';
+
+export function getStaticPaths() {
+  return trophy.stories.map((s) => ({ params: { slug: s.slug }, props: { s } }));
+}
+const { s } = Astro.props;
+const l = listings.sold.find((x) => x.key === s.key);
+const ctx = trophy.context[s.key];
+const money = (n) => '$' + Number(n).toLocaleString('en-US');
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const when = (d) => { const [y, m, day] = String(d).split('-'); return m ? `${MONTHS[+m - 1]}${day ? ' ' + +day + ',' : ''} ${y}` : y; };
+const closed = when((s.sale && s.sale.closed) || l.closed || l.year);
+const ofAsk = s.sale && s.sale.list ? (Math.round((l.price / s.sale.list) * 1000) / 10).toFixed(1) : null;
+const ytd = ctx && l.year === +trophy.context_as_of.slice(0, 4);
+const topPct = ctx ? Math.max(1, Math.ceil((ctx.rank / ctx.n) * 100)) : null;
+const pin = ctx ? Math.max(1.2, (ctx.rank / ctx.n) * 100) : 0;
+const side = { list: 'Listing side', buyer: 'Buyer side', both: 'Both sides', referral: 'Buyer referral' }[l.side] || l.side_label;
+const dir = `/media/${s.folder}`;
+const heroSet = (ext) => [800, 1280, 1920].map((w) => `${dir}/hero-${w}.${ext} ${w}w`).join(', ');
+const heroDim = media[`${s.folder}/hero`];
+
+// Photographs are laid out in plates of one or two.
+const plates = []; const order = ['a', 'full', 'c', 'd', 'full', 'c', 'a']; let i = 0, k = 0;
+while (i < s.photos.length) {
+  let kind = order[k++ % order.length]; const left = s.photos.length - i;
+  if (left === 1) kind = 'full'; if (kind !== 'full' && left === 3) kind = 'c';
+  const take = kind === 'full' ? 1 : 2; plates.push({ kind, shots: s.photos.slice(i, i + take) }); i += take;
+}
+const shapeOf = (kind, n) => (kind === 'full' ? 'wide' : kind === 'a' && n === 0 ? 'four' : 'land');
+const sizesOf = (kind, n) => (kind === 'full' ? '100vw' : kind === 'a' ? (n === 0 ? '(max-width: 899px) 100vw, 56vw' : '(max-width: 899px) 100vw, 38vw') : kind === 'd' ? (n === 0 ? '(max-width: 899px) 100vw, 38vw' : '(max-width: 899px) 100vw, 56vw') : '(max-width: 899px) 100vw, 50vw');
+
+// Other trophy sales with a story of their own.
+const storyHref = (x) => x.href;
+const more = listings.sold.filter((x) => x.price >= trophy.tier && x.href && x.key !== s.key).sort((p, q) => q.price - p.price).slice(0, 3);
+const tilePic = (x) => { const src = '/' + x.photo; const m = src.match(/^(.*)-(1400|1280)\.webp$/); return m ? `${m[1]}-800.webp` : src; };
+const title = `${l.address}, ${l.town}. Sold ${l.year} for ${money(l.price)}`;
+const lds = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+  { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://patrick.realestate/' },
+  { '@type': 'ListItem', position: 2, name: 'Properties', item: 'https://patrick.realestate/properties' },
+  { '@type': 'ListItem', position: 3, name: l.address, item: `https://patrick.realestate/sold/${s.slug}` } ] };
+---
+<Chapter
+  title={`${l.address}, ${l.town} — Sold ${l.year} · Patrick Milhaupt`}
+  description={`${title}. ${s.summary} ${l.side_label}, Patrick Milhaupt, Jameson Sotheby's International Realty.`}
+  path={`/sold/${s.slug}`} current="/properties" legacy={false} page="estate" hero={true}
+  ogImage={`https://patrick.realestate${dir}/og.jpg`} jsonLd={lds}
+>
+  <Fragment slot="head">
+    <link rel="preload" as="image" type="image/avif" fetchpriority="high" imagesrcset={heroSet('avif')} imagesizes="100vw">
+  </Fragment>
+
+  <section class="hero hero--estate hero--sold" data-hero="once" aria-labelledby="estate-title">
+    <div class="hero-media">
+      <picture>
+        <source type="image/avif" sizes="100vw" srcset={heroSet('avif')}>
+        <source type="image/webp" sizes="100vw" srcset={heroSet('webp')}>
+        <img src={`${dir}/hero-1280.webp`} width={heroDim.w} height={heroDim.h} fetchpriority="high" decoding="async"
+          style={`view-transition-name: sold-${s.slug}`} alt={s.heroAlt}>
+      </picture>
+    </div>
+    <div class="hero-body">
+      <div class="estate-title">
+        <span class="brass" aria-hidden="true"></span>
+        <h1 id="estate-title">{l.address}</h1>
+        <p class="estate-place">{l.town}, {l.town.includes(',') ? '' : 'Illinois'}</p>
+        <p class="estate-status"><span class="pill">Sold {l.year}</span><span class="price">{money(l.price)}</span></p>
+      </div>
+      <div class="hero-side">
+        <button class="motion-ctl" type="button" data-state="replay"><i aria-hidden="true"></i><span class="t">Replay approach</span></button>
+        <div class="actions">
+          <a class="btn-gold" href="#inquire">Ask about a home like this</a>
+          <a class="btn-line" href="#walk" data-open-gallery="0">View the photographs</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The sale, in figures -->
+  <section class="sec" aria-labelledby="s-sale">
+    <div class="wrap">
+      <div class="walk-head rv">
+        <p class="label">The sale</p>
+        <h2 class="h2" id="s-sale">{s.summary}</h2>
+      </div>
+      <dl class="sale-grid rv">
+        <div><dt>Closed</dt><dd class="fig">{money(l.price)}</dd><dd class="sub">{closed}</dd></div>
+        {ofAsk && <div><dt>Asked</dt><dd class="fig">{money(s.sale.list)}</dd><dd class="sub">Sold at {ofAsk}% of the asking price</dd></div>}
+        {s.sale && s.sale.dom && <div><dt>Days on market</dt><dd class="fig">{s.sale.dom}</dd><dd class="sub">From listing to accepted offer</dd></div>}
+        <div><dt>Representation</dt><dd class="fig fig--text">{side}</dd><dd class="sub">Patrick Milhaupt</dd></div>
+      </dl>
+      {ctx && (
+        <div class="rank rv">
+          <p class="rank-line"><b>No. {ctx.rank}</b> of {ctx.n} single-family sales in {l.town} in {l.year}{ytd ? ' to date' : ''}, by price. <span>The top {topPct} percent.</span></p>
+          <div class="rank-track" role="img" aria-label={`This sale ranked number ${ctx.rank} of ${ctx.n} by price. The village median was ${money(ctx.median)}.`}>
+            <span class="rank-pin" style={`left:${pin}%`}><i></i><b>This sale</b></span>
+            <span class="rank-med"><i></i><b>Median {money(ctx.median)}</b></span>
+          </div>
+          <p class="rank-ends"><span>Highest price</span><span>Lowest</span></p>
+          <p class="note">MLS closed sales of single-family homes, {l.town}, {l.year}{ytd ? `, through ${when(trophy.context_as_of)}` : ''}.</p>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- The house -->
+  <section class="sec sec--surface" aria-labelledby="s-house">
+    <div class="wrap estate-intro">
+      <div class="prose rv">
+        <p class="label">The house</p>
+        <h2 class="h2" id="s-house">{l.address}</h2>
+        {s.story.map((p) => <p>{p}</p>)}
+      </div>
+      <dl class="ledger rv">
+        <div><dt>Address</dt><dd>{l.address}, {l.town}</dd></div>
+        {s.facts.map((f) => <div><dt>{f[0]}</dt><dd>{f[1]}{f[2] && <small>{f[2]}</small>}</dd></div>)}
+        <div><dt>Closed</dt><dd>{closed}<small>{money(l.price)}</small></dd></div>
+      </dl>
+    </div>
+    {s.factsSource && <div class="wrap"><p class="note rv" style="margin-top:18px">{s.factsSource} Information is believed accurate but is not warranted.</p></div>}
+  </section>
+
+  <!-- The photographs -->
+  <section class="sec" id="walk" aria-labelledby="s-photos">
+    <div class="wrap">
+      <div class="walk-head rv">
+        <p class="label">The photographs</p>
+        <h2 class="h2" id="s-photos">As it was presented.</h2>
+      </div>
+      {plates.map((pl) => (
+        <div class={`plate plate--${pl.kind}`}>
+          {pl.shots.map((ph, n) => <Shot folder={s.folder} name={ph.n} shape={shapeOf(pl.kind, n)} sizes={sizesOf(pl.kind, n)} alt={ph.alt} caption={`<b>${l.address}.</b> ${ph.cap}`} />)}
+        </div>
+      ))}
+      <p class="note rv" style="margin-top:14px">Photographs are from the listing as marketed. The house has since changed hands.</p>
+    </div>
+  </section>
+
+  <!-- More trophy sales -->
+  {more.length > 0 && (
+    <section class="sec sec--surface" aria-labelledby="s-more">
+      <div class="wrap">
+        <div class="sheet-head"><h2 class="h3" id="s-more">More trophy sales</h2><p class="label label--quiet"><a href="/properties">The full record</a></p></div>
+        <div class="sheet">
+          {more.map((x) => (
+            <a class="tile" href={storyHref(x)} aria-label={`${x.address}, ${x.town}. Closed ${x.year}. ${money(x.price)}.`}>
+              <img src={tilePic(x)} sizes="(max-width: 560px) 100vw, 30vw" width="800" height="600" loading="lazy" decoding="async" alt={`${x.address}, ${x.town}`}>
+              <span class="tile-status">Closed {x.year}</span>
+              <span class="tile-info" style="opacity:1;transform:none"><span class="a">{x.address}</span><span class="m">{x.town} &middot; <b>{money(x.price)}</b></span></span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="sec" id="inquire" aria-labelledby="s-inquire" data-dock-hide>
+    <div class="wrap inquiry">
+      <div class="inquiry-aside rv">
+        <p class="label">Inquiries</p>
+        <h2 class="h2" id="s-inquire">Ask about a home like this.</h2>
+        <p class="lede">If you own a comparable house, or are looking for one, send a note and I will reply within the business day. Or call me directly.</p>
+        <p class="direct">
+          <a href={`tel:${c.tel}`}>{c.phone}</a>
+          <a href={`mailto:${c.email}?subject=${encodeURIComponent(l.address)}`}>Email Patrick</a>
+        </p>
+      </div>
+      <form class="lead rv" data-lead={`sold-${s.slug}`} data-property={l.address} novalidate>
+        <input type="hidden" name="property" value={l.address}>
+        <p class="regarding full"><b>Regarding</b><span>{l.address}</span></p>
+        <label>Name<input type="text" name="name" required maxlength="200" autocomplete="name"></label>
+        <label>Email<input type="email" name="email" required maxlength="200" autocomplete="email"></label>
+        <label class="full">Phone<input type="tel" name="phone" maxlength="50" autocomplete="tel"></label>
+        <label class="full">Message<textarea name="message" maxlength="4000" placeholder="What you own or what you are looking for, and your timing."></textarea></label>
+        <label class="hp" aria-hidden="true">Company<input type="text" name="company" tabindex="-1" autocomplete="off"></label>
+        <div class="full lead-foot">
+          <button class="btn-gold" type="submit">Send inquiry</button>
+          <p class="lead-status" role="status">Delivered directly to Patrick</p>
+        </div>
+      </form>
+    </div>
+    <div class="wrap">
+      <p class="note attribution">{l.side_label}: Patrick Milhaupt, Global Advisor, Jameson Sotheby&rsquo;s International Realty. <a href="/properties">All properties</a></p>
+    </div>
+  </section>
+
+  <div class="dock" aria-hidden="true">
+    <a class="btn-line" href="#walk" data-open-gallery="0" tabindex="-1">Photographs</a>
+    <a class="btn-gold" href="#inquire" tabindex="-1">Inquire</a>
+  </div>
+
+  <Gallery />
+</Chapter>

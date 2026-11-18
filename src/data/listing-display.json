@@ -27,7 +27,8 @@
       "closed": "2026-10",
       "side": "list",
       "blurb": "Tarns of the Moor",
-      "photo": "media/listings/28-aberdeen-court-1400.webp"
+      "photo": "media/sold/28-aberdeen/hero-1280.webp",
+      "href": "/sold/28-aberdeen-court"
     },
     "1330 W WHITMORE": {
       "address": "1330 W. Whitmore Court",
@@ -54,7 +55,8 @@
       "sold_price": 2860000,
       "closed": "2026-06-08",
       "side": "list",
-      "photo": "media/listings/925-ashland-1400.webp"
+      "photo": "media/sold/925-ashland/hero-1280.webp",
+      "href": "/sold/925-ashland-avenue"
     },
     "5 BARRIER BEACH": {
       "address": "5 Barrier Beach Cove",
@@ -101,7 +103,8 @@
       "address": "4 High Terrace Lane",
       "town": "Bannockburn",
       "side": "both",
-      "photo": "lf-market-assets/notable-4-high-terrace.jpg"
+      "photo": "media/sold/4-high-terrace/hero-1280.webp",
+      "href": "/sold/4-high-terrace"
     },
     "1360 ELM TREE": {
       "address": "1360 Elm Tree Road",
@@ -124,7 +127,9 @@
       "town": "Lake Forest",
       "sold_price": 2575000,
       "closed": "2024-07-01",
-      "side": "list"
+      "side": "list",
+      "href": "/sold/1002-woodbine-place",
+      "photo": "media/sold/1002-woodbine/hero-1280.webp"
     },
     "85 MORRIS": {
       "address": "85 Morris Lane",
@@ -167,7 +172,8 @@
       "sold_price": 2950000,
       "closed": "2023-07-24",
       "side": "list",
-      "photo": "lf-market-assets/notable-1000-e-illinois.jpg"
+      "photo": "media/sold/1000-e-illinois/hero-1280.webp",
+      "href": "/sold/1000-e-illinois-road"
     },
     "1300 KENNICOTT": {
       "address": "1300 W. Kennicott Drive",

@@ -36,9 +36,32 @@ The star field, the luminous waves, GSAP, Lenis, ScrollTrigger, three.js (Proper
 - Lead forms post to the `leads` table only on `patrick.realestate`. On any other host, or with `?dryrun`, the form reports what it would have sent and sends nothing.
 - Market figures read `daily_snapshots` with `scope=eq.all`. The previous homepage query mixed `all` and `luxury` rows.
 
-## Still-image treatments (no film exists yet)
+## Second pass (17 Nov, evening): trophy sales, film, interactive data
 
-- Home hero: one drone still (`DJI_0652`), slow lateral drift. Replace with a 12–20 second lateral drone pass along the bluff at first light, level horizon, no people.
+**Trophy sales.** `src/data/trophy.json` holds the tier ($2,500,000), each sale's rank by price among MLS closed single-family sales in its village and year, and the story pages' facts and photographs. `src/pages/sold/[slug].astro` renders one page per story. The homepage rail, the Properties trophy grid and the record chart all read `listings.json` joined to this file. To add a story: prepare photographs under `public/media/sold/<name>/` (2000 and 1000 px WebP, plus `hero-*`), add them to `media.json`, add the story to `trophy.json`, and set `href` in `listing-display.json`.
+
+**Film.** The homepage opens on drone footage (`public/media/home/film-1080.mp4`, `film-portrait-720.mp4`; a 16-second loop cut from `DJI_0650.MP4`, 12 Feb 2024). The poster is the film's first frame, so the change from still to film is invisible. The film is requested only after the page has loaded, never with reduced motion or data saver, and stops off screen and on Pause.
+
+**Charts.** `src/components/Viz.astro` + `src/scripts/viz.js` (Apache ECharts, tree-shaken, loaded when a figure nears the viewport):
+
+| kind | What it shows | Where |
+|---|---|---|
+| `history` | Monthly record since 2008 with a 12-month trend, carried to today on nightly data | Home, six village guides |
+| `motion` | Supply against median price for seven villages, month by month since 2008 | Intelligence |
+| `seasons` | Month-by-year heat map with the average year above it | Selling |
+| `record` | Every published sale by year and price | Home, Properties |
+
+**Data.** `public/data/history.json` is baked by `tools/sync_history.py` from the public view `mv_market_intelligence` (monthly rows through February 2026). Re-run it when a new settled month is loaded. The nightly tail comes from `daily_snapshots` in the browser.
+
+**Map.** `tools/build_shore.mjs` projects the seven villages' Census boundaries with D3 Geo into `src/data/shore.json`; `CoastMap.astro` draws them and `site.js` shades them by the latest nightly figure.
+
+**Open data question: months of supply.** The nightly table's `months_supply` and `homes_for_sale` do not match the monthly record. Lake Forest, October 2026: 46 homes for sale and 2.4 months in the monthly record; 113 homes and 8.1 months in the nightly table on 16 November. Closed sales and prices agree at the seam; inventory does not. Until that is reconciled the site shows days on market instead of supply wherever the figure is nightly, and the `history` chart does not extend supply past the monthly record.
+
+**Page transitions.** Chrome sometimes skips the cross-page photographic transition (observed in headless test runs, more often while large images are decoding). The page then simply appears. The layout suppresses the resulting unhandled-rejection message.
+
+## Still-image treatments
+
+- Home hero: now film (see above).
 - 999 Lake Road hero: one still (`Front_01`), a single slow push-in. Replace with a straight axial approach up the drive, ending on the portico.
 
 To swap in film: put a `<video muted playsinline loop poster>` inside `.hero-media` beside the `<picture>`, then extend the `[data-hero]` controller in `site.js` (it currently toggles `is-moving` / `is-held` for the CSS motion) to call `video.play()` and `video.pause()` in the same three places: start, the control, and the off-screen observer. If `play()` is rejected because autoplay is blocked, leave the poster in place and set the control to "Play motion". Blocked autoplay has not been tested because there is no film to block.

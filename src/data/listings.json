@@ -29,14 +29,15 @@
       "key": "28 ABERDEEN",
       "address": "28 Aberdeen Court",
       "town": "Bannockburn",
-      "photo": "media/listings/28-aberdeen-court-1400.webp",
+      "photo": "media/sold/28-aberdeen/hero-1280.webp",
       "blurb": "Tarns of the Moor",
       "status": "Closed",
       "price": 3375000,
       "side": "list",
       "side_label": "Listing representation",
       "year": 2026,
-      "closed": "2026-10"
+      "closed": "2026-10",
+      "href": "/sold/28-aberdeen-court"
     },
     {
       "key": "1330 W WHITMORE",
@@ -69,13 +70,14 @@
       "key": "925 ASHLAND",
       "address": "925 Ashland Avenue",
       "town": "Wilmette",
-      "photo": "media/listings/925-ashland-1400.webp",
+      "photo": "media/sold/925-ashland/hero-1280.webp",
       "status": "Closed",
       "price": 2860000,
       "side": "list",
       "side_label": "Listing representation",
       "year": 2026,
-      "closed": "2026-06-08"
+      "closed": "2026-06-08",
+      "href": "/sold/925-ashland-avenue"
     },
     {
       "key": "5 BARRIER BEACH",
@@ -173,7 +175,9 @@
       "side": "list",
       "side_label": "Listing representation",
       "year": 2024,
-      "closed": "2024-07-01"
+      "closed": "2024-07-01",
+      "photo": "media/sold/1002-woodbine/hero-1280.webp",
+      "href": "/sold/1002-woodbine-place"
     },
     {
       "key": "85 MORRIS",
@@ -225,12 +229,13 @@
       "key": "4 HIGH TERRACE",
       "address": "4 High Terrace Lane",
       "town": "Bannockburn",
-      "photo": "lf-market-assets/notable-4-high-terrace.jpg",
+      "photo": "media/sold/4-high-terrace/hero-1280.webp",
       "status": "Closed",
       "price": 3200000,
       "side": "both",
       "side_label": "Represented both sides",
-      "year": 2024
+      "year": 2024,
+      "href": "/sold/4-high-terrace"
     },
     {
       "key": "417 E DEERPATH",
@@ -246,13 +251,14 @@
       "key": "1000 E ILLINOIS",
       "address": "1000 E. Illinois Road",
       "town": "Lake Forest",
-      "photo": "lf-market-assets/notable-1000-e-illinois.jpg",
+      "photo": "media/sold/1000-e-illinois/hero-1280.webp",
       "status": "Closed",
       "price": 2950000,
       "side": "list",
       "side_label": "Listing representation",
       "year": 2023,
-      "closed": "2023-07-24"
+      "closed": "2023-07-24",
+      "href": "/sold/1000-e-illinois-road"
     },
     {
       "key": "1300 KENNICOTT",

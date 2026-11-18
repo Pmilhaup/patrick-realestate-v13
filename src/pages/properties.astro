@@ -3,17 +3,27 @@
 // Rendered from the generated listings data (tools/sync_listings.py). Do not hand-edit the tiles.
 import Chapter from '../layouts/Chapter.astro';
 import listings from '../data/listings.json';
+import trophy from '../data/trophy.json';
+import Viz from '../components/Viz.astro';
 
 const money = (n) => (n ? '$' + Number(n).toLocaleString('en-US') : '');
 const { active, under_contract: pending, sold } = listings;
-const gallery = sold.filter((s) => s.photo);
-const ledger = sold.filter((s) => !s.photo);
-// Photographs prepared at two sizes live under media/listings/<name>-1400.webp and -800.webp.
+const tier = trophy.tier;
+const byPrice = (a, b) => b.price - a.price;
+const withCtx = (l) => ({ ...l, ...(trophy.context[l.key] || {}), ytd: l.year === +trophy.context_as_of.slice(0, 4) });
+const trophies = sold.filter((s) => s.price >= tier && s.photo).sort(byPrice).map(withCtx);
+const gallery = sold.filter((s) => s.photo && s.price < tier).sort(byPrice);
+const ledger = sold.filter((s) => !s.photo).sort(byPrice);
+const current = [...active, ...pending];
+const SIDE = { list: 'listing', buyer: 'buyer', both: 'both', referral: 'buyer' };
+const record = sold.map(withCtx).map((l) => ({ address: l.address, town: l.town, year: l.year, price: l.price, side: SIDE[l.side] || 'listing', side_label: l.side_label, href: l.href || '', rank: l.rank, n: l.n, ytd: l.ytd }));
+// Photographs prepared at two sizes: <name>-1400.webp or -1280.webp, with an -800.webp beside it.
 const pic = (l) => {
   const src = '/' + l.photo;
-  const m = src.match(/^(\/media\/listings\/.+)-1400\.webp$/);
-  return m ? { src: `${m[1]}-800.webp`, srcset: `${m[1]}-800.webp 800w, ${src} 1400w` } : { src, srcset: undefined };
+  const m = src.match(/^(.*)-(1400|1280)\.webp$/);
+  return m ? { src: `${m[1]}-800.webp`, srcset: `${m[1]}-800.webp 800w, ${src} ${m[2]}w` } : { src, srcset: undefined };
 };
+const vt = (l) => (l.href && l.href.startsWith('/sold/') ? `view-transition-name: sold-${l.href.slice(6)}` : undefined);
 const lds = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
   { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://patrick.realestate/' },
   { '@type': 'ListItem', position: 2, name: 'Properties', item: 'https://patrick.realestate/properties' } ] };
@@ -48,6 +58,7 @@ const lds = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemL
         <h1 class="display" id="props-title">A <em>collection</em>, carried with restraint.</h1>
         <p class="lede">Current representations, closed sales, and the off-market channel. Every home researched, photographed, and written about the same way.</p>
         <div class="actions">
+          <a class="link-arrow" href="#trophy">Trophy sales</a>
           <a class="link-arrow" href="#sold">The sold record</a>
           <a class="link-arrow" href="#off-market">Off-market access</a>
         </div>
@@ -58,68 +69,63 @@ const lds = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemL
   <section class="sec" style="padding-top:0" aria-label="Listings">
     <div class="wrap">
 
-      <div class="sheet-head" id="active">
-        <h2 class="h3">Active</h2>
-        <p class="label label--quiet">{active.length > 0 ? 'On the market' : 'Nothing is publicly listed this week'}</p>
+      <div class="sheet-head" id="current">
+        <h2 class="h3">Current</h2>
+        <p class="label label--quiet">Represented now</p>
       </div>
-      {active.length > 0 ? (
-        <div class="sheet">
-          {active.map((l) => {
-            const estate = l.href === '/listings/999-lake-road';
-            const Tag = l.href ? 'a' : 'figure';
-            return (
-              <Tag class="tile tile--lead" href={l.href} tabindex={l.href ? undefined : '0'} aria-label={`${l.address}, ${l.town}. ${l.status}. ${money(l.price)}`}>
-                {estate
-                  ? <img src="/media/999/front-1280.webp" srcset="/media/999/front-800.webp 800w, /media/999/front-1280.webp 1280w, /media/999/front-1920.webp 1920w" sizes="(max-width: 899px) 100vw, 90vw"
-                      width="1920" height="1080" decoding="async" fetchpriority="high" style="view-transition-name: estate-front; object-position: 50% 42%"
-                      alt={`The entrance front of ${l.address}, ${l.town}`}>
-                  : <img {...pic(l)} sizes="(max-width: 899px) 100vw, 90vw" width="1400" height="933" decoding="async" alt={`${l.address}, ${l.town}`}>}
-                <span class="tile-status" data-s="active">{l.status}</span>
-                <span class="tile-info">
-                  <span class="a">{l.address}</span>
-                  <span class="m">{l.town} &middot; <b>{money(l.price)}</b>{l.specs ? ` · ${l.specs}` : ''}</span>
-                  {l.blurb && <span class="m">{l.blurb}</span>}
-                </span>
-              </Tag>
-            );
-          })}
-        </div>
-      ) : (
-        <p class="lede">The next introductions are made quietly first. See off-market access below.</p>
-      )}
+      <div class={`sheet ${current.length === 2 ? 'sheet--two' : ''}`}>
+        {current.map((l, i) => {
+          const estate = l.href === '/listings/999-lake-road';
+          const Tag = l.href ? 'a' : 'figure';
+          return (
+            <Tag class="tile tile--half" href={l.href} tabindex={l.href ? undefined : '0'} aria-label={`${l.address}, ${l.town}. ${l.status}. ${money(l.price)}`}>
+              {estate
+                ? <img src="/media/999/front-1280.webp" srcset="/media/999/front-800.webp 800w, /media/999/front-1280.webp 1280w, /media/999/front-1920.webp 1920w" sizes="(max-width: 899px) 100vw, 45vw"
+                    width="1920" height="1080" decoding="async" fetchpriority={i === 0 ? 'high' : undefined} style="view-transition-name: estate-front; object-position: 50% 42%"
+                    alt={`The entrance front of ${l.address}, ${l.town}`}>
+                : <img {...pic(l)} sizes="(max-width: 899px) 100vw, 45vw" width="1400" height="781" decoding="async" alt={`${l.address}, ${l.town}`}>}
+              <span class="tile-status" data-s={l.status === 'Active' ? 'active' : undefined}>{l.status}</span>
+              <span class="tile-info">
+                <span class="a">{l.address}</span>
+                <span class="m">{l.town} &middot; <b>{money(l.price)}</b>{l.specs ? ` · ${l.specs}` : ''}</span>
+                {l.blurb && <span class="m">{l.blurb}</span>}
+              </span>
+            </Tag>
+          );
+        })}
+      </div>
 
-      {pending.length > 0 && (
-        <Fragment>
-          <div class="sheet-head">
-            <h2 class="h3">Under contract</h2>
-            <p class="label label--quiet">Listing representation</p>
-          </div>
-          <div class="sheet sheet--two">
-            {pending.map((l) => (
-              <figure class="tile tile--half" tabindex="0" aria-label={`${l.address}, ${l.town}. Under contract. Listed at ${money(l.price)}`}>
-                {l.photo && <img {...pic(l)} sizes="(max-width: 899px) 100vw, 45vw" width="1400" height="781" loading="lazy" decoding="async" alt={`${l.address}, ${l.town}`}>}
-                <span class="tile-status">{l.status}</span>
-                <figcaption class="tile-info">
-                  <span class="a">{l.address}</span>
-                  <span class="m">{l.town} &middot; <b>{money(l.price)}</b>{l.specs ? ` · ${l.specs}` : ''}</span>
-                  {l.blurb && <span class="m">{l.blurb}</span>}
-                </figcaption>
-              </figure>
-            ))}
-            {pending.length === 1 && pending[0].blurb && (
-              <div class="sheet-aside">
-                <p class="label">On the record</p>
-                <p class="sheet-quote">{pending[0].blurb.split(' · ').map((part, i) => <Fragment>{i > 0 && <br />}{part.charAt(0).toUpperCase() + part.slice(1)}{i === pending[0].blurb.split(' · ').length - 1 ? '.' : ','}</Fragment>)}</p>
-                <p class="note">{pending[0].address}, {pending[0].town}. Offered at {money(pending[0].price)}.</p>
-              </div>
-            )}
-          </div>
-        </Fragment>
-      )}
+      <div class="sheet-head" id="trophy">
+        <h2 class="h3">Trophy sales</h2>
+        <p class="label label--quiet">Closed at {money(tier)} and above</p>
+      </div>
+      <div class="sheet sheet--trophy">
+        {trophies.map((l) => {
+          const Tag = l.href ? 'a' : 'figure';
+          const Info = l.href ? 'span' : 'figcaption';
+          return (
+            <Tag class="tile" href={l.href} tabindex={l.href ? undefined : '0'} aria-label={`${l.address}, ${l.town}. Closed ${l.year}. ${money(l.price)}. ${l.side_label}.`}>
+              <img {...pic(l)} sizes="(max-width: 560px) 100vw, (max-width: 899px) 50vw, 30vw" width="800" height="600" loading="lazy" decoding="async" style={vt(l)} alt={`${l.address}, ${l.town}`}>
+              <span class="tile-status">Closed {l.year}</span>
+              <Info class="tile-info">
+                <span class="a">{l.address}</span>
+                <span class="m">{l.town} &middot; <b>{money(l.price)}</b></span>
+                <span class="m">{l.side_label}{l.rank ? ` · No. ${l.rank} of ${l.n} in ${l.town}${l.ytd ? ' to date' : ''}` : ''}{l.href ? ' · Read the sale' : ''}</span>
+              </Info>
+            </Tag>
+          );
+        })}
+      </div>
+
+      <div class="sheet-head">
+        <h2 class="h3">The record</h2>
+        <p class="label label--quiet">Every sale of $1,000,000 and above</p>
+      </div>
+      <Viz kind="record" tier={tier} data={record} height={440} label="Closed sales of one million dollars and above, by year and price" />
 
       <div class="sheet-head" id="sold">
         <h2 class="h3">Sold</h2>
-        <p class="label label--quiet">Closed sales of $1,000,000 and above</p>
+        <p class="label label--quiet">$1,000,000 to {money(tier)}</p>
       </div>
       <div class="sheet sheet--reveal">
         {gallery.map((l) => {

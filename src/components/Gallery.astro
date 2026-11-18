@@ -1,0 +1,31 @@
+---
+// Photograph gallery behaviour for a page: PhotoSwipe (MIT). Any a[data-pswp] inside #main opens it.
+// Swipe, pinch-to-zoom, arrow keys and Escape; focus returns to the thumbnail that opened it.
+---
+<script>
+  import PhotoSwipeLightbox from 'photoswipe/lightbox';
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: '#main', children: 'a[data-pswp]',
+    pswpModule: () => import('photoswipe'),
+    bgOpacity: 0.97, wheelToZoom: true,
+    showHideAnimationType: reduce ? 'none' : 'zoom',
+    showAnimationDuration: reduce ? 0 : 320, hideAnimationDuration: reduce ? 0 : 260,
+    padding: { top: 56, bottom: 92, left: 0, right: 0 },
+    closeTitle: 'Close gallery', zoomTitle: 'Zoom', arrowPrevTitle: 'Previous photograph', arrowNextTitle: 'Next photograph',
+  });
+  lightbox.on('uiRegister', () => {
+    lightbox.pswp.ui.registerElement({
+      name: 'cap', order: 9, isButton: false, appendTo: 'root',
+      onInit: (el, pswp) => {
+        el.className = 'pswp-cap';
+        el.setAttribute('aria-live', 'polite');
+        pswp.on('change', () => { const a = pswp.currSlide?.data?.element; el.innerHTML = (a && a.dataset.caption) || ''; });
+      },
+    });
+  });
+  lightbox.init();
+  document.querySelectorAll('[data-open-gallery]').forEach((b) => {
+    b.addEventListener('click', (e) => { e.preventDefault(); lightbox.loadAndOpen(+(b.dataset.openGallery || 0)); });
+  });
+</script>
