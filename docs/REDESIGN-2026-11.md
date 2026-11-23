@@ -145,3 +145,22 @@ Design for the sender (not built, not deployed):
 
 **Story.** 143 Cary Avenue, Highland Park (sold 2020, $3,000,000), from the professional set in the new sold archive.
 
+## Sixth pass and launch (23 November 2026)
+
+**Live.** `main` was fast-forwarded from `9323813` to `2d14ac5` on Patrick's instruction ("Push the new website version"). The redesign is production. New work branches from `main`; the daily listings sync commits to `main`, so `redesign/north-shore-first-light` will fall behind it.
+
+**Forms and the leads policy.** The `leads` insert policy accepts three sources: `contact`, `showing-1330`, `briefing`. The redesign's forms used others (`valuation`, `year-end-report`, `listing-…`, `sold-…`) and would have been refused in production. `site.js` now files any other form as `contact` and puts its kind at the start of the message (`[valuation: …]`, `[year-end-report] …`, `[listing-999-lake-road] …`). Checked with an insert as the anonymous role inside a rolled-back transaction; no test lead was written. To give valuation requests their own source later, widen the policy first, then add the value to `SOURCES`.
+
+**Film, on Patrick's decision to use the AI-assisted footage with a footer note.**
+- Footer, every page: "AI may have been used for some video editing."
+- Properties opens on a 13-second loop of three sold houses (`/media/film/collection-720.mp4`).
+- About carries the silent reel, click to play (`patrick-milhaupt-reel-720.mp4`, 1 min 46 s, 17 MB).
+- 1000 E Illinois, 143 Cary and 4 High Terrace each show their five-second clip (`clip` in `trophy.json`).
+- Not placed: the 999 Lake Road clip on the active listing's page (it shows grounds and cars that are not in the photographs), and standalone clips for 1320 Elm Tree and 415 Deerpath, which have no page. All three appear inside the reel.
+
+**Library.** Buyer Guide (28 pages) and Closing Cost Breakdown are hosted. Commission figures read "Negotiated" (`tools/docs/edit_brokerage_docs.py`): on the one-page sheet the word is copied from the sheet's own type; in the guide it is set in Public Sans to match. The guide's two "personal logo here" boxes carry "Patrick Milhaupt, Global Advisor". The lender's page and the 2023 figures are as issued.
+
+**Verified on patrick.realestate after the push.** 28 pages load with live market data and no console errors, 141 internal links resolve, five documents and four films are served, forms are armed on the production host, phone and email are required on the CMA request. Lighthouse mobile: home 99 performance, 100 accessibility; home value 99 and 100. The remaining search-engine note is the content-signal line Cloudflare adds to robots.txt.
+
+**Not verified in production, by design.** No form was submitted on the live site.
+
