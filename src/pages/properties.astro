@@ -51,7 +51,15 @@ const lds = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemL
   .zen-foot { margin: 20px 0 0; padding-top: 14px; border-top: 1px solid rgba(79,143,255,.2); font: 500 10px/1.5 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: rgba(180,210,255,.6); }
   </style>
 
-  <section class="op" aria-labelledby="props-title">
+  <section class="op has-amb" aria-labelledby="props-title">
+    <div class="amb" data-amb>
+      <picture>
+        <source type="image/webp" srcset="/media/film/collection-1280.webp">
+        <img src="/media/film/collection-1280.jpg" width="1280" height="720" fetchpriority="high" decoding="async" alt="">
+      </picture>
+      <video muted playsinline loop preload="none" aria-hidden="true" tabindex="-1" disablepictureinpicture data-src="/media/film/collection-720.mp4"></video>
+      <button class="motion-ctl amb-ctl" type="button" data-state="playing" hidden><i aria-hidden="true"></i><span class="t">Pause motion</span></button>
+    </div>
     <div class="wrap">
       <div class="op-head">
         <p class="label">Portfolio &middot; North Shore</p>

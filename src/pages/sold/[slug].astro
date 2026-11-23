@@ -84,6 +84,23 @@ const lds = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemL
     </div>
   </section>
 
+  {s.clip && (
+    <section class="sec sec--clip" aria-label="The house on film">
+      <div class="wrap">
+        <figure class="clip rv">
+          <div class="clip-frame">
+            <div class="amb amb--bare" data-amb>
+              <img src={`/media/film/clip-${s.clip}.webp`} width="1280" height="720" loading="lazy" decoding="async" alt={`${l.address}, a short film of the approach to the house`}>
+              <video muted playsinline loop preload="none" aria-hidden="true" tabindex="-1" disablepictureinpicture data-src={`/media/film/clip-${s.clip}.mp4`}></video>
+              <button class="motion-ctl amb-ctl" type="button" data-state="playing" hidden><i aria-hidden="true"></i><span class="t">Pause motion</span></button>
+            </div>
+          </div>
+          <figcaption>On film</figcaption>
+        </figure>
+      </div>
+    </section>
+  )}
+
   <!-- The sale, in figures -->
   <section class="sec" aria-labelledby="s-sale">
     <div class="wrap">

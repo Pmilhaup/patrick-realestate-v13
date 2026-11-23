@@ -324,6 +324,7 @@
      confirms what it would have delivered so the journey can be tested. */
   var params = new URLSearchParams(location.search);
   var live = /(^|\.)patrick\.realestate$/.test(location.hostname) && !params.has('dryrun');
+  var SOURCES = ['contact', 'showing-1330', 'briefing'];
   $$('form[data-lead]').forEach(function (form) {
     var btn = $('[type="submit"]', form), status = $('.lead-status', form);
     var property = form.getAttribute('data-property') || params.get('property') || '';
@@ -340,10 +341,14 @@
       if (!form.reportValidity()) return;
       var f = form.elements, val = function (n) { return f[n] && f[n].value ? f[n].value.trim() : ''; };
       var prop = val('property') || val('address');
+      // The leads table accepts only the sources in SOURCES (its insert policy). Any other form is filed
+      // as 'contact' and named at the start of the message, so nothing is refused and nothing is lost.
+      var kind = form.getAttribute('data-lead') || 'contact', known = SOURCES.indexOf(kind) > -1;
+      var tag = known || val('interest').indexOf(kind) === 0 ? '' : '[' + kind + '] ';
       var body = {
-        source: form.getAttribute('data-lead') || 'contact',
+        source: known ? kind : 'contact',
         name: val('name'), email: val('email'), phone: val('phone'),
-        message: ((val('interest') ? '[' + val('interest') + '] ' : '') + (prop ? prop + ' — ' : '') + val('message')).trim(),
+        message: (tag + (val('interest') ? '[' + val('interest') + '] ' : '') + (prop ? prop + ' — ' : '') + val('message')).trim().slice(0, 4900),
         page: location.pathname, user_agent: navigator.userAgent.slice(0, 250)
       };
       form._lastBody = body;

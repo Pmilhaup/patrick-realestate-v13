@@ -271,7 +271,8 @@
      "alt": "The entrance walk",
      "shape": "land"
     }
-   ]
+   ],
+   "clip": "4-high-terrace"
   },
   {
    "key": "1000 E ILLINOIS",
@@ -364,7 +365,8 @@
      "alt": "The house from the lawn",
      "shape": "land"
     }
-   ]
+   ],
+   "clip": "1000-e-illinois"
   },
   {
    "key": "925 ASHLAND",
@@ -1027,7 +1029,8 @@
      "alt": "The back of the house across the lawn, with a screened porch at the left",
      "shape": "land"
     }
-   ]
+   ],
+   "clip": "143-cary"
   }
  ]
 }
